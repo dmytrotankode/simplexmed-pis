@@ -1,0 +1,30 @@
+{
+  "current_edition": "ТВ до ПІС v2, наказ НСЗУ № 978 від 08.12.2025 (текст: pis/docs/tv_pis_978.txt, додаток 1: pis/docs/tv_pis_978_dodatok1.txt)",
+  "checked_at": "2026-10-03",
+  "documents": [
+    {
+      "title": "Наказ НСЗУ №494 від 11.07.2025",
+      "url": "https://ehealth.gov.ua/wp-content/uploads/2025/07/3-Nakaz-TV-do-PIS-v1.pdf",
+      "sha256": "53c49a319c920603ff13a1c1948837f67af71571ad48eb57c8c2d43c97af6501"
+    },
+    {
+      "title": "Технічні вимоги до ПІС в редакції наказу НСЗУ №494 від 11.07.2025",
+      "url": "https://ehealth.gov.ua/wp-content/uploads/2025/08/3.1-TV-do-PIS-v1-3.pdf",
+      "sha256": "184cab94502f72270a2d03d54060de5e576a1b6650eb7f1d7595fe72fcedc8a2"
+    },
+    {
+      "title": "Технічні вимоги до ПІС в редакції наказу НСЗУ №978 від 08.12.2025",
+      "url": "https://ehealth.gov.ua/wp-content/uploads/2025/12/2-PIS-Tehnichni-vymogy-v-redaktsii-nakazu-NSZU-978-vid-08.12.2025.pdf",
+      "sha256": "92c680864906496ea977de1deb9914f2ed55e71d6da92468ef99772f2d7c4308"
+    },
+    {
+      "title": "Додаток №1 до ТВ до ПІС в редакції наказу НСЗУ № 978 від 08.12.2025.pdf",
+      "url": "https://ehealth.gov.ua/wp-content/uploads/2025/12/Dodatok-1-do-TV-do-PIS-v2-v-redaktsii-nakazu-NSZU-978-vid-08.12.2025.pdf",
+      "sha256": "c5384fca55924524dd28c04cb982bbdc0372da6123b9ca55b9ef66a983c3531a"
+    }
+  ],
+  "api": {
+    "url": "https://raw.githubusercontent.com/ehealth-ua/pis-api/main/apiary.apib",
+    "sha256": "73669b8de1d724c8d83f21b889d1458f867b7bf01a9761d30ca1044e3dd6c055"
+  }
+}

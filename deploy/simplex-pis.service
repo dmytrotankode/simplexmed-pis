@@ -1,0 +1,19 @@
+[Unit]
+Description=SimplexMed Patient Information System (PIS BFF API)
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/var/www/simplex-pis
+ExecStart=/usr/bin/python3 /var/www/simplex-pis/backend/app.py
+Restart=always
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+Environment=PIS_PORT=3122
+Environment=PIS_REDIRECT_URI=https://simplex-med.com
+# Секрети (PG_PASSWORD, PIS_EHEALTH_PSK, PIS_CRED_FILE): шаблон у pis/deploy/.env.example, права 600
+EnvironmentFile=/var/www/simplex-pis/.env
+
+[Install]
+WantedBy=multi-user.target

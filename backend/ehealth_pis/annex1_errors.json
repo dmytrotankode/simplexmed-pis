@@ -1,0 +1,3287 @@
+[
+ {
+  "method": "Logout",
+  "check": "Перевірити валідність токену доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "Logout",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Approve authentication method request",
+  "check": "Перевірити валідність токену доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Approve authentication method request",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Approve authentication method request",
+  "check": "Токен містисть person_id",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Approve authentication method request",
+  "check": "",
+  "status": 403,
+  "error": "authentication_method_request.status = NEW 403 Only authentication method request with NEW status is allowed",
+  "description": "Невалідний статус запиту на створення методу автентифікації",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Approve authentication method request",
+  "check": "Метод автентифікації. il.",
+  "status": 403,
+  "error": "authentication_method_request.auth_method. type = OTP 403 OTP authentication method is allowed",
+  "description": "Дозволений лише метод автентифікації",
+  "user_message": "OTP Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Approve authentication method request",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: authentication_method_request:write_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на погодження методу автентифікації",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Approve authentication method request",
+  "check": "Статус персони - активний",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Approve authentication method request",
+  "check": "authentication_method_request належить персоні",
+  "status": 404,
+  "error": "not found",
+  "description": "Метод аутентифікації не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Person documents upload",
+  "check": "Перевірити валідність токену доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Person documents upload",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Person documents upload",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: person_documents:write_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на ініціювання процесу завантаження документів персони",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Person documents upload",
+  "check": "Персона існує в базі даних mpi та є активною",
+  "status": 404,
+  "error": "Person does not exist or is not active",
+  "description": "Помилка валідації запису про пацієнта",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Цифровий підпис для $.signed_content валідний",
+  "status": 400,
+  "error": "with digital signature validation error message",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Поле $.signed_content містить цифровий підпис",
+  "status": 400,
+  "error": "Invalid signature",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Перевірити валідність токену доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Токен містисть person_id",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: person_request: write_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на завершення запиту на персону для оновлення даних пацієнта",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Статус персони - активний",
+  "status": 404,
+  "error": "Person is not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Запит на персону з URL існує в базі даних",
+  "status": 404,
+  "error": "IL 404, Person request not found",
+  "description": "Запит на оновлення даних не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Документи були завантажені, використовуючи Media Content Storage",
+  "status": 409,
+  "error": "Documents <<document_types_to_upload>> is not uploaded with types of documents that must be uploaded to media content storage",
+  "description": "Помилка завантаження скан-копії [Тип документу]",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Запит на персону для URL має статус = NEW та канал = PiS",
+  "status": 409,
+  "error": "Invalid transition",
+  "description": "Невалідний статус",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Якщо applicant_person_id != person_id з токену - порівняти із законним представником в базі даних MPI",
+  "status": 409,
+  "error": "Unable to authenticate signer.",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Недійсний електронний підпис. Перевірте свій електронний підпис та за потреби – оновіть його.",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Значення поля відповідає схемі",
+  "status": 422,
+  "error": "with field-specific message",
+  "description": "Невалідне значення [Назва]",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Необхідний набір параметрів присутній в запиті",
+  "status": 422,
+  "error": "expected a minimum of %{min} items but got %{actual}",
+  "description": "У запиті відсутній мінімально необхідний набір параметрів",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Поле $.signed_content це валідний рядок",
+  "status": 422,
+  "error": "base64 422, Not a base64 string",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Потрібні параметри присутні в запиті",
+  "status": 422,
+  "error": "required property %{property} was not present",
+  "description": "Значення [Назва] не може бути порожнім",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Поле patient_signed міститься в декодованому запиті на персону",
+  "status": 422,
+  "error": "required property patient_signed was not present",
+  "description": "Відсутня ознака про перегляд пацієнтом друкованої форми",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Додаткові поля відсутні в запиті",
+  "status": 422,
+  "error": "schema does not allow additional properties",
+  "description": "Помилка валідації запиту. Наявні додаткові поля",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Декодований підписний контент відповідає попереднього збереженим в таблиці person_requests для запиту на персону",
+  "status": 422,
+  "error": "Signed content does not match the previously created content",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "Значення поля $.signed_content_encoding дорівнює 'base64'",
+  "status": 422,
+  "error": "value is not allowed in enum",
+  "description": "Неприпустиме значення [Назва]",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Complete Update Person details",
+  "check": "patient_signed = true в декодованому запиті на персону",
+  "status": 422,
+  "error": "value is not allowed in enum",
+  "description": "Неприпустиме значення [Назва]",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create authentication method request",
+  "check": "Перевірити валідність токену доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create authentication method request",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create authentication method request",
+  "check": "Токен містисть person_id",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create authentication method request",
+  "check": "Перевірити метод автентифікації. il.",
+  "status": 403,
+  "error": "authentication_method_request.auth_method. type = OTP 403 Only for OTP authentication method is allowed",
+  "description": "Дозволений лише метод автентифікації",
+  "user_message": "OTP Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create authentication method request",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: authentication_method_request:write_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на створення методу автентифікації",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create authentication method request",
+  "check": "Статус персони - активний",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Пацієнта не знайдено в системі або запис про пацієнта неактивний. Перевірте правильність даних електронного підпису або перейдіть до реєстрації в системі",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create authentication method request",
+  "check": "phone_numberобов'язковий",
+  "status": 422,
+  "error": "required property %{property} was not present",
+  "description": "Значення [Назва] не може бути порожнім",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create authentication method request",
+  "check": "Перевірити використаний ліміт для цього номера телефону",
+  "status": 422,
+  "error": "This phone number is present more than # {phone_number_auth_limit.limit} times in the system",
+  "description": "Перевищено ліміт для даного номера телефону",
+  "user_message": "Цей номер телефону перевищив ліміт для використання в ЕСОЗ. Оберіть інший номер.",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Перевірити валідність токену доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: declaration_request:write_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на створення заявки на декларацію",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Статус персони - активний",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Пацієнта не знайдено в системі або запис про пацієнта неактивний. Перевірте правильність даних електронного підпису або перейдіть до реєстрації в системі",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Взаємозв'язок є верифікованим",
+  "status": 409,
+  "error": "‘Can’t confirm relationship’",
+  "description": "Неможливо підтвердити зв'язок між пацієнтом і законним представником",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Існує applicant_person_id та має будь-який verification_status але не NOT_VERIFIED",
+  "status": 409,
+  "error": "‘Confidant person not found or is not verified’",
+  "description": "Помилка валідації законного представника і зв'язку між пацієнтом та законним представником",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Вік персони > person_full_legal_capacity_age глобального параметру та існує хоча б один взаємозв'язок активний та погоджений",
+  "status": 409,
+  "error": "‘Request must be authorized by confidant person’",
+  "description": "Помилка валідації законного представника і зв'язку між пацієнтом та законним представником",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Отримати підрозділ по id, наданому в запиті (Request.division_id)",
+  "status": 409,
+  "error": "Division doesn’t exist",
+  "description": "Помилка валідації. Неможливо вибрати даний підрозділ СГуСОЗ",
+  "user_message": "Це місце надання послуг неможливо обрати. Оберіть інший підрозділ або зверніться за уточненням до надавача медичних послуг",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Перевірити вимоги до віку відповідно до глобальних параметрів",
+  "status": 409,
+  "error": "Doctor speciality doesnt match patients age",
+  "description": "Спеціалізація лікаря не відповідає вимогам до віку пацієнта. Виберіть лікаря, спецільність якого відповідає вашому віку",
+  "user_message": "Лікар обраної спеціалізації не може обслуговувати пацієнтів вашого віку. Оберіть лікаря, спеціалізація якого відповідає вашому віку: терапевт – пацієнтів від 18 років, педіатр – до 18 років, сімейний лікар – для всіх вікових категорій.",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Отримати співробітника по id, який вказаний в запиті",
+  "status": 409,
+  "error": "Employee doesn’t exist",
+  "description": "Помилка валідації. Неможливо вибрати даного лікаря",
+  "user_message": "Подати декларацію цьому лікареві неможливо. Оберіть іншого фахівця або за потреби зверніться за уточненням до надавача медичних послуг",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Співробітник відноситься до тієї ж юридичної особи",
+  "status": 409,
+  "error": "Employee must belongs to the same legal entity",
+  "description": "Помилка валідації. Неможливо вибрати даного лікаря",
+  "user_message": "Подати декларацію цьому лікареві неможливо. Оберіть іншого фахівця або за потреби зверніться за уточненням до надавача медичних послуг",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Статус підрозділу дорівнює ACTIVE",
+  "status": 409,
+  "error": "Invalid division status",
+  "description": "Помилка валідації. Неможливо вибрати даний підрозділ СГуСОЗ",
+  "user_message": "Це місце надання послуг неможливо обрати. Оберіть інший підрозділ або зверніться за уточненням до надавача медичних послуг",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Статус співробітника - APPROVED",
+  "status": 409,
+  "error": "Invalid employee status",
+  "description": "Помилка валідації. Неможливо вибрати даного лікаря",
+  "user_message": "Подати декларацію цьому лікареві неможливо. Оберіть іншого фахівця або за потреби зверніться за уточненням до надавача медичних послуг",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Тип - DOCTOR",
+  "status": 409,
+  "error": "Invalid employee type",
+  "description": "Помилка валідації. Неможливо вибрати даного лікаря",
+  "user_message": "Подати декларацію цьому лікареві неможливо. Оберіть іншого фахівця або за потреби зверніться за уточненням до надавача медичних послуг",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Статус юридичної особи - ACTIVE",
+  "status": 409,
+  "error": "Invalid legal entity status",
+  "description": "Помилка валідації. Неможливо вибрати даний СГуСОЗ",
+  "user_message": "Цей суб’єкт господарювання у сфері охорони здоров’я неможливо обрати. Оберіть інший або зверніться за уточненням до надавача медичних послуг.",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "тип юридичної особи один з: MSP,",
+  "status": 409,
+  "error": "PRIMARY_CARE 409 Invalid legal entity type",
+  "description": "Помилка валідації. Неможливо вибрати даний СГуСОЗЗ",
+  "user_message": "Цей суб’єкт господарювання у сфері охорони здоров’я неможливо обрати. Оберіть інший або зверніться за уточненням до надавача медичних послуг.",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Є хоча б один активний запит",
+  "status": 409,
+  "error": "It is prohibited to create declaration request when there is unfinished person request",
+  "description": "Заборонено створювати заявку на декларацію, поки не завершено запит на оновлення даних пацієнта",
+  "user_message": "Неможливо подати заявку на декларацію, оскільки ви не завершили роботу з запитом на оновлення ваших даних в системі. Будь ласка, підпишіть запит на зміну або скасуйте його, а потім подайте заяву на декларацію повторно.",
+  "action": ""
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Перевірити статус верифікації",
+  "status": 409,
+  "error": "Person is not verified",
+  "description": "Запис про пацієнта не верифіковано",
+  "user_message": "Увага! Персональні дані потребують перевірки. Можливість роботи з ЕСОЗ, зокрема з деклараціями та медичними записами пацієнта, може бути заблоковано. Актуалізуйте персональні дані в ЕСОЗ.",
+  "action": "Запропонувати перейти в інтерфейс оновлення даних"
+ },
+ {
+  "method": "PIS. Create Declaration request",
+  "check": "Перевірити запит за допомогою схеми",
+  "status": 422,
+  "error": "JSON 422 error",
+  "description": "Помилка валідації",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Delete approval",
+  "check": "Хедер x-consumer-id передано в запиті",
+  "status": 401,
+  "error": "Unauthorized.",
+  "description": "Некоректні дані для підключення",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Delete approval",
+  "check": "Перевірити валідність токена доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Delete approval",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: app:delete_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на відкликання доступу до даних пацієнта",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Delete approval",
+  "check": "Перевірити, що запитаний ресурс належить автентифікованому користувачу",
+  "status": 403,
+  "error": "Forbidden",
+  "description": "Запитаний ресурс не належить автентифікованому користувачу",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Exchange oAuth Code Grant to Access Token",
+  "check": "Клієнт не заблокований в базі даних mithril",
+  "status": 401,
+  "error": "Client is blocked",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Exchange oAuth Code Grant to Access Token",
+  "check": "grant_type дорівнює ‘authorization_code’",
+  "status": 401,
+  "error": "Grant type not allowed.",
+  "description": "Некоректні дані для підключення",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Exchange oAuth Code Grant to Access Token",
+  "check": "client_secret належить клієнту з бази даних",
+  "status": 401,
+  "error": "mithril 401 Invalid client id or secret.",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Exchange oAuth Code Grant to Access Token",
+  "check": "Перевірити апрували по переліку скоупів для app_id з коду доступу в базі даних",
+  "status": 401,
+  "error": "mithril 401 Resource owner revoked access for the client.",
+  "description": "Доступ для клієнта скасовано",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Exchange oAuth Code Grant to Access Token",
+  "check": "redirect_uri в запиті дорівнює uri для перенаправлення в коді доступу",
+  "status": 401,
+  "error": "The redirection URI provided does not match a pre-registered value.",
+  "description": "Вказаний URI для перенаправлення не відповідає попередньо зареєстрованому значенню",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Exchange oAuth Code Grant to Access Token",
+  "check": "uri для перенаправлення належить клієнту",
+  "status": 401,
+  "error": "The redirection URI provided does not match a pre-registered value.",
+  "description": "Вказаний URI для перенаправлення не відповідає попередньо зареєстрованому значенню",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Exchange oAuth Code Grant to Access Token",
+  "check": "Код доступу дійсний в базі даних mithril",
+  "status": 401,
+  "error": "Token expired.",
+  "description": "Некоректні дані для підключення",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Exchange oAuth Code Grant to Access Token",
+  "check": "Код ще не був використаний",
+  "status": 401,
+  "error": "Token has already been used.",
+  "description": "Некоректні дані для підключення",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Exchange oAuth Code Grant to Access Token",
+  "check": "Клієнт з коду доступу відповідний до",
+  "status": 401,
+  "error": "client_id 401 Token not found or expired.",
+  "description": "Некоректні дані для підключення",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Exchange oAuth Code Grant to Access Token",
+  "check": "Код доступу = code та назва = ‘authorization_code’ існує в базі даних",
+  "status": 401,
+  "error": "mithril 401 Token not found.",
+  "description": "Некоректні дані для підключення",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Exchange oAuth Code Grant to Access Token",
+  "check": "code вказано в запиті та не дорівнює null",
+  "status": 422,
+  "error": "cant be blank",
+  "description": "Значення [Назва] не може бути порожнім",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Exchange oAuth Code Grant to Access Token",
+  "check": "Поля client_id та client_secret вказані в запиті та не пусті",
+  "status": 422,
+  "error": "cant be blank",
+  "description": "Значення [Назва] не може бути порожнім",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Exchange oAuth Code Grant to Access Token",
+  "check": "Поле redirect_uri присутнє в запиті і не пусте",
+  "status": 422,
+  "error": "cant be blank",
+  "description": "Значення [Назва] не може бути порожнім",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Exchange oAuth Code Grant to Access Token",
+  "check": "grant_type вказано в запиті та не дорівнює",
+  "status": 422,
+  "error": "null 422 Request must include grant_type.",
+  "description": "Значення [Назва] не може бути порожнім",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Approval details",
+  "check": "Хедер x-consumer-id передано в запиті",
+  "status": 401,
+  "error": "Unauthorized.",
+  "description": "Некоректні дані для підключення",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Approval details",
+  "check": "Перевірити валідність токена доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Approval details",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Approval details",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: app:read_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на отримання і відображення переліку доступів до даних пацієнта",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Approval details",
+  "check": "Погодження з URL",
+  "status": 404,
+  "error": "Approval not found",
+  "description": "Погодження на отримання доступу до даних пацієнта не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Approval details",
+  "check": "Існує в базі даних mithril",
+  "status": 404,
+  "error": "Approval not found",
+  "description": "Погодження на отримання доступу до даних пацієнта не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Approval details",
+  "check": "Належить пацієнту",
+  "status": 404,
+  "error": "Approval not found",
+  "description": "Погодження на отримання доступу до даних пацієнта не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Approvals",
+  "check": "Хедер x-consumer-id передано в запиті",
+  "status": 401,
+  "error": "Unauthorized.",
+  "description": "Некоректні дані для підключення",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Approvals",
+  "check": "Перевірити валідність токена доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Approvals",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Approvals",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: app:read_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на отримання і відображення переліку доступів до даних пацієнта",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration details",
+  "check": "Перевірити валідність токена доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration details",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration details",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: declaration: details_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на отримання деталей декларацій",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration details",
+  "check": "Статус персони - активний",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration details",
+  "check": "існує в системі",
+  "status": 404,
+  "error": "not found",
+  "description": "Декларацію не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration details",
+  "check": "належить пацієнту",
+  "status": 404,
+  "error": "not found",
+  "description": "Декларацію не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration details",
+  "check": "",
+  "status": 409,
+  "error": "- 409 Failed to get signed_content",
+  "description": "Не вдалося вивантажити декларацію зі сховища",
+  "user_message": "Наразі не вдалось завантажити вашу декларацію. Спробуйте, будь ласка, пізніше.",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration request details",
+  "check": "Перевірити валідність токену доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration request details",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration request details",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: declaration_request:details_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на отримання деталей заявок на декларацію",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration request details",
+  "check": "Статус персони - активний",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration request details",
+  "check": "існує в il DB",
+  "status": 404,
+  "error": "not found",
+  "description": "Заявку на декларацію не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration request details",
+  "check": "is_shareable= true або channel = PIS",
+  "status": 404,
+  "error": "not found",
+  "description": "Заявку на декларацію не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration request details",
+  "check": "належить пацієнту",
+  "status": 404,
+  "error": "not found",
+  "description": "Заявку на декларацію не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration requests",
+  "check": "Перевірити валідність токену доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration requests",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration requests",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: declaration_request:read_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на пошук заявок на декларацію",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Declaration requests",
+  "check": "Статус персони - активний",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Пацієнта не знайдено в системі або запис про пацієнта неактивний. Перевірте правильність даних електронного підпису або перейдіть до реєстрації в системі",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get declarations",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get declarations",
+  "check": "Перевірити валідність токена доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get declarations",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: declaration: read_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на пошук декларацій",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get declarations",
+  "check": "Статус персони - активний",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Пацієнта не знайдено в системі або запис про пацієнта неактивний. Перевірте правильність даних електронного підпису або перейдіть до реєстрації в системі",
+  "action": ""
+ },
+ {
+  "method": "PIS. Contract Divisions (Bulk data export)",
+  "check": "Токен MIS API присутній в запиті",
+  "status": 401,
+  "error": "Api key is not set",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Contract Divisions (Bulk data export)",
+  "check": "Перевірити валідність токену MIS API",
+  "status": 401,
+  "error": "Invalid api key",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Contract Divisions (Bulk data export)",
+  "check": "Токен MIS API дійсний",
+  "status": 401,
+  "error": "Invalid api key",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Contract Divisions (Bulk data export)",
+  "check": "Перевірити скоупи на можливість виконання даної дії",
+  "status": 403,
+  "error": "“Your scope does not allow to access this resource. Missing allowances: contract_division_bulk:read_pis”",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на отримання інформації про наявність у МНП договорів щодо надання послуг в рамках ПМГ",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get declarations limit and declarations",
+  "check": "",
+  "status": null,
+  "error": "count per practitioner (Bulk data export)",
+  "description": "Токен MIS API присутній в запиті 401 \"Api key is not set",
+  "user_message": "Помилка даних пацієнтської інформаційної системи Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get declarations limit and declarations",
+  "check": "",
+  "status": null,
+  "error": "count per practitioner (Bulk data export)",
+  "description": "Перевірити валідність токену MIS API 401 \"Invalid api key\"",
+  "user_message": "Помилка даних пацієнтської інформаційної системи Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get declarations limit and declarations",
+  "check": "",
+  "status": null,
+  "error": "count per practitioner (Bulk data export)",
+  "description": "Токен MIS API дійсний 401 \"Invalid api key\"",
+  "user_message": "Помилка даних пацієнтської інформаційної системи Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get declarations limit and declarations",
+  "check": "",
+  "status": null,
+  "error": "count per practitioner (Bulk data export)",
+  "description": "Перевірити скоупи на можливість виконання даної дії 403 \"Your scope does not allow to access this resource. Missing allowances: declaration_bulk:read_pis\"",
+  "user_message": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на отримання всіх працівників з Системи Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get divisions (Bulk data export)",
+  "check": "Токен MIS API присутній в запиті",
+  "status": 401,
+  "error": "Api key is not set",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get divisions (Bulk data export)",
+  "check": "Перевірити валідність токену MIS API",
+  "status": 401,
+  "error": "Invalid api key",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get divisions (Bulk data export)",
+  "check": "Токен MIS API дійсний",
+  "status": 401,
+  "error": "Invalid api key",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get divisions (Bulk data export)",
+  "check": "Перевірити скоупи на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: division_bulk: read_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на отримання всіх працівників з Системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get employee roles (Bulk data export)",
+  "check": "Токен MIS API присутній в запиті",
+  "status": 401,
+  "error": "Api key is not set",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get employee roles (Bulk data export)",
+  "check": "Перевірити валідність токену MIS API",
+  "status": 401,
+  "error": "Invalid api key",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get employee roles (Bulk data export)",
+  "check": "Токен MIS API дійсний",
+  "status": 401,
+  "error": "Invalid api key",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get employee roles (Bulk data export)",
+  "check": "Перевірити скоупи на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: employee_role_bulk:read_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на отримання всіх працівників з Системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get employees (Bulk data export)",
+  "check": "Токен MIS API присутній в запиті",
+  "status": 401,
+  "error": "Api key is not set",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get employees (Bulk data export)",
+  "check": "Перевірити валідність токену MIS API",
+  "status": 401,
+  "error": "Invalid api key",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get employees (Bulk data export)",
+  "check": "Токен MIS API дійсний",
+  "status": 401,
+  "error": "Invalid api key",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get employees (Bulk data export)",
+  "check": "Перевірити скоупи на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: employee_bulk: read_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на отримання всіх працівників з Системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get healthcare services (Bulk data export)",
+  "check": "Токен MIS API присутній в запиті",
+  "status": 401,
+  "error": "Api key is not set",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get healthcare services (Bulk data export)",
+  "check": "Перевірити валідність токену MIS API",
+  "status": 401,
+  "error": "Invalid api key",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get healthcare services (Bulk data export)",
+  "check": "Токен MIS API дійсний",
+  "status": 401,
+  "error": "Invalid api key",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get healthcare services (Bulk data export)",
+  "check": "Перевірити скоупи на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: healthcare_service_bulk:read_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на отримання всіх працівників з Системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get legal entities (Bulk data export)",
+  "check": "Токен MIS API присутній в запиті",
+  "status": 401,
+  "error": "Api key is not set",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get legal entities (Bulk data export)",
+  "check": "Перевірити валідність токену MIS API",
+  "status": 401,
+  "error": "Invalid api key",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get legal entities (Bulk data export)",
+  "check": "Токен MIS API дійсний",
+  "status": 401,
+  "error": "Invalid api key",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get legal entities (Bulk data export)",
+  "check": "Перевірити скоупи на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: legal_entity_bulk:read_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на отримання всіх працівників з Системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get nonce",
+  "check": "client_id не заблоковано",
+  "status": 401,
+  "error": "Client is blocked",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get nonce",
+  "check": "client_secret належить клієнту",
+  "status": 401,
+  "error": "Invalid client id or secret.",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get nonce",
+  "check": "client_id існує в базі даних mithril",
+  "status": 404,
+  "error": "Client is not found.",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get nonce",
+  "check": "client_id вказано",
+  "status": 422,
+  "error": "cant be blank",
+  "description": "Значення [Назва] не може бути порожнім",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get nonce",
+  "check": "client_secretвказано, якщо client_type =",
+  "status": 422,
+  "error": "TRUSTED_PIS 422 required property <property> was not present",
+  "description": "Значення [Назва] не може бути порожнім",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get parties (Bulk data export)",
+  "check": "Токен MIS API присутній в запиті",
+  "status": 401,
+  "error": "Api key is not set",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get parties (Bulk data export)",
+  "check": "Перевірити валідність токену MIS API",
+  "status": 401,
+  "error": "Invalid api key",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get parties (Bulk data export)",
+  "check": "Токен MIS API дійсний",
+  "status": 401,
+  "error": "Invalid api key",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get parties (Bulk data export)",
+  "check": "Перевірити скоупи на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: party_bulk: read_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на отримання всіх працівників з Системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person authentication methods",
+  "check": "Перевірити валідність токену доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person authentication methods",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person authentication methods",
+  "check": "Токен містисть person_id",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person authentication methods",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: authentication_method:read_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на пошук активних методів автентифікації",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person authentication methods",
+  "check": "Статус персони - активний",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Пацієнта не знайдено в системі або запис про пацієнта неактивний. Перевірте правильність даних електронного підпису або перейдіть до реєстрації в системі",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person details",
+  "check": "Перевірити валідність токену доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person details",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person details",
+  "check": "Токен містисть person_id",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person details",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: person: details_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на отримання інформації по пацієнту з токену",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person details",
+  "check": "Статус пацієнта - активний",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Пацієнта не знайдено в системі або запис про пацієнта неактивний. Перевірте правильність даних електронного підпису або перейдіть до реєстрації в системі",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person Request Details",
+  "check": "Перевірити валідність токену доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person Request Details",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person Request Details",
+  "check": "Токен містисть person_id",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person Request Details",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: person_request: details_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на отримання деталей запиту на персону",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person Request Details",
+  "check": "Статус персони - активний",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person Request Details",
+  "check": "існує в il DB",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person Request Details",
+  "check": "належить пацієнту",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person Requests List",
+  "check": "Перевірити валідність токену доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person Requests List",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person Requests List",
+  "check": "Токен містисть person_id",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person Requests List",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: person_request: read_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на отримання переліку запитів на персону",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person Requests List",
+  "check": "Статус пацієнта активний",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Пацієнта не знайдено в системі або запис про пацієнта неактивний. Перевірте правильність даних електронного підпису або перейдіть до реєстрації в системі",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person verification details",
+  "check": "Перевірити валідність токену доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person verification details",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person verification details",
+  "check": "Токен містисть person_id",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person verification details",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: person_verification:details_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person verification details",
+  "check": "Якщо person_id та applicant_person_id з токену не рівні, перевірити існування запису по взаємозв'язку з довіреною особою в mpi.confidant_person_relationships",
+  "status": 404,
+  "error": "Confidant person relationship not found",
+  "description": "Зв'язок між пацієнтом і законним представником не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Get Person verification details",
+  "check": "Статус пацієнта є активним",
+  "status": 404,
+  "error": "Person not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Пацієнта не знайдено в системі або запис про пацієнта неактивний. Перевірте правильність даних електронного підпису або перейдіть до реєстрації в системі",
+  "action": ""
+ },
+ {
+  "method": "PIS. Initialize Person documents upload",
+  "check": "Перевірити валідність токену доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Initialize Person documents upload",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Initialize Person documents upload",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: person_documents:write_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на ініціювання процесу завантаження документів персони",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Initialize Person documents upload",
+  "check": "Персона існує в базі даних mpi та є активною",
+  "status": 404,
+  "error": "Person does not exist or is not active",
+  "description": "Помилка валідації запису про пацієнта",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Initialize Update Person details",
+  "check": "Перевірити валідність токену доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Initialize Update Person details",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Initialize Update Person details",
+  "check": "Токен містисть person_id",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Initialize Update Person details",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: person_request: write_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на створення запиту на персону для оновлення даних пацієнта",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Initialize Update Person details",
+  "check": "Статус персони - активний",
+  "status": 404,
+  "error": "Person is not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Пацієнта не знайдено в системі або запис про пацієнта неактивний. Перевірте правильність даних електронного підпису або перейдіть до реєстрації в системі",
+  "action": ""
+ },
+ {
+  "method": "PIS. Initialize Update Person details",
+  "check": "",
+  "status": 409,
+  "error": "PERSON_ONLINE_DEDUPLICATION_UP DATE_SCORE 409, \"Such person can't be updated. New person should be created instead",
+  "description": "Запис про пацієнта оновлювався занадто часто. Необхідно створити новий обліковий запис",
+  "user_message": "Запис про пацієнта оновлювався занадто часто. Необхідно створити новий обліковий запис",
+  "action": ""
+ },
+ {
+  "method": "PIS. Initialize Update Person details",
+  "check": "Значення поля відповідає схемі",
+  "status": 422,
+  "error": "with field-specific message",
+  "description": "Невалідне значення [Назва]",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Initialize Update Person details",
+  "check": "Необхідний набір параметрів присутній в запиті",
+  "status": 422,
+  "error": "expected a minimum of %{min} items but got %{actual}",
+  "description": "У запиті відсутній мінімально необхідний набір параметрів",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Initialize Update Person details",
+  "check": "Потрібні параметри присутні в запиті",
+  "status": 422,
+  "error": "required property %{property} was not present",
+  "description": "Значення [Назва] не може бути порожнім",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Initialize Update Person details",
+  "check": "Додаткові поля відсутні в запиті",
+  "status": 422,
+  "error": "schema does not allow additional properties",
+  "description": "Помилка валідації запиту. Наявні додаткові поля",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Initialize Update Person details",
+  "check": "Перевірити, що $.person.tax_id відповідає оновленому полю персони tax_id",
+  "status": 422,
+  "error": "tax_id cant be updated",
+  "description": "Редагування РНОКПП заборонено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Initialize Update Person details",
+  "check": "Перевірити, що $.person.unzr дорівнює оновленому unzr персони",
+  "status": 422,
+  "error": "unzr cant be updated",
+  "description": "Редагування УНЗР заборонено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-in",
+  "check": "client_id вказано в запиті",
+  "status": null,
+  "error": "Не вказаний ідентифікатор додатку для авторизації",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-in",
+  "check": "redirect_uri вказано в запиті",
+  "status": null,
+  "error": "Не вказано адресу зворотнього визову",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-in",
+  "check": "Для вказаного віку персони авторизація в системі не дозволена",
+  "status": null,
+  "error": "Incorrect person age for such an action.",
+  "description": "Невідповідний вік пацієнта для даної дії",
+  "user_message": "Увійти у свій особистий кабінет пацієнта може лише користувач старше 14 років. Якщо вам уже виповнилось 14 років - створіть звернення через портал підтримки НСЗУ за посиланням щодо зміни інформації про вас [url переходу на створення запиту з відповідною категорією].",
+  "action": "КПІС повинна зупинити процес авторизації і відобразити користувачу повідомлення про помилку"
+ },
+ {
+  "method": "PIS. Patient sign-in",
+  "check": "Підписаний контент некоректний або прострочений.",
+  "status": null,
+  "error": "Invalid signed content.",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-in",
+  "check": "Не вдалося ідентифікувати персону",
+  "status": null,
+  "error": "It is impossible to uniquely identify the person.",
+  "description": "Неможливо ідентифікувати пацієнта.",
+  "user_message": "Зверніться до НСЗУ для уточнення персональних даних користувача Неможливо однозначно ідентифікувати пацієнта – в системі знайдено більше ніж 1 запис про пацієнта за даними електронного підпису. Для розв'язання цієї проблеми створіть звернення через портал підтримки НСЗУ за посиланням щодо дублювання запису [url переходу на створення запиту з відповідною категорією].",
+  "action": "КПІС повинна зупинити процес авторизації і відобразити користувачу повідомлення про помилку"
+ },
+ {
+  "method": "PIS. Patient sign-in",
+  "check": "Підписаний контент некоректний або прострочений",
+  "status": null,
+  "error": "JWT is invalid",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-in",
+  "check": "Персону не знайдено.",
+  "status": null,
+  "error": "Person not found.",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Пацієнта не знайдено в системі або запис про пацієнта неактивний. Перевірте правильність даних електронного підпису або перейдіть до реєстрації в системі.",
+  "action": "КПІС повинна зупинити процес авторизації, відобразити повідомлення про помилку з пропозицією перейти до процедури реєстрації у Системі згідно вимог"
+ },
+ {
+  "method": "PIS. Patient sign-in",
+  "check": "Персону не знайдено",
+  "status": null,
+  "error": "Person with tax id or document number not found.",
+  "description": "Запис про пацієнта з такими даними не знайдено. Перейдіть до реєстрації пацієнта",
+  "user_message": "Пацієнта не знайдено в системі або запис про пацієнта неактивний. Перевірте правильність даних електронного підпису або перейдіть до реєстрації в системі.",
+  "action": "КПІС повинна зупинити процес авторизації, відобразити повідомлення про помилку з пропозицією перейти до процедури реєстрації у Системі згідно вимог"
+ },
+ {
+  "method": "PIS. Patient sign-in",
+  "check": "",
+  "status": null,
+  "error": "server_error server_error",
+  "description": "всі інші помилки повертаються як server_error",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-in",
+  "check": "Користувача заблоковано",
+  "status": null,
+  "error": "User is blocked.",
+  "description": "Користувача заблоковано",
+  "user_message": "Знайдений за даними електронного підпису Користувач був заблокований. Якщо ви вважаєте що це помилка - створіть технічне звернення через портал підтримки НСЗУ за посиланням [url переходу на створення запиту з відповідною категорією].",
+  "action": "КПІС повинна зупинити процес авторизації і відобразити користувачу повідомлення про помилку"
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Кількість змінних в переліку",
+  "status": null,
+  "error": "entry\": \"$.person.documents\" \"description\": \"expected a minimum of 1 items but got 0",
+  "description": "Мінімум один документ особи, що реєструється, має бути вказаний",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Кількість змінних в переліку",
+  "status": null,
+  "error": "entry\": $.person.addresses \"description\": \"expected a minimum of 1 items but got 0",
+  "description": "Мінімум одна адреса має бути вказана",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Кількість змінних в переліку",
+  "status": null,
+  "error": "entry\": $.person.authentication_methods \"description\": \"expected a minimum of 1 items but got 0",
+  "description": "Мінімум один телефон має бути вказаний",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Кількість змінних в переліку",
+  "status": null,
+  "error": "entry\": $.person.emergency_contact.phones \"description\": \"expected a minimum of 1 items but got 0",
+  "description": "Мінімум один телефон контактної особи для екстрених випадків має бути вказаний",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Кількість змінних в переліку",
+  "status": null,
+  "error": "entry\": $.person.phones \"description\": \"expected a minimum of 1 items but got 0",
+  "description": "Мінімум один телефон має бути вказаний",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Підписаний контент некоректний або прострочений.",
+  "status": null,
+  "error": "JWT is invalid.",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Для вказаного віку персони необхідно вказати документи підтверджуючі дієздатність особи",
+  "status": null,
+  "error": "Document that proves person`s legal capacity must be submitted.",
+  "description": "Необхідно вказати документи, що підтверджують дієздатність",
+  "user_message": "Самостійно зареєструватись може виключно дієздатна особа. Якщо ви не досягли віку 18 років - вкажіть документи, які підтверджують вашу дієздатність",
+  "action": "КПІС відобразити користувачу повідомлення про помилку і повернутися на початок процесу рєстрації"
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Для вказаного віку персони самореєстрація в системі не дозволена",
+  "status": null,
+  "error": "Incorrect person age for such an action.",
+  "description": "Невідповідний вік пацієнта для даної дії",
+  "user_message": "Увійти у свій особистий кабінет пацієнта може лише користувач старше 14 років. Якщо вам уже виповнилось 14 років - створіть звернення через портал підтримки НСЗУ за посиланням [url переходу на створення запиту з відповідною категорією].",
+  "action": "КПІС повинна зупинити процес реєстрації і відобразити користувачу повідомлення про помилку"
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Дані з підпису не співпадають з даними для реєстрації",
+  "status": null,
+  "error": "Input name doesn't match name from digital signature.",
+  "description": "Вказане прізвище або ім'я не відповідає даним з електронного підпису",
+  "user_message": "Дані з підпису не співпадають з даними для реєстрації. Будь ласка, перевірте правильність введених даних та переконайтеся, що електронний підпис, який використвується, належить вам і є актуальним.",
+  "action": "КПІС відобразити користувачу повідомлення про помилку і повернутися на початок процесу рєстрації"
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Підписаний контент некоректний або прострочений.",
+  "status": null,
+  "error": "Invalid signed content.",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Дані з підпису не співпадають з даними для реєстрації. Будь ласка, перевірте правильність введених даних та переконайтеся, що електронний підпис, який використвується, належить вам і є актуальним.",
+  "action": "КПІС відобразити користувачу повідомлення про помилку і повернутися на початок процесу рєстрації"
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Некоректний код підтвердження",
+  "status": null,
+  "error": "Invalid verification code",
+  "description": "Недійсний код підтвердження",
+  "user_message": "Невірний код підтвердження вказаного вами номеру телефону як методу автентифікації",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Не вдалося ідентифікувати персону",
+  "status": null,
+  "error": "It is impossible to uniquely identify the person.",
+  "description": "Неможливо ідентифікувати пацієнта.",
+  "user_message": "Зверніться до НСЗУ для уточнення персональних даних користувача Неможливо однозначно ідентифікувати пацієнта – в системі знайдено більше ніж 1 запис про пацієнта за даними електронного підпису. Для розв'язання цієї проблеми створіть звернення через порталу підтримки НСЗУ за посиланням [url переходу на створення запиту з відповідною категорією].",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Некоректно вказаний метод автентифікації",
+  "status": null,
+  "error": "Only OTP authentication method can be created for person",
+  "description": "Некоректно вказаний метод автентифікації",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Не вдалося ідентифікувати персону",
+  "status": null,
+  "error": "Person not found.",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Дані з підпису не співпадають з даними для реєстрації",
+  "status": null,
+  "error": "Registration person and person that sign should be the same.",
+  "description": "Дані з підпису не співпадають з даними для реєстрації",
+  "user_message": "Дані з підпису не співпадають з даними для реєстрації. Будь ласка, перевірте правильність введених даних та переконайтеся, що електронний підпис, який використвується, належить вам і є актуальним.",
+  "action": "КПІС відобразити користувачу повідомлення про помилку і повернутися на початок процесу рєстрації"
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Обовʼязковий атрибут відсутній",
+  "status": null,
+  "error": "required property %{property} was not present",
+  "description": "Обовʼязковий атрибут [Назва] відсутній",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Некоректний тип документу",
+  "status": null,
+  "error": "Submitted document type is not allowed",
+  "description": "Некоректний тип документу",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Користувача заблоковано",
+  "status": null,
+  "error": "User is blocked.",
+  "description": "Користувача заблоковано",
+  "user_message": "Знайдений за даними електронного підпису Користувач був заблокований. Якщо ви вважаєте що це помилка створіть звернення через портал підтримки НСЗУ за посиланням [url переходу на створення запиту з відповідною категорією].",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Відсутні дані для реєстрації",
+  "status": null,
+  "error": "user_data missing",
+  "description": "Відсутні дані для реєстрації",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Patient sign-up",
+  "check": "Не вдалося ідентифікувати персону",
+  "status": null,
+  "error": "Validation failed",
+  "description": "Неможливо ідентифікувати пацієнта.",
+  "user_message": "Зверніться до НСЗУ для уточнення персональних даних користувача Неможливо однозначно ідентифікувати пацієнта – в системі знайдено більше ніж 1 запис про пацієнта за даними електронного підпису. Для розв'язання цієї проблеми створіть звернення через порталу підтримки НСЗУ за посиланням [url переходу на створення запиту з відповідною категорією].",
+  "action": ""
+ },
+ {
+  "method": "PIS. Reject Declaration request",
+  "check": "Перевірити валідність токена доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Reject Declaration request",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Reject Declaration request",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: declaration_request:reject_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на відхилення попередньо створених заявок на декларацію",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Reject Declaration request",
+  "check": "Перевірити статус верифікації по персоні, що він не NOT_VERIFIED",
+  "status": 403,
+  "error": "Access denied. Person is not verified",
+  "description": "Запис про пацієнта не верифіковано",
+  "user_message": "Увага! Персональні дані потребують перевірки. Можливість роботи з ЕСОЗ, зокрема з деклараціями та медичними записами пацієнта, може бути заблоковано. Актуалізуйте персональні дані в ЕСОЗ.",
+  "action": "Запропонувати перейти в інтерфейс оновлення даних"
+ },
+ {
+  "method": "PIS. Reject Declaration request",
+  "check": "Статус запиту на декларацію = NEW та канал PIS або APPROVED",
+  "status": 403,
+  "error": "Only declaration request with NEW or APPROVED statuses can be rejected",
+  "description": "Тільки заявки на декларацію у статусі",
+  "user_message": "\"Нова\" або \"Підтверджена\" можуть бути відхилені Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Reject Declaration request",
+  "check": "Статус персони активний",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Reject Declaration request",
+  "check": "існує в il DB",
+  "status": 404,
+  "error": "not found",
+  "description": "Заявку на декларацію не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Reject Declaration request",
+  "check": "належить пацієнту",
+  "status": 404,
+  "error": "not found",
+  "description": "Заявку на декларацію не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Reject Person Request",
+  "check": "Перевірити валідність токену доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Reject Person Request",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Reject Person Request",
+  "check": "Токен містисть person_id",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Reject Person Request",
+  "check": "Статус запиту = NEW, APPROVED",
+  "status": 403,
+  "error": "Only person request with NEW or APPROVED statuses can be rejected",
+  "description": "Тільки запити у статусі NEW або",
+  "user_message": "APPROVED можуть бути відхилені Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Reject Person Request",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: person_request: reject_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на відхилення запиту на персону, який був створений раніше",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Reject Person Request",
+  "check": "Статус персони - активний",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Reject Person Request",
+  "check": "існує в il DB",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Reject Person Request",
+  "check": "належить пацієнту",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Resend authorization OTP for authentication method request",
+  "check": "Перевірити валідність токена доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Resend authorization OTP for authentication method request",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Resend authorization OTP for authentication method request",
+  "check": "Токен містисть person_id",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Resend authorization OTP for authentication method request",
+  "check": "",
+  "status": 403,
+  "error": "authentication_method_request.status = NEW 403 Resend OTP allowed only for authentication method request with NEW status",
+  "description": "Невалідний статус запиту на створення методу автентифікації",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Resend authorization OTP for authentication method request",
+  "check": "Автентифікаційний метод. il.",
+  "status": 403,
+  "error": "authentication_method_request.auth_method. type = OTP 403 Resend SMS allowed only for OTP authentication method",
+  "description": "Повторна відправка sms-повідомлення дозволена тільки для методу аутентифікації",
+  "user_message": "OTP Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Resend authorization OTP for authentication method request",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: authentication_method_request:write_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на повторне відправлення SMS-повідомлення пацієнту",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Resend authorization OTP for authentication method request",
+  "check": "Статус персони - активний",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Пацієнта не знайдено в системі або запис про пацієнта неактивний. Перевірте правильність даних електронного підпису або перейдіть до реєстрації в системі",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Перевірити валідність токена доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: declaration_request:sign_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на підписання заявки на декларацію",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Статус пацієнта - активний",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Пацієнта не знайдено в системі або запис про пацієнта неактивний. Перевірте правильність даних електронного підпису або перейдіть до реєстрації в системі",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Взаємозв'язок є верифікованим",
+  "status": 409,
+  "error": "‘Can’t confirm relationship’",
+  "description": "Неможливо підтвердити зв'язок між пацієнтом і законним представником",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Існує applicant_person_id та має будь-який verification_status але не NOT_VERIFIED",
+  "status": 409,
+  "error": "‘Confidant person not found or is not verified’",
+  "description": "Помилка валідації законного представника і зв'язку між пацієнтом та законним представником",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Вік персони > person_full_legal_capacity_age глобального параметру та існує хоча б один взаємозв'язок активний та погоджений",
+  "status": 409,
+  "error": "‘Request must be authorized by confidant person’",
+  "description": "Помилка валідації законного представника і зв'язку між пацієнтом та законним представником",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Перевірити вимоги до віку відповідно до глобальних параметрів",
+  "status": 409,
+  "error": "Doctor speciality doesn't match patient's age",
+  "description": "Спеціалізація лікаря не відповідає вимогам до віку пацієнта. Виберіть лікаря, спецільність якого відповідає вашому віку",
+  "user_message": "Лікар обраної спеціалізації не може обслуговувати пацієнтів вашого віку. Оберіть лікаря, спеціалізація якого відповідає вашому віку: терапевт – пацієнтів від 18 років, педіатр – до 18 років, сімейний лікар – для всіх вікових категорій.",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Отримати співробітника по id, наданому в запиті",
+  "status": 409,
+  "error": "Employee doesn’t exist",
+  "description": "Помилка валідації. Неможливо вибрати даного лікаря",
+  "user_message": "Подати декларацію цьому лікареві неможливо. Оберіть іншого фахівця або за потреби зверніться за уточненням до надавача медичних послуг",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Співробітник відноситься до тієї ж юридичної особи",
+  "status": 409,
+  "error": "Employee must belongs to the same legal entity",
+  "description": "Помилка валідації. Неможливо вибрати даного лікаря",
+  "user_message": "Подати декларацію цьому лікареві неможливо. Оберіть іншого фахівця або за потреби зверніться за уточненням до надавача медичних послуг",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Статус співробітника - APPROVED",
+  "status": 409,
+  "error": "Invalid employee status",
+  "description": "Помилка валідації. Неможливо вибрати даного лікаря",
+  "user_message": "Подати декларацію цьому лікареві неможливо. Оберіть іншого фахівця або за потреби зверніться за уточненням до надавача медичних послуг",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Тип співробітника - DOCTOR",
+  "status": 409,
+  "error": "Invalid employee type",
+  "description": "Помилка валідації. Неможливо вибрати даного лікаря",
+  "user_message": "Подати декларацію цьому лікареві неможливо. Оберіть іншого фахівця або за потреби зверніться за уточненням до надавача медичних послуг",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Персона в запиті на декларацію та ж, що і в токені",
+  "status": 409,
+  "error": "Invalid person",
+  "description": "Помилка валідації запису про пацієнта",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Перевірити статус запиту на декларацію",
+  "status": 409,
+  "error": "Invalid transition",
+  "description": "Невалідний статус",
+  "user_message": "Статус заяви на подання Декларації не дозволяє завершити процес подання. Будь ласка, створіть нову заявку або зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Є хоча б один активний запит",
+  "status": 409,
+  "error": "It is prohibited to sign declaration request when there is unfinished person request",
+  "description": "Заборонено підписувати заявку на декларацію, поки не завершено запит на оновлення даних пацієнта",
+  "user_message": "Неможливо подати заявку на декларацію, оскільки ви не завершили роботу з запитом на оновлення ваших даних в системі. Будь ласка, підпишіть запит на зміну або скасуйте його, а потім подайте заяву на декларацію повторно.",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Перевірити статус верифікації",
+  "status": 409,
+  "error": "Person is not verified",
+  "description": "Запис про пацієнта не верифіковано",
+  "user_message": "Увага! Персональні дані потребують перевірки. Можливість роботи з ЕСОЗ, зокрема з деклараціями та медичними записами пацієнта, може бути заблоковано. Актуалізуйте персональні дані в ЕСОЗ.",
+  "action": "Запропонувати перейти в інтерфейс оновлення даних"
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Немає інших декларацій з тим же номером",
+  "status": 422,
+  "error": "Declaration with the same declaration_number already exists in DB",
+  "description": "Декларація з таким номером вже існує",
+  "user_message": "Декларація з таким номером вже існує. Будь ласка, створіть нову заявку або зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Перевірити запит за допомогою схеми",
+  "status": 422,
+  "error": "JSON 422 error",
+  "description": "Помилка валідації",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Запит створено персоною / запит створено законним представником, в разі неуспішних валідацій - згенерувати помилку",
+  "status": 422,
+  "error": "error",
+  "description": "Помилка валідації",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Sign Declaration request",
+  "check": "Перевірити, що підписний контент співпадає з згенерованими",
+  "status": 422,
+  "error": "data_to_be_signed 422 message: Signed content does not match the previously created content",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Недійсний електронний підпис. Перевірте свій електронний підпис та за потреби – оновіть його.",
+  "action": ""
+ },
+ {
+  "method": "PIS. Terminate declaration",
+  "check": "Перевірити валідність токена доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Terminate declaration",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Terminate declaration",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: ‘declaration: terminate_pis’",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на розірвання активної декларації",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Terminate declaration",
+  "check": "Статус верифікації персони - не",
+  "status": 403,
+  "error": "NOT_VERIFIED 403 Access denied. Person is not verified",
+  "description": "Запис про пацієнта не верифіковано",
+  "user_message": "Увага! Персональні дані потребують перевірки. Можливість роботи з ЕСОЗ, зокрема з деклараціями та медичними записами пацієнта, може бути заблоковано. Актуалізуйте персональні дані в ЕСОЗ.",
+  "action": "Запропонувати перейти в інтерфейс оновлення даних"
+ },
+ {
+  "method": "PIS. Terminate declaration",
+  "check": "Статус декларації = active, pending",
+  "status": 403,
+  "error": "verification 403. Message: ‘Invalid declaration status’",
+  "description": "Декларація неактивна. Можна розірвати тільки активну декларацію",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Terminate declaration",
+  "check": "Статус персони - активний",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Terminate declaration",
+  "check": "існує в системі",
+  "status": 404,
+  "error": "not found",
+  "description": "Декларацію не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Terminate declaration",
+  "check": "належить пацієнту",
+  "status": 404,
+  "error": "not found",
+  "description": "Декларацію не знайдено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Update authentication method",
+  "check": "Перевірити валідність токена доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Update authentication method",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Update authentication method",
+  "check": "Токен містисть person_id",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Update authentication method",
+  "check": "Метод автентифікації. il.",
+  "status": null,
+  "error": "authentication_method_request. auth_methos_current.type =",
+  "description": "THIRD_PERSON or ОТР 403 Only THIRD_PERSON or ОТР authentication method types could be updated",
+  "user_message": "Даний метод аутентифікації не може бути оновлено Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Update authentication method",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: authentication_method:write_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на оновлення методів автентифікації",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Update authentication method",
+  "check": "Статус персони - активний",
+  "status": 404,
+  "error": "not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Пацієнта не знайдено в системі або запис про пацієнта неактивний. Перевірте правильність даних електронного підпису або перейдіть до реєстрації в системі",
+  "action": ""
+ },
+ {
+  "method": "PIS. Update authentication method",
+  "check": "Метод автентифікації належить персоні",
+  "status": 404,
+  "error": "Such authentication method does not belong to this person",
+  "description": "Меиод автентифікації не належить пацієнту",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Update authentication method",
+  "check": "auth_method - активний",
+  "status": 422,
+  "error": "Authentication method isn’t active",
+  "description": "Метод аутентифікації неактивний",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "PIS. Update authentication method",
+  "check": "Аліас оновлено",
+  "status": 422,
+  "error": "Only alias can be updated",
+  "description": "Можливо оновити тільки назву методу автентифікації (alias)",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "Renew access token using refresh token",
+  "check": "Перевірити валідність Refresh token",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректний або відкликаний refresh token",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "Renew access token using refresh token",
+  "check": "client_secret належить клієнту",
+  "status": 401,
+  "error": "Invalid client id or secret.",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "Renew access token using refresh token",
+  "check": "client_id існує в базі даних mithril",
+  "status": 401,
+  "error": "Invalid client id.",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "Renew access token using refresh token",
+  "check": "Відсутній або невалідний approval",
+  "status": 401,
+  "error": "Resource owner revoked access for the client.",
+  "description": "Користувач відкликав дозвіл на доступ",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "Renew access token using refresh token",
+  "check": "Refresh token дійсний",
+  "status": 401,
+  "error": "Token expired",
+  "description": "Час дії refresh token вичерпано",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "Renew access token using refresh token",
+  "check": "refresh_token не належить вказаному",
+  "status": 401,
+  "error": "client_id 401 Token not found or expired.",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "Renew access token using refresh token",
+  "check": "Вказаний client_id",
+  "status": 422,
+  "error": "can't be blank",
+  "description": "Не передано обов’язкове поле client_id",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "Renew access token using refresh token",
+  "check": "Вказаний client_secret",
+  "status": 422,
+  "error": "can't be blank",
+  "description": "Не передано обов’язкове поле client_secret",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Initialize Update Person details",
+  "check": "Перевірити валідність токену доступу",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Initialize Update Person details",
+  "check": "Токен дійсний",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Initialize Update Person details",
+  "check": "Токен містисть person_id",
+  "status": 401,
+  "error": "Invalid access token",
+  "description": "Некоректні дані для авторизації Користувача",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Initialize Update Person details",
+  "check": "Перевірка типу клієнта на можливість оновлення персональних даних",
+  "status": 401,
+  "error": "Client type is not allowed to update person details",
+  "description": "Для даного типу клієнта заборонено оновлення персональних даних",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Initialize Update Person details",
+  "check": "Перевірити скоупи користувача на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: person_request: write_pis",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на створення запиту на персону для оновлення даних пацієнта",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Initialize Update Person details",
+  "check": "Статус персони - активний",
+  "status": 404,
+  "error": "Person is not found",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Пацієнта не знайдено в системі або запис про пацієнта неактивний. Перевірте правильність даних електронного підпису або перейдіть до реєстрації в системі",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Initialize Update Person details",
+  "check": "Значення поля відповідає схемі",
+  "status": 422,
+  "error": "with field-specific message",
+  "description": "Невалідне значення [Назва]",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Initialize Update Person details",
+  "check": "PIS_UNZR_UPDATE=true, якщо встановлене значення unzr не дорівнює null, перевірити що $.person.unzr не дорівнює null",
+  "status": 422,
+  "error": "unzr can't be cleared",
+  "description": "Видалення УНЗР заборонено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Initialize Update Person details",
+  "check": "Необхідний набір параметрів присутній в запиті",
+  "status": 422,
+  "error": "expected a minimum of %{min} items but got %{actual}",
+  "description": "У запиті відсутній мінімально необхідний набір параметрів",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Initialize Update Person details",
+  "check": "Потрібні параметри присутні в запиті",
+  "status": 422,
+  "error": "required property %{property} was not present",
+  "description": "Значення [Назва] не може бути порожнім",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Initialize Update Person details",
+  "check": "Додаткові поля відсутні в запиті",
+  "status": 422,
+  "error": "schema does not allow additional properties",
+  "description": "Помилка валідації запиту. Наявні додаткові поля",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Initialize Update Person details",
+  "check": "Перевірити, що $.person.tax_id відповідає оновленому полю персони tax_id",
+  "status": 422,
+  "error": "tax_id cant be updated",
+  "description": "Редагування РНОКПП заборонено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Initialize Update Person details",
+  "check": "PIS_UNZR_UPDATE=false, якщо встановлене значення unzr не дорівнює null, перевірити що $.person.unzr дорівнює встановленому unzr",
+  "status": 422,
+  "error": "unzr cant be updated",
+  "description": "Редагування УНЗР заборонено",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Токен PIS API присутній в запиті",
+  "status": 401,
+  "error": "Api key is not set",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Перевірка валідності токену PIS API",
+  "status": 401,
+  "error": "Invalid api key",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "client_id не заблокований в базі даних",
+  "status": 401,
+  "error": "mithril 401 Client is blocked",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "grant_type дозволений для надання клієнтом",
+  "status": 401,
+  "error": "Client is not allowed to issue access token.",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Тип клієнта - 'TRUSTED_PIS'",
+  "status": 401,
+  "error": "Client type is not allowed to issue access token.",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "grant_type це одне зі значень: pis_auth",
+  "status": 401,
+  "error": "Grant type is not allowed.",
+  "description": "Некоректні дані для підключення",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Якщо персона знайдена - перевірити, що її вік більше значення глобального параметру",
+  "status": 401,
+  "error": "no_self_auth_age 401 Incorrect person age for such an action.",
+  "description": "Невідповідний вік пацієнта для даної дії",
+  "user_message": "Помилка авторизації: увійти в свій особистий кабінет пацієнта може лише користувач старше 14 років. Якщо вам уже виповнилось 14 років - створіть контекстне звернення через портал підтримки НСЗУ за посиланням щодо зміни інформації про вас [url переходу на створення запиту з відповідною категорією].",
+  "action": "АПІС повинна зупинити процес авторизації і відобразити користувачу повідомлення про помилку"
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "client_secret належить клієнту",
+  "status": 401,
+  "error": "Invalid client id or secret.",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "client_id існує в базі даних mithril",
+  "status": 401,
+  "error": "Invalid client id.",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Отримати значення конфігураційного параметру CHECK_TRUSTED_CA_LOGIN, якщо він рівний істині - перевірити, що надавач цифрового підпису це значення з",
+  "status": 401,
+  "error": "TRUSTED_CA_EDRPOU_CODES_LIST 401 Issuer of digital signature is not allowed.",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Ваш електронний підпис не може використовуватись для роботи з [назва ПІС]. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Знайдено більше однієї активної персони",
+  "status": 401,
+  "error": "It is impossible to uniquely identify the person.",
+  "description": "Неможливо ідентифікувати пацієнта.",
+  "user_message": "Зверніться до НСЗУ для уточнення персональних даних користувача Неможливо однозначно ідентифікувати пацієнта – в системі знайдено більше ніж 1 запис про пацієнта за даними електронного підпису. Для розв'язання цієї проблеми створіть контекстне звернення через портал підтримки НСЗУ за посиланням щодо дублювання запису [url переходу на створення запиту з відповідною категорією].",
+  "action": "АПІС повинна зупинити процес авторизації і відобразити користувачу повідомлення про помилку"
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Підписний контент - це валідний JWT з aud",
+  "status": 401,
+  "error": "= trusted-client 401 JWT is invalid",
+  "description": "Некоректні дані для підключення",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Знайти існуючу персону в базі даних mpi",
+  "status": 401,
+  "error": "Person not found.",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Пацієнта не знайдено в системі або запис про пацієнта неактивний. Перевірте правильність даних електронного підпису або перейдіть до реєстрації в системі.",
+  "action": "АПІС повинна зупинити процес авторизації, відобразити повідомлення про помилку з пропозицією перейти до процедури реєстрації у Системі згідно вимог"
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Не знайдено активної персони",
+  "status": 401,
+  "error": "Person with tax id or document number not found.",
+  "description": "Запис про пацієнта з такими даними не знайдено. Перейдіть до реєстрації пацієнта",
+  "user_message": "Пацієнта не знайдено в системі або запис про пацієнта неактивний. Перевірте правильність даних електронного підпису або перейдіть до реєстрації в системі.",
+  "action": "АПІС повинна зупинити процес авторизації, відобразити повідомлення про помилку з пропозицією перейти до процедури реєстрації у Системі згідно вимог"
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Підписний контент містить поле jwt",
+  "status": 401,
+  "error": "Signed content does not contain field jwt.",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Якщо користувача знайдено - перевірити, що він не заблокований",
+  "status": 401,
+  "error": "User is blocked.",
+  "description": "Користувача заблоковано",
+  "user_message": "Знайдений за даними електронного підпису Користувач був заблокований. Якщо ви вважаєте що це помилка - створіть технічне звернення через портал підтримки НСЗУ за посиланням [url переходу на створення запиту з відповідною категорією].",
+  "action": "АПІС повинна зупинити процес авторизації і відобразити користувачу повідомлення про помилку"
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Цифровий підпис валідний",
+  "status": 401,
+  "error": "with digital signature validation error message",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Перевірка скоупів PIS на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: trusted_person: login",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на авторизацію пацієнта",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Поле signed_content це валідний рядок в форматі base64",
+  "status": 422,
+  "error": "Invalid signed content",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Значення поля signed_content_encoding рівне 'base64'",
+  "status": 422,
+  "error": "is invalid",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Перевірка, що client_id вказано та він не рівний null",
+  "status": 422,
+  "error": "required property client_id was not present",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "client_secret вказано та він не рівний null",
+  "status": 422,
+  "error": "required property client_secret was not present",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "grant_type вказаний та не рівний null",
+  "status": 422,
+  "error": "required property grant_type was not present",
+  "description": "Значення [Назва] не може бути порожнім",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "scope вказано та він не рівний null",
+  "status": 422,
+  "error": "required property scope was not present",
+  "description": "Значення [Назва] не може бути порожнім",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "signed_content та signed_content_encoding вказані",
+  "status": 422,
+  "error": "required property signed_content was not present or ‘required property signed_content_encoding was not present",
+  "description": "Значення [Назва] не може бути порожнім",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Запитаний скоуп дозволений для даного типу клієнта",
+  "status": 422,
+  "error": "Scope is not allowed by client type.",
+  "description": "Помилка валідації скоупів",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-in",
+  "check": "Запитаний скоуп існує в ролі користувача",
+  "status": 422,
+  "error": "User requested scope that is not allowed by role based access policies.",
+  "description": "Помилка валідації скоупів",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Токен PIS API присутній в запиті",
+  "status": 401,
+  "error": "Api key is not set",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Перевірка валідності токену PIS API",
+  "status": 401,
+  "error": "Invalid api key",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "client_id не заблокований в базі даних",
+  "status": 401,
+  "error": "mithril 401 Client is blocked",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Перевірка, що client_id дорівнює",
+  "status": 401,
+  "error": "TRUSTED_PIS' 401 Client type is not allowed to register patient.",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Перевірити, що вік персони більше ніж значення глобального параметру",
+  "status": 401,
+  "error": "no_self_auth_age 401 Incorrect person age for such an action.",
+  "description": "Невідповідний вік пацієнта для даної дії",
+  "user_message": "Увійти у свій особистий кабінет пацієнта може лише користувач старше 14 років. Якщо вам уже виповнилось 14 років - створіть звернення через портал підтримки НСЗУ за посиланням [url переходу на створення запиту з відповідною категорією].",
+  "action": "АПІС повинна зупинити процес реєстрації і відобразити користувачу повідомлення про помилку"
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Одна активна персона з порівняльним скором >",
+  "status": null,
+  "error": "PIS_ONLINE_DEDUPLICATION_MATCH",
+  "description": "_SCORE була знайдена - перевірити, що її вік більше за значення глобального параметру no_self_auth_age 401 Incorrect person age for such an action.",
+  "user_message": "Невідповідний вік пацієнта для даної дії Увійти у свій особистий кабінет пацієнта може лише користувач старше 14 років. Якщо вам уже виповнилось 14 років - створіть звернення через портал підтримки НСЗУ за посиланням [url переходу на створення запиту з відповідною категорією].",
+  "action": "АПІС повинна зупинити процес реєстрації і відобразити користувачу повідомлення про помилку"
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "client_secret належить клієнту",
+  "status": 401,
+  "error": "Invalid client id or secret.",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "client_id існує в базі даних mithril",
+  "status": 401,
+  "error": "Invalid client id.",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Емітент цифрового підпису це значення з",
+  "status": 401,
+  "error": "TRUSTED_CA_EDRPOU_CODES_LIST 401 Issuer of digital signature is not allowed.",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Ваш електронний підпис не може використовуватись для роботи з [назва ПІС]. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Більше одної персони з порівняльним скором >",
+  "status": null,
+  "error": "PIS_ONLINE_DEDUPLICATION_MATCH",
+  "description": "_SCORE було знайдено 401 It is impossible to uniquely identify the person.",
+  "user_message": "Неможливо ідентифікувати пацієнта. Зверніться до НСЗУ для уточнення персональних даних користувача Неможливо однозначно ідентифікувати пацієнта – в системі знайдено більше ніж 1 запис про пацієнта за даними електронного підпису. Для розв'язання цієї проблеми створіть звернення через порталу підтримки НСЗУ за посиланням [url переходу на створення запиту з відповідною категорією].",
+  "action": "АПІС повинна зупинити процес реєстрації і відобразити користувачу повідомлення про помилку"
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Перевірити підписний контент, що це валідний JWT з aud = trusted-client",
+  "status": 401,
+  "error": "JWT is invalid",
+  "description": "Некоректні дані для підключення",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Персону не було знайдено",
+  "status": 401,
+  "error": "Person not found.",
+  "description": "Запис про пацієнта не знайдено",
+  "user_message": "Знайдений за даними електронного підпису Користувач. Cтворіть звернення через портал підтримки НСЗУ за посиланням [url переходу на створення запиту з відповідною категорією].",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Підписний контент містить поле jwt",
+  "status": 401,
+  "error": "Signed content does not contain jwt.",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Користувача знайдено - перевірити, що він не заблокований",
+  "status": 401,
+  "error": "User is blocked.",
+  "description": "Користувача заблоковано",
+  "user_message": "Знайдений за даними електронного підпису Користувач був заблокований. Якщо ви вважаєте що це помилка створіть звернення через портал підтримки НСЗУ за посиланням [url переходу на створення запиту з відповідною категорією].",
+  "action": "АПІС повинна зупинити процес реєстрації і відобразити користувачу повідомлення про помилку"
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Користувача було знайдено - перевірити, що він не заблокований",
+  "status": 401,
+  "error": "User is blocked.",
+  "description": "Користувача заблоковано",
+  "user_message": "Знайдений за даними електронного підпису Користувач був заблокований. Якщо ви вважаєте що це помилка створіть звернення через портал підтримки НСЗУ за посиланням [url переходу на створення запиту з відповідною категорією].",
+  "action": "АПІС повинна зупинити процес реєстрації і відобразити користувачу повідомлення про помилку"
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Цифровий підпис валідний",
+  "status": 401,
+  "error": "with digital signature validation error message",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Перевірити скоупи PIS на можливість виконання даної дії",
+  "status": 403,
+  "error": "Your scope does not allow to access this resource. Missing allowances: trusted_person: sign_up",
+  "description": "Для вашої ролі відсутній доступ до цього ресурсу. Необхідний доступ на реєстрацію пацієнта",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Значення drfo з цифрового підпису належить персоні в запиті на реєстрацію,",
+  "status": 409,
+  "error": "Registration person and person that sign should be the same",
+  "description": "Дані з підпису не співпадають з даними для реєстрації",
+  "user_message": "Дані з підпису не співпадають з даними для реєстрації. Будь ласка, перевірте правильність введених даних та переконайтеся, що електронний підпис, який використвується, належить вам і є актуальним.",
+  "action": "АПІС відобразити користувачу повідомлення про помилку і повернутися на початок процесу рєстрації"
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Вказані signed_content та",
+  "status": 422,
+  "error": "signed_content_encoding 422 cant be blank",
+  "description": "Значення [Назва] не може бути порожнім",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "last_name з цифрового підпису належить персоні з запиту на реєстрацію",
+  "status": 422,
+  "error": "Input name doesn't match name from digital signature",
+  "description": "Вказане прізвище або ім'я не відповідає даним з електронного підпису",
+  "user_message": "Дані з підпису не співпадають з даними для реєстрації. Будь ласка, перевірте правильність введених даних та переконайтеся, що електронний підпис, який використвується, належить вам і є актуальним.",
+  "action": "АПІС відобразити користувачу повідомлення про помилку і повернутися на початок процесу рєстрації"
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "first_name з запиту на реєстрацію вказано в рядку given_name з цифрового підпису",
+  "status": 422,
+  "error": "Input name doesn't match name from digital signature",
+  "description": "Вказане прізвище або ім'я не відповідає даним з електронного підпису",
+  "user_message": "Дані з підпису не співпадають з даними для реєстрації. Будь ласка, перевірте правильність введених даних та переконайтеся, що електронний підпис, який використвується, належить вам і є актуальним.",
+  "action": "АПІС відобразити користувачу повідомлення про помилку і повернутися на початок процесу рєстрації"
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Поле signed_content це валідний рядок в форматі base64",
+  "status": 422,
+  "error": "Invalid signed content",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Поле signed_content це валідний рядок в форматі base64",
+  "status": 422,
+  "error": "Invalid signed content",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Підписний контент містить запит на реєстрацію персони, з обов'язковими полями person, patient_signed,",
+  "status": 422,
+  "error": "process_disclosure_data_consent 422 Invalid signed content, field {field_name} is missing",
+  "description": "Значення [Назва] не може бути порожнім",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Підписний контент містить запит на реєстрацію персони, з обов'язковими полями person, patient_signed,",
+  "status": 422,
+  "error": "process_disclosure_data_consent 422 Invalid signed content, field {field_name} is missing",
+  "description": "Значення [Назва] не може бути порожнім",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "PIS_VALIDATE_ALL_PHONES. Якщо встановлено true - перевірити, що значення з поля $.otp в запиті дорівнює коду верифікації, що був направлений на номер телефону, та декодоване значення md5 hash з $.signed_content дорівнює значенню, що зберігається",
+  "status": 422,
+  "error": "Invalid verification code",
+  "description": "Недійсний код підтвердження",
+  "user_message": "Невірний код підтвердження вказаного вами номеру телефону як методу автентифікації",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Поле signed_content_encoding рівне 'base64'",
+  "status": 422,
+  "error": "is invalid",
+  "description": "Невалідний електронний підпис або підписний контент",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "client_id вказано в полі token і не рівне null",
+  "status": 422,
+  "error": "required property client_id was not present",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "client_secret вказано в полі token та не рівне",
+  "status": 422,
+  "error": "null 422 required property client_secret was not present",
+  "description": "Помилка даних пацієнтської інформаційної системи",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "scope вказані в полі token та не дорівнюють",
+  "status": 422,
+  "error": "null 422 required property scope was not present",
+  "description": "Значення [Назва] не може бути порожнім",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Запитані скоупи дозволені для даного типу клієнта",
+  "status": 422,
+  "error": "Scope is not allowed by client type.",
+  "description": "Помилка валідації скоупів",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "Запитані скоупи існуються дл ролі користувачів",
+  "status": 422,
+  "error": "User requested scope that is not allowed by role based access policies.",
+  "description": "Помилка валідації скоупів",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "patient_signed дорівнює ‘true’",
+  "status": 422,
+  "error": "value is not allowed in enum",
+  "description": "Неприпустиме значення [Назва]",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ },
+ {
+  "method": "TRUSTED PIS. Patient sign-up",
+  "check": "process_disclosure_data_consentдорівнює",
+  "status": 422,
+  "error": "‘true’ 422 value is not allowed in enum",
+  "description": "Неприпустиме значення [Назва]",
+  "user_message": "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС] Verify phone number JWT не закінчив строк дії 401 JWT expired Некоректні дані для підключення Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС] Verify phone number Хедер авторизації містить валідний JWT 401 JWT is invalid Некоректні дані для підключення Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС] Verify phone number JWT з правильним aud : cabinet-registration, pis-registration, trusted-client 401 JWT is not permitted for this action Некоректні дані для підключення Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС] Verify phone number Поля factor та type вказані в запиті та не пусті 422 cant be blank Значення [Назва] не може бути порожнім Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС] Verify phone number Поле content_hash присутній в запиті і не є пустим aud = pis-registration, trusted-client 422 content hash is required for pis and trusted_pis clients Значення [Назва] не може бути порожнім Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС] Verify phone number Значення поляfactor відповідає номеру телефону з врахуванням regexp 422 invalid phone Помилка валідації Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС] Verify phone number Значення поля type відповідає SMS 422 is invalid Помилка валідації Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС] Verify phone number Виклик OTP не перевищує ліміт для номеру телефону 429 Too many attemts Виклик OTP перевищив ліміт для номера телефону Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]",
+  "action": ""
+ }
+]

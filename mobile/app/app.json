@@ -1,0 +1,75 @@
+{
+  "expo": {
+    "name": "Плексі",
+    "slug": "simplexmed-pis",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "ua.simplexmed.pis"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#273FCC",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "ua.simplexmed.pis",
+      "allowBackup": false,
+      "blockedPermissions": [
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.VIBRATE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-secure-store",
+        {
+          "configureAndroidBackup": true,
+          "faceIDPermission": "Дозвольте використовувати Face ID для розблокування кабінету пацієнта."
+        }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Дозвольте використовувати Face ID для розблокування кабінету пацієнта."
+        }
+      ],
+      "expo-web-browser",
+      "expo-sharing",
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 160,
+          "resizeMode": "contain",
+          "backgroundColor": "#F3F5F8",
+          "dark": {
+            "image": "./assets/splash-icon-dark.png",
+            "backgroundColor": "#0C111D"
+          }
+        }
+      ]
+    ],
+    "scheme": "simplexpis",
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "pisApiBase": "https://my-dev.simplex-med.com",
+      "ehealthEnv": "pis-app"
+    },
+    "description": "Плексі — кабінет пацієнта на базі SimplexMed: вхід через ЕСОЗ, декларація з лікарем, персональні дані."
+  }
+}

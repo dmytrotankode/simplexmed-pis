@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Підпис КЕП — SimplexMed</title>
+  <style>
+    :root { color-scheme: light; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 16px;
+           background: #f8fafc; color: #0f172a; font-size: 15px; }
+    h1 { font-size: 18px; margin: 0 0 8px; }
+    p { color: #475569; margin: 0 0 16px; line-height: 1.4; }
+    label { display: block; font-size: 13px; font-weight: 600; color: #334155; margin: 12px 0 6px; }
+    select, input[type=password], input[type=file] { width: 100%; box-sizing: border-box; padding: 12px; font-size: 15px;
+           border: 1px solid #94a3b8; border-radius: 10px; background: #fff; color: #0f172a; }
+    button { width: 100%; margin-top: 20px; padding: 14px; font-size: 16px; font-weight: 600; border: 0; border-radius: 10px;
+             background: #047857; color: #fff; }
+    button:disabled { background: #64748b; }
+    .note { font-size: 13px; color: #475569; margin-top: 12px; }
+    .status { margin-top: 16px; padding: 12px; border-radius: 10px; display: none; }
+    .status.info { display: block; background: #eff6ff; color: #1e3a8a; border: 1px solid #bfdbfe; }
+    .status.error { display: block; background: #fef2f2; color: #7f1d1d; border: 1px solid #fecaca; }
+    .owner { margin-top: 12px; padding: 12px; border-radius: 10px; background: #ecfdf5; color: #064e3b; display: none; }
+  </style>
+</head>
+<body>
+  <!--
+    Сторінка для мобільного застосунку ПІС (react-native-webview).
+    Застосунок передає дані для підпису повідомленням {type:"sign", data, title, purpose};
+    сторінка повертає {type:"signed", signed} | {type:"error", message} | {type:"ready"} через ReactNativeWebView.postMessage.
+    Файл ключа і пароль обробляються лише тут, у бібліотеці ІІТ (web worker), і нікуди не передаються.
+  -->
+  <main>
+    <h1 id="title">Електронний підпис</h1>
+    <p id="purpose">Очікування даних для підпису…</p>
+    <form id="form" novalidate>
+      <label for="ca">Кваліфікований надавач (ЦСК)</label>
+      <select id="ca"><option value="">Визначити автоматично (довше)</option></select>
+      <label for="file">Файл ключа (.dat, .pfx, .p12, .jks, .zs2)</label>
+      <input id="file" type="file" accept=".dat,.pfx,.p12,.jks,.zs2,.pk8,application/octet-stream">
+      <label for="password">Пароль до ключа</label>
+      <input id="password" type="password" autocomplete="off">
+      <button id="submit" type="submit" disabled>Зчитати ключ і підписати</button>
+    </form>
+    <div id="owner" class="owner" role="status"></div>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+    <p class="note">Ключ і пароль обробляються лише на вашому пристрої й не передаються на сервер.</p>
+  </main>
+  <script src="/kep.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      var dataToSign = null;
+      var bridge = window.ReactNativeWebView;
+
+      function send(msg) { if (bridge) bridge.postMessage(JSON.stringify(msg)); }
+      function status(type, text) {
+        var el = document.getElementById('status');
+        el.className = 'status ' + (text ? type : '');
+        el.textContent = text || '';
+      }
+
+      function onMessage(event) {
+        var msg;
+        try { msg = JSON.parse(event.data); } catch (e) { return; }
+        if (!msg || msg.type !== 'sign' || typeof msg.data !== 'string') return;
+        dataToSign = msg.data;
+        if (msg.title) document.getElementById('title').textContent = msg.title;
+        document.getElementById('purpose').textContent = msg.purpose || 'Підпишіть дані своїм кваліфікованим електронним підписом.';
+        document.getElementById('submit').disabled = false;
+      }
+      // Android WebView надсилає повідомлення на document, iOS — на window
+      window.addEventListener('message', onMessage);
+      document.addEventListener('message', onMessage);
+
+      Kep.listCAs().then(function (names) {
+        var select = document.getElementById('ca');
+        names.forEach(function (n) { var o = document.createElement('option'); o.value = n; o.textContent = n; select.appendChild(o); });
+      }).catch(function () { /* автоматичне визначення ЦСК */ });
+
+      document.getElementById('form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!dataToSign) return;
+        var btn = document.getElementById('submit');
+        var file = document.getElementById('file').files[0];
+        var password = document.getElementById('password').value;
+        if (!file) { status('error', 'Оберіть файл ключа'); return; }
+        btn.disabled = true;
+        status('info', 'Зчитування ключа… Перший раз бібліотека підпису завантажується кілька секунд.');
+        file.arrayBuffer().then(function (buf) {
+          return Kep.readKey(new Uint8Array(buf), password, document.getElementById('ca').value);
+        }).then(function (res) {
+          document.getElementById('password').value = '';
+          var o = res.owner || {};
+          var owner = document.getElementById('owner');
+          owner.textContent = 'Підписувач: ' + (o.subjFullName || o.subjCN || '—') + (o.subjDRFOCode ? ' • РНОКПП ' + o.subjDRFOCode : '');
+          owner.style.display = 'block';
+          status('info', 'Накладання підпису…');
+          return Kep.sign(dataToSign);
+        }).then(function (signed) {
+          status('info', 'Підпис накладено.');
+          send({ type: 'signed', signed: signed });
+          return Kep.reset();
+        }).catch(function (err) {
+          var message = (err && err.message) || String(err);
+          status('error', message);
+          send({ type: 'error', message: message });
+          btn.disabled = false;
+        });
+      });
+
+      send({ type: 'ready' });
+    })();
+  </script>
+</body>
+</html>
