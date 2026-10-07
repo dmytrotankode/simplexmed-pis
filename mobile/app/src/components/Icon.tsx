@@ -3,7 +3,8 @@ import Svg, { Circle, Path, Rect } from 'react-native-svg';
 /** Лінійні іконки дизайну «Плексі» (24×24, обведення 2). Декоративні: підпис дає текст поруч або accessibilityLabel кнопки. */
 export type IconName =
   | 'home' | 'file' | 'user' | 'more' | 'chevron' | 'back' | 'key' | 'grid' | 'upload' | 'download' | 'alert' | 'check'
-  | 'stop' | 'tick' | 'plus' | 'pencil' | 'doctor' | 'lock' | 'shield' | 'logout' | 'eye' | 'fingerprint' | 'list';
+  | 'stop' | 'tick' | 'plus' | 'pencil' | 'doctor' | 'lock' | 'shield' | 'logout' | 'eye' | 'fingerprint' | 'list'
+  | 'trash';
 
 function Glyph({ name, color }: { name: IconName; color: string }) {
   switch (name) {
@@ -53,6 +54,8 @@ function Glyph({ name, color }: { name: IconName; color: string }) {
       return <><Path d="M7 17.5c.9-1.7 1.4-3.5 1.4-5.5a3.6 3.6 0 0 1 7.2 0c0 1.2-.1 2.4-.3 3.5" /><Path d="M12 12c0 3-.8 5.8-2.3 8" /><Path d="M4.6 15.5c.6-1.1.9-2.3.9-3.5a6.5 6.5 0 0 1 11.6-4" /><Path d="M18.4 11c.1.5.1 1 .1 1.5 0 2.7-.5 5.3-1.5 7.6" /></>;
     case 'list':
       return <><Path d="M9 6.5h10.5" /><Path d="M9 12h10.5" /><Path d="M9 17.5h10.5" /><Circle cx="5" cy="6.5" r="1" /><Circle cx="5" cy="12" r="1" /><Circle cx="5" cy="17.5" r="1" /></>;
+    case 'trash':
+      return <><Path d="M4.5 6.5h15" /><Path d="M9.5 6.5V5a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 14.5 5v1.5" /><Path d="M6.5 6.5l.9 12.6A1.5 1.5 0 0 0 8.9 20.5h6.2a1.5 1.5 0 0 0 1.5-1.4l.9-12.6" /><Path d="M10 10.5v6" /><Path d="M14 10.5v6" /></>;
     default:
       return null;
   }

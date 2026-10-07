@@ -60,7 +60,8 @@ function Shell() {
         <Stack.Screen name="login" options={{ headerShown: false }} />
         <Stack.Screen name="privacy" options={{ title: 'Політика конфіденційності' }} />
         <Stack.Screen name="sign-up" options={{ title: 'Реєстрація в ЕСОЗ' }} />
-        <Stack.Screen name="kep-sign" options={{ title: 'Електронний підпис', presentation: 'modal' }} />
+        {/* Звичайний екран стека (не presentation: 'modal'): нативне модальне вікно iOS опинилося б над екраном PIN-коду (п.2.9) */}
+        <Stack.Screen name="kep-sign" options={{ title: 'Електронний підпис' }} />
         <Stack.Screen name="pin-setup" options={{ title: 'PIN-код застосунку', headerBackVisible: false }} />
         <Stack.Screen name="person-edit" options={{ title: 'Зміна персональних даних' }} />
         <Stack.Screen name="person-requests" options={{ title: 'Запити на зміну даних' }} />

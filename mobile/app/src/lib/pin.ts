@@ -46,19 +46,36 @@ export async function setPin(pin: string): Promise<void> {
 
 export type PinCheck = { ok: boolean; attemptsLeft: number; wiped: boolean };
 
+/** Кількість уже зарахованих невдалих спроб (некоректне значення — 0). */
+async function failedAttempts(): Promise<number> {
+  const n = Number.parseInt((await getSecure(KEYS.pinAttempts)) ?? '0', 10);
+  return Number.isFinite(n) && n > 0 ? n : 0;
+}
+
+/**
+ * Перевірка PIN-коду. Спроба зараховується ДО обчислення і порівняння хешу: якщо застосунок закрити
+ * під час перевірки (щоб невдала спроба не врахувалася), лічильник уже збільшено. Правильний PIN скидає
+ * лічильник; після PIN_MAX_ATTEMPTS невдалих спроб сесія і дані стираються.
+ */
 export async function verifyPin(pin: string): Promise<PinCheck> {
   const stored = await getSecure(KEYS.pin);
   if (!stored) return { ok: false, attemptsLeft: 0, wiped: true };
-  const [salt, expected] = stored.split('$');
-  if (constantTimeEqual(await hashPin(pin, salt), expected)) {
-    await deleteSecure(KEYS.pinAttempts);
-    return { ok: true, attemptsLeft: PIN_MAX_ATTEMPTS, wiped: false };
-  }
-  const failed = Number((await getSecure(KEYS.pinAttempts)) ?? '0') + 1;
-  if (failed >= PIN_MAX_ATTEMPTS) {
+  const previous = await failedAttempts();
+  if (previous >= PIN_MAX_ATTEMPTS) {
+    // Ліміт вичерпано раніше, але стирання перервалося — стерти без перевірки
     await wipeAll();
     return { ok: false, attemptsLeft: 0, wiped: true };
   }
-  await setSecure(KEYS.pinAttempts, String(failed));
-  return { ok: false, attemptsLeft: PIN_MAX_ATTEMPTS - failed, wiped: false };
+  const attempt = previous + 1;
+  await setSecure(KEYS.pinAttempts, String(attempt));
+  const [salt, expected] = stored.split('$');
+  if (constantTimeEqual(await hashPin(pin, salt), expected ?? '')) {
+    await deleteSecure(KEYS.pinAttempts);
+    return { ok: true, attemptsLeft: PIN_MAX_ATTEMPTS, wiped: false };
+  }
+  if (attempt >= PIN_MAX_ATTEMPTS) {
+    await wipeAll();
+    return { ok: false, attemptsLeft: 0, wiped: true };
+  }
+  return { ok: false, attemptsLeft: PIN_MAX_ATTEMPTS - attempt, wiped: false };
 }

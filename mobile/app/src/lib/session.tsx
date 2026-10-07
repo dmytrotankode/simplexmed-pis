@@ -4,7 +4,8 @@ import { router } from 'expo-router';
 import { Alert, AppState, type AppStateStatus } from 'react-native';
 
 import { ApiError } from './api';
-import { logoutOnServer } from './auth';
+import { deleteAccountOnServer, logoutOnServer } from './auth';
+import { clearCacheDirectory, ensureFreshInstall } from './localFiles';
 import { type SessionStatus, statusOnResume, statusOnStart, statusOnTick } from './lock';
 import { type PinCheck, hasPin, setPin, verifyPin } from './pin';
 import { KEYS, getSecure, setSecure, wipeAll } from './secure';
@@ -21,13 +22,25 @@ type SessionValue = {
   unlockWithPin: (pin: string) => Promise<PinCheck>;
   unlockWithBiometric: () => Promise<boolean>;
   lock: () => void;
-  signOut: () => Promise<void>;
+  /** Вихід (п.3.7). Не кидає помилок; повертає попередження за Додатком 1, якщо ЕСОЗ не припинила токени (п.3.7.1.1). */
+  signOut: () => Promise<string | null>;
+  /** Видалення облікового запису «Плексі» на сервері і всіх даних на пристрої; повертає повідомлення сервера. */
+  deleteAccount: () => Promise<string>;
   /** Обробка помилки API: недійсна сесія — локальний вихід. */
   handleApiError: (e: unknown) => string;
 };
 
 const SessionContext = createContext<SessionValue | null>(null);
 const TICK_MS = 15_000;
+
+/** п.2.9: після PIN_MAX_ATTEMPTS невдалих спроб дані застосунку на пристрої стираються. */
+export const MSG_PIN_WIPED =
+  'Після 5 невдалих спроб введення PIN-коду дані кабінету на цьому пристрої видалено. Увійдіть через ЕСОЗ знову.';
+
+/** п.3.7.1.1: помилку ЕСОЗ під час виходу (текст за Додатком 1) показати Користувачу. */
+export function showLogoutWarning(warning: string | null | undefined): void {
+  if (warning) Alert.alert('Вихід з кабінету', warning);
+}
 
 export function SessionProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<SessionStatus>('loading');
@@ -44,10 +57,22 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     lastActivity.current = Date.now();
     (async () => {
-      const [stored, pin, bio] = await Promise.all([getSecure(KEYS.session), hasPin(), getSecure(KEYS.biometric)]);
-      setToken(stored);
-      setBiometricEnabled(bio === '1');
-      setStatus(statusOnStart(Boolean(stored), pin));
+      try {
+        // iOS зберігає Keychain після видалення застосунку: перший запуск після встановлення — з чистого сховища
+        await ensureFreshInstall(wipeAll);
+        const [stored, pin, bio] = await Promise.all([getSecure(KEYS.session), hasPin(), getSecure(KEYS.biometric)]);
+        setToken(stored);
+        setBiometricEnabled(bio === '1');
+        setStatus(statusOnStart(Boolean(stored), pin));
+      } catch {
+        // Сховище ключів недоступне або пошкоджене (напр., після зміни блокування екрана пристрою):
+        // локальний вихід — потрібен новий вхід через ЕСОЗ, а не «вічне» завантаження
+        await wipeAll().catch(() => {});
+        clearCacheDirectory();
+        setToken(null);
+        setBiometricEnabled(false);
+        setStatus('signedOut');
+      }
     })();
   }, []);
 
@@ -66,8 +91,14 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     return () => clearInterval(id);
   }, []);
 
+  /** Стирання всіх даних на пристрої: захищене сховище і кеш (експортовані форми, копії документів). */
   const wipeLocal = useCallback(async () => {
-    await wipeAll();
+    try {
+      await wipeAll();
+    } catch {
+      // сховище недоступне — стан застосунку все одно скидається
+    }
+    clearCacheDirectory();
     setToken(null);
     setBiometricEnabled(false);
     setStatus('signedOut');
@@ -95,8 +126,9 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       touch();
       setStatus('unlocked');
     } else if (result.wiped) {
-      await logoutOnServer(token);
+      const warning = await logoutOnServer(token);
       await wipeLocal();
+      Alert.alert('Кабінет заблоковано', warning ? `${MSG_PIN_WIPED}\n\n${warning}` : MSG_PIN_WIPED);
     }
     return result;
   }, [token, touch, wipeLocal]);
@@ -118,13 +150,20 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const lock = useCallback(() => setStatus((s) => (s === 'unlocked' ? 'locked' : s)), []);
 
   const signOut = useCallback(async () => {
-    await logoutOnServer(token);
+    const warning = await logoutOnServer(token);
     await wipeLocal();
+    return warning;
+  }, [token, wipeLocal]);
+
+  const deleteAccount = useCallback(async () => {
+    const message = await deleteAccountOnServer(token);
+    await wipeLocal();
+    return message;
   }, [token, wipeLocal]);
 
   const handleApiError = useCallback((e: unknown) => {
     if (e instanceof ApiError) {
-      if (e.unauthorized) void wipeLocal();
+      if (e.unauthorized) void wipeLocal().catch(() => {});
       // Додаток 1 «Дії ПІС»: пацієнт не верифікований — запропонувати перейти до оновлення даних
       if (e.nextStep === 'person-edit') {
         Alert.alert('Потрібно оновити дані', e.message, [
@@ -139,9 +178,9 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<SessionValue>(() => ({
     status, token, appState, biometricEnabled, touch, signIn, setupPin, unlockWithPin, unlockWithBiometric,
-    lock, signOut, handleApiError,
+    lock, signOut, deleteAccount, handleApiError,
   }), [status, token, appState, biometricEnabled, touch, signIn, setupPin, unlockWithPin, unlockWithBiometric,
-       lock, signOut, handleApiError]);
+       lock, signOut, deleteAccount, handleApiError]);
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
 }

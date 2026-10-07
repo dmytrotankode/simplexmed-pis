@@ -36,3 +36,12 @@ export function statusOnTick(current: SessionStatus, lastActivityAt: number, now
 export function shouldCoverContent(appState: string, status: SessionStatus): boolean {
   return status === 'locked' || (status === 'unlocked' && appState !== 'active');
 }
+
+/**
+ * Чи можна показувати модальне вікно (окреме нативне вікно над усім, зокрема над екраном PIN-коду):
+ * лише в розблокованому кабінеті. До входу (форма реєстрації) PIN-коду ще немає — дозволено, якщо
+ * екран працює без сесії (allowSignedOut).
+ */
+export function isModalAllowed(status: SessionStatus, allowSignedOut = false): boolean {
+  return status === 'unlocked' || (allowSignedOut && status === 'signedOut');
+}

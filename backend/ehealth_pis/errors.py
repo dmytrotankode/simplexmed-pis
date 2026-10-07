@@ -12,6 +12,7 @@ import re
 
 ANNEX_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "annex1_errors.json")
 GENERIC_MESSAGE = "Сталася помилка. Зверніться до технічної підтримки [назва ПІС]: [контакти підтримки ПІС]"
+DEFAULT_SUPPORT_CONTACTS = "support@simplex-med.com"
 NETWORK_MESSAGE = "Сервіс ЕСОЗ тимчасово недоступний. Спробуйте, будь ласка, пізніше."
 
 
@@ -45,16 +46,23 @@ class EhealthApiError(Exception):
         }
 
 
+# Текст помилки від ЕСОЗ або сервісу авторизації обрізаємо: зіставлення — регулярними виразами
+MAX_ERROR_TEXT = 2000
+# Плейсхолдери в тексті помилки таблиці: %{property}, # {limit}, <<types>>, <type>, [Назва]
+PLACEHOLDER_RE = re.compile(r"%\{[^}]*\}|#\s*\{[^}]*\}|<<?[^<>]*>>?|\[[^\]]*\]")
+
+
 def _norm(text):
-    text = (text or "").lower()
+    text = str(text or "")[:MAX_ERROR_TEXT].lower()
     text = re.sub(r"[‘’'\"`«»]", "", text)
     return re.sub(r"\s+", " ", text).strip(" .")
 
 
 def _pattern(error_text):
-    """Текст помилки з таблиці -> regex; плейсхолдери %{property}, [Назва] стають .*"""
-    parts = re.split(r"%\{[^}]+\}|\[[^\]]+\]", _norm(error_text))
-    return re.compile(".*".join(re.escape(p) for p in parts))
+    """Текст помилки з таблиці -> regex; плейсхолдери — обмежений фрагмент (без катастрофічного перебору)."""
+    text = re.sub(r"^(message|error)\s*:\s*", "", _norm(error_text))
+    parts = [p.strip() for p in PLACEHOLDER_RE.split(text)]
+    return re.compile(r".{0,200}?".join(re.escape(p) for p in parts if p) or r"(?!)")
 
 
 def next_step(action):
@@ -82,24 +90,27 @@ class Annex1:
 
     def _render(self, text):
         text = (text.replace("[назва ПІС]", self.pis_name)
-                    .replace("[контакти підтримки ПІС]", self.support_contacts or "див. розділ «Підтримка»"))
+                    .replace("[контакти підтримки ПІС]", self.support_contacts or DEFAULT_SUPPORT_CONTACTS))
         if self.support_url:
             text = re.sub(r"\[url переходу на[^\]]*\]", self.support_url, text)
         return text
 
     def resolve(self, api_method, status=None, message="", error_type=""):
-        """Повертає (user_message, action) для помилки; якщо збігу немає — загальне повідомлення."""
+        """
+        Повертає (user_message, action) для помилки; якщо збігу немає — загальне повідомлення.
+        Шукаємо лише серед рядків цього методу; з кількох збігів — найконкретніший (найдовший текст помилки).
+        """
         texts = [_norm(t) for t in (message, error_type) if t]
-        candidates = [r for r in self.rows if r["method"] == api_method] or self.rows
-        best = None
+        candidates = [r for r in self.rows if r["method"] == api_method]
+        best, best_len = None, -1
         for row in candidates:
             if status is not None and row["status"] not in (None, status):
                 continue
             if row["_pattern"] and any(row["_pattern"].search(t) for t in texts):
-                best = row
-                break
-            if best is None and row["status"] == status and row["method"] == api_method and not texts:
-                best = row
+                if len(row["error"]) > best_len:
+                    best, best_len = row, len(row["error"])
+        if best is None and not texts:
+            best = next((r for r in candidates if r["status"] == status), None)
         if best is None:
             return self._render(GENERIC_MESSAGE), ""
         return self._render(best["user_message"] or GENERIC_MESSAGE), best["action"]

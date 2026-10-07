@@ -63,7 +63,9 @@
     .tab-item.is-active { color: rgb(var(--accent-600)); }
     .tab-item.is-active i { background: rgb(var(--accent-50)); }
     @media (min-width: 768px) { #bottom-nav { display: none !important; } }
-    .status-badge { display: inline-flex; align-items: center; gap: .25rem; padding: .125rem .625rem; border-radius: 9999px; font-size: .8125rem; font-weight: 600; }
+    .status-badge { display: inline-flex; align-items: center; gap: .25rem; padding: .125rem .625rem; border-radius: 9999px; font-size: .8125rem; font-weight: 600; max-width: 100%; }
+    /* Поле з помилкою від сервера (п.3.5.4): рамка кольору «потребує вашої дії» */
+    [aria-invalid="true"] { border-color: rgb(var(--attention-600)) !important; }
     @media print { #app-header, #cabinet-sidebar, #cabinet-toolbar, #bottom-nav { display: none !important; } }
   </style>
 </head>
@@ -112,11 +114,11 @@
         </p>
       </div>
 
-      <!-- Способи входу -->
-      <div class="px-6">
-        <div role="tablist" aria-label="Спосіб входу" class="grid grid-cols-2 gap-1 p-1 rounded-xl bg-slate-100 text-sm font-semibold">
-          <button role="tab" onclick="setGateAuthTab('ehealth')" id="gate-tab-ehealth">Через ЕСОЗ</button>
-          <button role="tab" onclick="setGateAuthTab('local')" id="gate-tab-local">Обліковий запис</button>
+      <!-- Способи входу: вкладки лише якщо сервер дозволяє власні облікові записи (/api/config.local_accounts) -->
+      <div id="gate-tabs" class="hidden px-6">
+        <div role="tablist" aria-label="Спосіб входу" onkeydown="gateTabsKeydown(event)" class="grid grid-cols-2 gap-1 p-1 rounded-xl bg-slate-100 text-sm font-semibold">
+          <button type="button" role="tab" onclick="setGateAuthTab('ehealth')" id="gate-tab-ehealth" aria-controls="gate-content-ehealth">Через ЕСОЗ</button>
+          <button type="button" role="tab" onclick="setGateAuthTab('local')" id="gate-tab-local" aria-controls="gate-content-local">Обліковий запис</button>
         </div>
       </div>
 
@@ -142,7 +144,7 @@
               <label class="block text-sm font-semibold text-slate-700 mb-1">Пароль:</label>
               <div class="relative">
                 <input type="password" id="gate-login-pwd" required placeholder="Введіть пароль" class="w-full px-3 pr-10 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600">
-                <button type="button" onclick="togglePasswordVis('gate-login-pwd')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-600">
+                <button type="button" onclick="togglePasswordVis('gate-login-pwd', this)" aria-label="Показати пароль" aria-pressed="false" class="absolute inset-y-0 right-0 px-3 flex items-center text-slate-500 hover:text-slate-600">
                   <i class="fa-solid fa-eye text-xs"></i>
                 </button>
               </div>
@@ -232,22 +234,6 @@
               Ще не зареєстровані в ЕСОЗ? Зареєструватися
             </button>
           </div>
-
-          <!-- Резервний спосіб, якщо браузер не повернувся до кабінету автоматично -->
-          <details class="border-t border-slate-200 pt-3 text-sm">
-            <summary class="cursor-pointer min-h-[40px] flex items-center text-slate-600 font-semibold">Не вдалося повернутися до кабінету автоматично?</summary>
-            <div class="mt-2 space-y-2">
-              <p class="text-slate-600 leading-snug">
-                Після входу в ЕСОЗ браузер відкриває адресу <code class="text-xs">https://simplex-med.com/?code=...</code>. Скопіюйте її повністю з адресного рядка і вставте сюди:
-              </p>
-              <div class="flex flex-col sm:flex-row gap-2">
-                <input type="text" id="gate-manual-code-input" aria-label="Адреса після входу в ЕСОЗ" placeholder="https://simplex-med.com/?code=...&state=..." class="flex-1 min-h-[44px] px-3 text-sm font-mono border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:outline-none">
-                <button onclick="exchangeManualCodeGate()" id="btn-exchange-code" class="min-h-[44px] px-4 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition whitespace-nowrap">
-                  Увійти в кабінет
-                </button>
-              </div>
-            </div>
-          </details>
         </div>
 
         <!-- Лог помилок або успіху -->
@@ -323,10 +309,15 @@
         <section class="space-y-3">
           <h2 class="font-bold text-slate-900 text-lg">Адреса фактичного місця проживання *</h2>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <!-- п.3.5.4.15.b: країна — за довідником COUNTRY (типово Україна) -->
+            <div><label class="block text-sm font-semibold text-slate-700 mb-1">Країна *</label><select data-f="addr.country" data-dict="COUNTRY" data-default="UA" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none bg-white min-h-[44px] text-sm focus:ring-blue-600"><option value="">—</option></select></div>
             <div><label class="block text-sm font-semibold text-slate-700 mb-1">Область *</label><select data-role="region" onchange="onRegion(this.form)" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none bg-white min-h-[44px] text-sm focus:ring-blue-600"><option value="">—</option></select></div>
-            <div class="sm:col-span-2"><label class="block text-sm font-semibold text-slate-700 mb-1">Населений пункт * (почніть вводити назву)</label>
-              <input data-role="settlement-q" oninput="searchSettlements(this.form)" placeholder="Назва населеного пункту" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600">
-              <select data-role="settlement-list" size="4" class="hidden mt-1 w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none bg-white min-h-[44px] text-sm focus:ring-blue-600" onchange="onSettlement(this.form)"></select>
+            <!-- п.3.12.3.3: райони області — "Districts by Region" -->
+            <div><label class="block text-sm font-semibold text-slate-700 mb-1">Район</label><select data-role="district" onchange="onDistrict(this.form)" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none bg-white min-h-[44px] text-sm focus:ring-blue-600"><option value="">—</option></select></div>
+            <div class="sm:col-span-3"><label class="block text-sm font-semibold text-slate-700 mb-1">Населений пункт * (почніть вводити назву)</label>
+              <input data-role="settlement-q" oninput="searchSettlements(this.form)" placeholder="Назва населеного пункту" autocomplete="off" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600">
+              <select data-role="settlement-list" size="5" aria-label="Знайдені населені пункти" class="hidden mt-1 w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none bg-white min-h-[44px] text-sm focus:ring-blue-600" onchange="onSettlement(this.form)"></select>
+              <p data-role="settlement-status" class="hidden mt-1 text-[11px] text-slate-600" role="status" aria-live="polite"></p>
             </div>
             <div><label class="block text-sm font-semibold text-slate-700 mb-1">Тип вулиці</label><select data-f="addr.street_type" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none bg-white min-h-[44px] text-sm focus:ring-blue-600" data-dict="STREET_TYPE"><option value="">—</option></select></div>
             <div class="sm:col-span-2"><label class="block text-sm font-semibold text-slate-700 mb-1">Вулиця</label><input data-f="addr.street" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
@@ -338,16 +329,20 @@
 
         <section class="space-y-3">
           <h2 class="font-bold text-slate-900 text-lg">Контакти</h2>
+          <!-- п.3.5.4.16: тип телефону — за довідником PHONE_TYPE (типово мобільний) -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div><label class="block text-sm font-semibold text-slate-700 mb-1">Мобільний телефон *</label><input data-f="phone" placeholder="+380XXXXXXXXX" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
-            <div data-role="signup-only" class="sm:col-span-2"><label class="block text-sm font-semibold text-slate-700 mb-1">Телефон для автентифікації (SMS) *</label><input data-f="auth_phone" placeholder="+380XXXXXXXXX — мобільний оператор України" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
+            <div><label class="block text-sm font-semibold text-slate-700 mb-1">Тип телефону *</label><select data-f="phone_type" data-dict="PHONE_TYPE" data-default="MOBILE" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none bg-white min-h-[44px] text-sm focus:ring-blue-600"><option value="">—</option></select></div>
+            <div><label class="block text-sm font-semibold text-slate-700 mb-1">Номер телефону *</label><input data-f="phone" type="tel" placeholder="+380XXXXXXXXX" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
+            <div data-role="signup-only"><label class="block text-sm font-semibold text-slate-700 mb-1">Телефон для автентифікації (SMS) *</label><input data-f="auth_phone" type="tel" placeholder="+380XXXXXXXXX — мобільний оператор України" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
           </div>
           <h3 class="font-semibold text-slate-700 pt-1">Особа для екстреного зв'язку *</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div><label class="block text-sm font-semibold text-slate-700 mb-1">Прізвище *</label><input data-f="ec.last_name" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
             <div><label class="block text-sm font-semibold text-slate-700 mb-1">Ім'я *</label><input data-f="ec.first_name" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
             <div><label class="block text-sm font-semibold text-slate-700 mb-1">По батькові</label><input data-f="ec.second_name" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
-            <div><label class="block text-sm font-semibold text-slate-700 mb-1">Телефон *</label><input data-f="ec.phone" placeholder="+380XXXXXXXXX" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
+            <!-- п.3.5.4.19.d.i: тип телефону контакту — за довідником PHONE_TYPE -->
+            <div><label class="block text-sm font-semibold text-slate-700 mb-1">Тип телефону *</label><select data-f="ec.phone_type" data-dict="PHONE_TYPE" data-default="MOBILE" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none bg-white min-h-[44px] text-sm focus:ring-blue-600"><option value="">—</option></select></div>
+            <div><label class="block text-sm font-semibold text-slate-700 mb-1">Телефон *</label><input data-f="ec.phone" type="tel" placeholder="+380XXXXXXXXX" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
           </div>
         </section>
         </div>
@@ -438,7 +433,7 @@
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             <!-- Основні персональні дані -->
-            <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5 space-y-4">
+            <div id="person-card" class="min-w-0 lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5 space-y-4">
               <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
                 <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">Персональні дані пацієнта
                 </h2>
@@ -487,8 +482,8 @@
               </div>
 
               <!-- Підключення eHealth (якщо пацієнт увійшов за local або kep) -->
-              <div id="p-ehealth-link-box" class="pt-3 border-t border-slate-100 flex items-center justify-between bg-slate-50 p-3 rounded-lg border border-slate-200">
-                <div class="text-xs">
+              <div id="p-ehealth-link-box" class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                <div class="text-xs min-w-0">
                   <span class="font-bold text-slate-800 flex items-center gap-1.5">
                     <i class="fa-solid fa-link text-blue-600"></i> Інтеграція з центральною базою даних eHealth
                   </span>
@@ -510,7 +505,7 @@
             </div>
 
             <!-- Статуси державних верифікацій (ДРФО, ДРАЦСГ, НСЗУ) -->
-            <div class="bg-white rounded-2xl border border-slate-200 p-5 space-y-4">
+            <div id="verification-card" class="min-w-0 bg-white rounded-2xl border border-slate-200 p-5 space-y-4">
               <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">Статуси верифікації
                 </h2>
@@ -522,20 +517,21 @@
             </div>
 
             <!-- Копії документів (п. 3.6) -->
-            <div id="documents-card" class="hidden lg:col-span-3 bg-amber-50 rounded-xl border border-amber-300 shadow-sm p-5 space-y-3">
+            <div id="documents-card" class="hidden min-w-0 lg:col-span-3 bg-amber-50 rounded-xl border border-amber-300 shadow-sm p-5 space-y-3">
               <div class="flex items-center justify-between pb-2 border-b border-amber-200">
                 <h2 class="text-sm font-bold text-amber-900 flex items-center gap-2">
-                  <i class="fa-solid fa-file-arrow-up"></i> Завантажте копії ваших документів
+                  <i class="fa-solid fa-file-arrow-up"></i> Копії документів
                 </h2>
               </div>
-              <p class="text-xs text-amber-900">До завантаження документів можливості особистого кабінету пацієнта будуть обмежені.
-                Формати: PDF, JPG, PNG, BMP, до 20 МБ.</p>
+              <!-- Текст п.3.5.8.2.1 / 3.9.3.5.f — дослівно -->
+              <p class="text-sm font-semibold text-amber-900">Завантажте копії ваших документів. До завантаження документів можливості особистого кабінету пацієнта будуть обмежені.</p>
+              <p class="text-xs text-amber-900">Формати: PDF, JPG, PNG, BMP, до 20 МБ.</p>
               <div id="documents-list" class="space-y-2 text-xs"></div>
               <button onclick="completeDocumentsUpload()" class="px-3 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-sm font-semibold min-h-[40px]">Завершити завантаження</button>
             </div>
 
             <!-- Методи автентифікації (п. 3.9.4) -->
-            <div class="lg:col-span-3 bg-white rounded-2xl border border-slate-200 p-5 space-y-3">
+            <div id="auth-methods-card" class="min-w-0 lg:col-span-3 bg-white rounded-2xl border border-slate-200 p-5 space-y-3">
               <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">Методи автентифікації в ЕСОЗ
                 </h2>
@@ -544,6 +540,17 @@
               <div id="auth-methods-list" class="text-xs text-slate-500">Доступно після входу через ЕСОЗ.</div>
               <button id="btn-add-auth-method" onclick="openAuthMethodModal()" class="hidden px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold min-h-[40px]">
                 <i class="fa-solid fa-plus"></i> Додати номер телефону для входу
+              </button>
+            </div>
+
+            <!-- Обліковий запис «Плексі»: видалення самим користувачем (App Store 5.1.1(v), Google Play) -->
+            <div id="account-card" class="min-w-0 lg:col-span-3 bg-white rounded-2xl border border-slate-200 p-5 space-y-3">
+              <div class="pb-3 border-b border-slate-100">
+                <h2 class="text-lg font-bold text-slate-900">Обліковий запис «Плексі»</h2>
+              </div>
+              <p class="text-sm text-slate-600 leading-relaxed">Ви можете видалити свій обліковий запис у кабінеті «Плексі» разом із сесіями на всіх пристроях. Записи про вас в ЕСОЗ при цьому залишаться — їх веде держава.</p>
+              <button id="btn-delete-account" onclick="deleteAccount()" class="px-3 bg-white hover:bg-rose-50 text-rose-700 rounded-lg text-sm font-semibold border border-rose-200 transition min-h-[40px]">
+                <i class="fa-regular fa-trash-can"></i> Видалити обліковий запис
               </button>
             </div>
           </div>
@@ -847,9 +854,13 @@
       <div id="declaration-modal-warning" class="hidden px-5 py-3 bg-amber-50 border-b border-amber-200 text-amber-900"></div>
       <!-- HTML форми від ЕСОЗ — в ізольованому фреймі без скриптів (п.2.3) -->
       <iframe id="declaration-frame" sandbox="" class="flex-1 w-full bg-white"></iframe>
-      <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex justify-between gap-2">
-        <button onclick="downloadFormPdf(state.declarationContent, document.getElementById('declaration-modal-title').textContent)" class="px-3 rounded-lg border border-slate-300 text-slate-700 font-semibold min-h-[40px]"><i class="fa-solid fa-file-pdf"></i> Завантажити PDF</button>
-        <div class="flex gap-2">
+      <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex flex-wrap justify-between gap-2">
+        <div class="flex flex-wrap gap-2">
+          <button onclick="downloadFormPdf(state.declarationContent, document.getElementById('declaration-modal-title').textContent)" class="px-3 rounded-lg border border-slate-300 text-slate-700 font-semibold min-h-[40px]"><i class="fa-solid fa-file-pdf"></i> Завантажити PDF</button>
+          <!-- п.3.11.2.1.3: інші відомості запиту за запитом Користувача -->
+          <button id="declaration-details-btn" onclick="showDeclarationRequestDetails()" class="hidden px-3 rounded-lg border border-slate-300 text-slate-700 font-semibold min-h-[40px]">Усі відомості</button>
+        </div>
+        <div class="flex flex-wrap gap-2">
           <button id="declaration-reject-btn" onclick="rejectDeclarationRequest(state.declarationRequestId, true)" class="hidden px-3 rounded-lg border border-rose-300 text-rose-700 font-semibold min-h-[40px]">Відхилити запит</button>
           <button id="declaration-sign-btn" onclick="signDeclarationRequest()" class="hidden px-3 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-semibold min-h-[40px]"><i class="fa-solid fa-file-signature"></i> Підписати КЕП</button>
         </div>
@@ -872,6 +883,29 @@
     </div>
   </div>
 
+  <!-- Діалог «Плексі» замість alert()/confirm()/prompt() браузера: uiAlert / uiConfirm / uiPrompt / uiDialog -->
+  <div id="modal-dialog" aria-describedby="ui-dialog-message" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <form id="ui-dialog-form" onsubmit="event.preventDefault(); uiDialogFinish(true);" novalidate class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-lg w-full overflow-hidden flex flex-col max-h-[85vh]">
+      <div class="px-5 pt-5 pb-2 flex items-start gap-3">
+        <span id="ui-dialog-icon" class="w-10 h-10 shrink-0 rounded-full flex items-center justify-center bg-blue-50 text-blue-600"><i class="fa-solid fa-circle-info text-lg"></i></span>
+        <h3 id="ui-dialog-title" class="font-bold text-lg text-slate-900 pt-1.5 min-w-0 break-words">Повідомлення</h3>
+      </div>
+      <div class="px-5 pb-5 pt-1 overflow-y-auto space-y-3 min-w-0">
+        <p id="ui-dialog-message" class="text-sm text-slate-700 leading-relaxed whitespace-pre-line break-words"></p>
+        <div id="ui-dialog-field" class="hidden">
+          <label id="ui-dialog-label" for="ui-dialog-input" class="block text-sm font-semibold text-slate-700 mb-1"></label>
+          <input id="ui-dialog-input" autocomplete="off" class="hidden w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600">
+          <textarea id="ui-dialog-textarea" rows="3" class="hidden w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none text-sm focus:ring-blue-600"></textarea>
+        </div>
+        <p id="ui-dialog-warning" class="hidden p-3 rounded-lg bg-amber-50 border border-amber-300 text-amber-900 text-sm font-semibold whitespace-pre-line"></p>
+      </div>
+      <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex flex-wrap justify-end gap-2">
+        <button type="button" id="ui-dialog-cancel" onclick="uiDialogFinish(false)" class="px-4 rounded-lg border border-slate-300 bg-white text-slate-700 font-semibold min-h-[44px]">Скасувати</button>
+        <button type="submit" id="ui-dialog-ok" class="px-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold min-h-[44px] disabled:opacity-50 disabled:cursor-not-allowed">Гаразд</button>
+      </div>
+    </form>
+  </div>
+
   <!-- ========================================================================= -->
   <!-- 5. JAVASCRIPT ЛОГІКА                                                      -->
   <!-- ========================================================================= -->
@@ -885,8 +919,25 @@
       declarations: [],
       apps: [],
       scopeDescriptions: null,
+      config: null,              // /api/config: client_id, local_accounts, legal_capacity_document_types, ...
+      sessionEnding: false,
       gateLocalMode: 'login' // 'login' or 'register'
     };
+
+    const MSG_OFFLINE = 'Немає зв’язку з сервером. Перевірте підключення до інтернету та спробуйте ще раз.';
+    const MSG_UNAVAILABLE = 'Сервіс тимчасово недоступний. Спробуйте пізніше.';
+    const MSG_IDLE_LOGOUT = 'Сесію завершено через тривалу бездіяльність. Увійдіть знову.';
+    const GATE_NOTICE_KEY = 'pis_gate_notice';          // одноразова причина для екрана входу після повного скидання сторінки
+    const AFTER_SIGNUP_KEY = 'pis_after_signup';        // повернення з сервісу реєстрації ЕСОЗ (п.3.5.8.1)
+    const SIGNUP_DOCUMENTS_KEY = 'pis_signup_documents'; // одноразова перевірка копій документів після реєстрації (п.3.5.8.2)
+
+    function flagGet(key) {
+      try { return sessionStorage.getItem(key) === '1'; } catch (e) { return false; }
+    }
+
+    function flagSet(key, on) {
+      try { if (on) sessionStorage.setItem(key, '1'); else sessionStorage.removeItem(key); } catch (e) {}
+    }
 
     // Усі дані з ЕСОЗ виводяться лише через esc() / textContent (п.2.3 ТВ ПІС, захист від XSS)
     function esc(value) {
@@ -906,39 +957,212 @@
       return fetch('/api' + endpoint, { credentials: 'same-origin', ...options });
     }
 
+    /**
+     * Запит до API кабінету: завжди {ok, status, body}, без винятків.
+     * Збій мережі — status 0 і текст про відсутність зв'язку; відповідь не у форматі JSON (крім порожньої успішної,
+     * напр. 204) — помилка «Сервіс тимчасово недоступний». 401 без ehealth_required — сесію кабінету завершено.
+     */
     async function apiJson(endpoint, options = {}) {
-      const resp = await apiFetch(endpoint, options);
-      let body = {};
-      try { body = await resp.json(); } catch (e) { body = {}; }
-      if (resp.status === 401 && body.ehealth_required) {
-        state.ehealthConnected = false;
-        updateEhealthBox();
-      } else if (resp.status === 401) {
-        logoutPatient(false);
+      let resp, text;
+      try {
+        resp = await apiFetch(endpoint, options);
+        text = await resp.text();
+      } catch (e) {
+        return { ok: false, status: 0, body: { error: MSG_OFFLINE } };
       }
-      return { ok: resp.ok, status: resp.status, body };
+      let body = {};
+      if (text.trim()) {
+        try { body = JSON.parse(text); } catch (e) { body = null; }
+        if (!body || typeof body !== 'object' || Array.isArray(body)) body = { error: MSG_UNAVAILABLE, invalid_response: true };
+      } else if (!resp.ok) {
+        body = { error: MSG_UNAVAILABLE };
+      }
+      const ok = resp.ok && !body.invalid_response;
+      if (resp.status === 401 && body.ehealth_required) {
+        if (state.ehealthConnected) setEhealthDisconnected();
+      } else if (resp.status === 401 && state.authenticated) {
+        // Сесію кабінету завершено на сервері (бездіяльність, вихід на іншому пристрої): повне скидання сторінки
+        endSession({ type: 'notice', text: MSG_IDLE_LOGOUT });
+        return new Promise(() => {});   // сторінка перезавантажується — застарілі помилки не показуємо
+      }
+      return { ok, status: resp.status, body };
     }
 
     function jsonRequest(method, payload) {
       return { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload || {}) };
     }
 
+    // Текст помилки для користувача; деталі ЕСОЗ (invalid[].rules[].description) — окремим рядком
     function errorText(body, fallback) {
-      return (body && body.error) || fallback || 'Сталася помилка. Спробуйте пізніше.';
+      const text = (body && body.error) || fallback || 'Сталася помилка. Спробуйте пізніше.';
+      const details = [];
+      for (const item of (body && Array.isArray(body.invalid) ? body.invalid : [])) {
+        for (const rule of ((item && Array.isArray(item.rules)) ? item.rules : [])) {
+          const description = rule && rule.description ? String(rule.description).trim() : '';
+          if (!description || text.includes(description)) continue;
+          const entry = item.entry ? String(item.entry).replace(/^\$\./, '') + ': ' : '';
+          if (!details.includes(entry + description)) details.push(entry + description);
+        }
+      }
+      return details.length ? text + '\nДеталі: ' + details.slice(0, 5).join('; ') : text;
+    }
+
+    // Повне скидання сторінки після виходу або завершення сесії (п.2.8): у DOM не лишається даних попереднього
+    // пацієнта; причина показується на екрані входу після перезавантаження
+    async function endSession(notice) {
+      if (state.sessionEnding) return;
+      state.sessionEnding = true;
+      flagSet(AFTER_SIGNUP_KEY, false);
+      flagSet(SIGNUP_DOCUMENTS_KEY, false);
+      let stored = !notice;
+      if (notice) {
+        try { sessionStorage.setItem(GATE_NOTICE_KEY, JSON.stringify(notice)); stored = true; } catch (e) {}
+      }
+      if (!stored) await uiAlert(notice.text, { tone: notice.type === 'error' ? 'error' : 'info' });
+      window.location.replace('/');
+    }
+
+    function takeGateNotice() {
+      try {
+        const notice = JSON.parse(sessionStorage.getItem(GATE_NOTICE_KEY) || 'null');
+        sessionStorage.removeItem(GATE_NOTICE_KEY);
+        return notice && notice.text ? notice : null;
+      } catch (e) { return null; }
+    }
+
+    // Захист від повторного натискання: прапорець ставиться синхронно, до першого await
+    const busyActions = new Set();
+    async function guard(key, fn) {
+      if (busyActions.has(key)) return undefined;
+      busyActions.add(key);
+      try { return await fn(); } finally { busyActions.delete(key); }
+    }
+    // Після переходу на сайт ЕСОЗ кнопка лишається зайнятою, доки браузер не відкрив нову сторінку
+    const holdWhileNavigating = () => new Promise(resolve => setTimeout(resolve, 8000));
+    window.addEventListener('pageshow', e => { if (e.persisted) busyActions.clear(); });
+
+    // ========================================================================
+    // Діалоги «Плексі» замість alert() / confirm() / prompt() браузера
+    // (вигляд кабінету, доступність п.1.5.3, текст з абзацами — white-space: pre-line)
+    // ========================================================================
+    const DIALOG_TONES = {
+      info: ['fa-circle-info', 'bg-blue-50 text-blue-600'],
+      success: ['fa-circle-check', 'bg-blue-50 text-blue-600'],
+      question: ['fa-circle-question', 'bg-blue-50 text-blue-600'],
+      warning: ['fa-triangle-exclamation', 'bg-amber-50 text-amber-600'],
+      error: ['fa-circle-exclamation', 'bg-rose-50 text-rose-600']
+    };
+    let dialogQueue = Promise.resolve();
+    let dialogCurrent = null;
+
+    /**
+     * opts: {kind: 'alert'|'confirm'|'prompt', title, message, tone, okText, cancelText, focusCancel, warning,
+     *        input: {label, value, multiline, maxLength, placeholder, requireText}}
+     * Результат: Promise<{ok, value}>. Діалоги показуються по черзі, кожен поверх усіх відкритих вікон.
+     */
+    function uiDialog(opts) {
+      const run = () => new Promise(resolve => openUiDialog(opts || {}, resolve));
+      const result = dialogQueue.then(run, run);
+      dialogQueue = result.catch(() => {});
+      return result;
+    }
+
+    function openUiDialog(opts, resolve) {
+      const $ = id => document.getElementById(id);
+      const kind = opts.kind || 'alert';
+      const [icon, iconCls] = DIALOG_TONES[opts.tone] || DIALOG_TONES[kind === 'alert' ? 'info' : 'question'];
+      $('ui-dialog-title').textContent = opts.title || (kind === 'alert' ? 'Повідомлення' : 'Підтвердіть дію');
+      $('ui-dialog-message').textContent = opts.message || '';
+      $('ui-dialog-message').classList.toggle('hidden', !opts.message);
+      $('ui-dialog-icon').className = 'w-10 h-10 shrink-0 rounded-full flex items-center justify-center ' + iconCls;
+      $('ui-dialog-icon').innerHTML = `<i class="fa-solid ${icon} text-lg" aria-hidden="true"></i>`;
+      $('ui-dialog-warning').textContent = opts.warning || '';
+      $('ui-dialog-warning').classList.toggle('hidden', !opts.warning);
+      const ok = $('ui-dialog-ok'), cancel = $('ui-dialog-cancel');
+      const input = opts.input || null;
+      const field = input ? $(input.multiline ? 'ui-dialog-textarea' : 'ui-dialog-input') : null;
+      $('ui-dialog-field').classList.toggle('hidden', !field);
+      [$('ui-dialog-input'), $('ui-dialog-textarea'), ok, cancel].forEach(el => el.removeAttribute('data-autofocus'));
+      [$('ui-dialog-input'), $('ui-dialog-textarea')].forEach(el => {
+        el.classList.toggle('hidden', el !== field);
+        el.value = el === field ? String(input.value || '') : '';
+        el.removeAttribute('maxlength');
+        el.placeholder = el === field ? (input.placeholder || '') : '';
+        el.oninput = null;
+      });
+      ok.textContent = opts.okText || (kind === 'alert' ? 'Гаразд' : (kind === 'prompt' ? 'Зберегти' : 'Так'));
+      cancel.textContent = opts.cancelText || 'Скасувати';
+      cancel.classList.toggle('hidden', kind === 'alert');
+      ok.disabled = false;
+      if (field) {
+        $('ui-dialog-label').textContent = input.label || '';
+        $('ui-dialog-label').htmlFor = field.id;
+        if (input.maxLength) field.maxLength = input.maxLength;
+        if (input.requireText) {
+          // Сильне підтвердження: кнопка доступна лише після введення контрольного слова
+          field.oninput = () => { ok.disabled = field.value.trim() !== input.requireText; };
+          field.oninput();
+        }
+        field.setAttribute('data-autofocus', '1');
+      } else {
+        (opts.focusCancel && kind !== 'alert' ? cancel : ok).setAttribute('data-autofocus', '1');
+      }
+      dialogCurrent = { resolve, field };
+      $('modal-dialog').classList.remove('hidden');
+    }
+
+    // true — підтвердження (кнопка дії / Enter), false — скасування (кнопка «Скасувати» / Esc)
+    function uiDialogFinish(confirmed) {
+      const current = dialogCurrent;
+      if (!current) return;
+      if (confirmed && document.getElementById('ui-dialog-ok').disabled) return;
+      dialogCurrent = null;
+      const value = current.field ? current.field.value : '';
+      document.getElementById('modal-dialog').classList.add('hidden');
+      current.resolve({ ok: !!confirmed, value });
+    }
+
+    async function uiAlert(message, opts = {}) {
+      await uiDialog({ ...opts, kind: 'alert', message });
+    }
+
+    async function uiError(message) {
+      await uiAlert(message, { title: 'Помилка', tone: 'error' });
+    }
+
+    async function uiConfirm(message, opts = {}) {
+      return (await uiDialog({ ...opts, kind: 'confirm', message })).ok;
+    }
+
+    // Аналог prompt(): текст запиту — підпис поля; null — скасовано
+    async function uiPrompt(label, value = '', opts = {}) {
+      const r = await uiDialog({ ...opts, kind: 'prompt', input: { label, value, ...(opts.input || {}) } });
+      return r.ok ? r.value : null;
     }
 
     // Показ помилки ЕСОЗ з дією за Додатком 1 (next_step від сервера): перехід до зміни даних або реєстрації
-    function alertEhealthError(body) {
+    async function alertEhealthError(body) {
       const text = errorText(body);
       if (body && body.next_step === 'person-edit') {
-        if (confirm(text + '\n\nПерейти до зміни персональних даних?')) {
+        if (await uiConfirm(text + '\n\nПерейти до зміни персональних даних?', { title: 'Помилка', tone: 'error', okText: 'Перейти' })) {
           closeKepModal();
           closeDeclarationModal();
-          openPersonEdit();
+          await openPersonEdit();
         }
         return;
       }
-      alert(text);
+      await uiError(text);
+    }
+
+    // Налаштування кабінету з сервера (кешується після успішного завантаження)
+    let configPromise = null;
+    function loadConfig() {
+      configPromise = configPromise || apiJson('/config').then(r => {
+        if (!r.ok) { configPromise = null; return null; }
+        state.config = r.body || {};
+        return state.config;
+      });
+      return configPromise;
     }
 
     // Керування відображенням: Вхід проти Кабінету
@@ -958,21 +1182,51 @@
       if (bottomNav) bottomNav.classList.toggle('hidden', !show);
     }
 
-    // Перемикання вкладок на екрані авторизації
-    function setGateAuthTab(tabKey) {
-      const tabBase = 'min-h-[44px] px-3 rounded-lg transition flex items-center justify-center gap-2';
-      document.querySelectorAll('#auth-gate button[id^="gate-tab-"]').forEach(btn => {
-        btn.className = tabBase + ' text-slate-600 hover:text-slate-900';
-        btn.setAttribute('aria-selected', 'false');
+    // Вкладки входу показуються лише з власними обліковими записами (/api/config.local_accounts), інакше — лише ЕСОЗ
+    function localAccountsEnabled() {
+      return !!(state.config && state.config.local_accounts === true);
+    }
+
+    function initGateTabs() {
+      const enabled = localAccountsEnabled();
+      document.getElementById('gate-tabs').classList.toggle('hidden', !enabled);
+      ['ehealth', 'local'].forEach(key => {
+        const panel = document.getElementById('gate-content-' + key);
+        if (enabled) {
+          panel.setAttribute('role', 'tabpanel');
+          panel.setAttribute('aria-labelledby', 'gate-tab-' + key);
+        } else {
+          panel.removeAttribute('role');
+          panel.removeAttribute('aria-labelledby');
+        }
       });
-      document.querySelectorAll('#auth-gate div[id^="gate-content-"]').forEach(c => c.classList.add('hidden'));
-      const activeBtn = document.getElementById('gate-tab-' + tabKey);
-      const activeContent = document.getElementById('gate-content-' + tabKey);
-      if (activeBtn) {
-        activeBtn.className = tabBase + ' bg-white text-slate-900 shadow-sm';
-        activeBtn.setAttribute('aria-selected', 'true');
-      }
-      if (activeContent) activeContent.classList.remove('hidden');
+      setGateAuthTab('ehealth');
+    }
+
+    // Перемикання вкладок на екрані авторизації (WAI-ARIA Tabs: aria-selected, aria-controls, клавіші-стрілки)
+    function setGateAuthTab(tabKey) {
+      if (tabKey !== 'ehealth' && !localAccountsEnabled()) tabKey = 'ehealth';
+      const tabBase = 'min-h-[44px] px-3 rounded-lg transition flex items-center justify-center gap-2';
+      document.querySelectorAll('#gate-tabs [role="tab"]').forEach(btn => {
+        const on = btn.id === 'gate-tab-' + tabKey;
+        btn.className = tabBase + (on ? ' bg-white text-slate-900 shadow-sm' : ' text-slate-600 hover:text-slate-900');
+        btn.setAttribute('aria-selected', String(on));
+        btn.tabIndex = on ? 0 : -1;
+      });
+      ['ehealth', 'local'].forEach(key => {
+        document.getElementById('gate-content-' + key).classList.toggle('hidden', key !== tabKey);
+      });
+    }
+
+    function gateTabsKeydown(e) {
+      const tabs = [...document.querySelectorAll('#gate-tabs [role="tab"]')];
+      const i = tabs.indexOf(document.activeElement);
+      const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+      if (i < 0 || next === undefined) return;
+      e.preventDefault();
+      const tab = tabs[(next + tabs.length) % tabs.length];
+      tab.focus();
+      tab.click();
     }
 
     function toggleGateLocalMode() {
@@ -984,9 +1238,29 @@
       document.getElementById('gate-form-register').classList.toggle('hidden', !toRegister);
     }
 
-    function togglePasswordVis(inputId) {
+    function togglePasswordVis(inputId, btn) {
       const input = document.getElementById(inputId);
-      if (input) input.type = input.type === 'password' ? 'text' : 'password';
+      if (!input) return;
+      const show = input.type === 'password';
+      input.type = show ? 'text' : 'password';
+      if (btn) {
+        btn.setAttribute('aria-pressed', String(show));
+        const icon = btn.querySelector('i');
+        if (icon) icon.className = 'fa-solid ' + (show ? 'fa-eye-slash' : 'fa-eye') + ' text-xs';
+      }
+    }
+
+    // Паролі не лишаються в полях після спроби входу або реєстрації
+    function clearPasswordFields(ids) {
+      ids.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) { input.value = ''; input.type = 'password'; }
+      });
+      document.querySelectorAll('#gate-form-login [aria-pressed]').forEach(btn => {
+        btn.setAttribute('aria-pressed', 'false');
+        const icon = btn.querySelector('i');
+        if (icon) icon.className = 'fa-solid fa-eye text-xs';
+      });
     }
 
     async function enterCabinet() {
@@ -998,7 +1272,9 @@
 
     // 1. ОБЛІКОВИЙ ЗАПИС SIMPLEXMED (ВХІД)
     async function handleGateLogin() {
+      if (!localAccountsEnabled()) return;
       const btn = document.getElementById('gate-btn-submit-login');
+      if (btn.disabled) return;
       btn.disabled = true;
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Перевірка...';
       try {
@@ -1006,11 +1282,13 @@
           identifier: document.getElementById('gate-login-id').value.trim(),
           password: document.getElementById('gate-login-pwd').value
         }));
+        clearPasswordFields(['gate-login-pwd']);
         if (r.ok) await enterCabinet();
         else showGateLog('error', errorText(r.body, 'Невірний логін або пароль'));
       } catch (e) {
         showGateLog('error', 'Помилка мережі: ' + e.message);
       } finally {
+        clearPasswordFields(['gate-login-pwd']);
         btn.disabled = false;
         btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> <span>Увійти в кабінет</span>';
       }
@@ -1018,11 +1296,14 @@
 
     // 1. ОБЛІКОВИЙ ЗАПИС SIMPLEXMED (РЕЄСТРАЦІЯ)
     async function handleGateRegister() {
+      if (!localAccountsEnabled()) return;
       const pwd = document.getElementById('gate-reg-pwd').value;
       if (pwd !== document.getElementById('gate-reg-pwd-confirm').value) {
-        return alert('Паролі не співпадають!');
+        clearPasswordFields(['gate-reg-pwd', 'gate-reg-pwd-confirm']);
+        return await uiError('Паролі не співпадають!');
       }
       const btn = document.getElementById('gate-btn-submit-reg');
+      if (btn.disabled) return;
       btn.disabled = true;
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Реєстрація...';
       try {
@@ -1035,42 +1316,40 @@
           tax_id: document.getElementById('gate-reg-tax-id').value.trim(),
           password: pwd
         }));
+        clearPasswordFields(['gate-reg-pwd', 'gate-reg-pwd-confirm']);
         if (r.ok) await enterCabinet();
         else showGateLog('error', errorText(r.body, 'Помилка реєстрації'));
       } catch (e) {
         showGateLog('error', 'Помилка мережі: ' + e.message);
       } finally {
+        clearPasswordFields(['gate-reg-pwd', 'gate-reg-pwd-confirm']);
         btn.disabled = false;
         btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> <span>Зареєструватися та увійти</span>';
       }
     }
 
     // 2. ВХІД ЧЕРЕЗ СЕРВІС АВТОРИЗАЦІЇ ЕСОЗ (п.3.3)
-    async function startEhealthOAuth(agreeCheckboxId) {
-      const agree = document.getElementById(agreeCheckboxId || 'gate-eh-agree');
-      if (agree && !agree.checked) {
-        // п.3.3.1.2: продовжити лише після явної згоди з політикою конфіденційності
-        alert('Щоб продовжити, ознайомтеся з Політикою конфіденційності та підтвердьте згоду.');
-        return;
-      }
-      try {
-        const isDev = window.location.hostname.includes('my-dev') || window.location.hostname === 'localhost';
-        const r = await apiJson('/auth-url?env=' + (isDev ? 'my-dev' : 'my'));
-        if (r.ok && r.body.url) window.location.href = r.body.url;
-        else alert(errorText(r.body, 'Не вдалося сформувати посилання на сервіс авторизації ЕСОЗ'));
-      } catch (e) {
-        alert('Помилка мережі: ' + e.message);
-      }
+    function startEhealthOAuth(agreeCheckboxId) {
+      return guard('ehealth-oauth', async () => {
+        const agree = document.getElementById(agreeCheckboxId || 'gate-eh-agree');
+        if (agree && !agree.checked) {
+          // п.3.3.1.2: продовжити лише після явної згоди з політикою конфіденційності
+          return await uiAlert('Щоб продовжити, ознайомтеся з Політикою конфіденційності та підтвердьте згоду.', { tone: 'warning' });
+        }
+        const r = await apiJson('/auth-url?env=' + ehealthEnv());
+        if (!r.ok || !r.body.url) return await uiError(errorText(r.body, 'Не вдалося сформувати посилання на сервіс авторизації ЕСОЗ'));
+        window.location.href = r.body.url;
+        await holdWhileNavigating();
+      });
     }
 
-    function afterSignUpFlag() {
-      try { return sessionStorage.getItem('pis_after_signup') === '1'; } catch (e) { return false; }
-    }
-
-    function showNotice(text) {
+    function showNotice(text, type) {
       const box = document.getElementById('cabinet-notice');
+      const isError = type === 'error';
+      box.className = 'mb-4 p-4 rounded-2xl text-slate-900 text-sm flex items-start gap-3 whitespace-pre-line ' +
+        (isError ? 'bg-rose-50 border border-rose-200' : 'bg-blue-50 border border-blue-200');
+      box.querySelector('i').className = isError ? 'fa-solid fa-triangle-exclamation text-rose-600 mt-0.5' : 'fa-solid fa-circle-check text-blue-600 mt-0.5';
       box.querySelector('[data-role="text"]').textContent = text;
-      box.classList.remove('hidden');
       box.focus();
     }
 
@@ -1079,85 +1358,82 @@
       const code = params.get('code');
       const authState = params.get('state');
       const error = params.get('error');
+      // Позначка реєстрації діє лише для одного повернення з ЕСОЗ: пізніша помилка входу — не помилка реєстрації
+      const signUp = flagGet(AFTER_SIGNUP_KEY);
+      flagSet(AFTER_SIGNUP_KEY, false);
       if (!code && !error) return false;
       window.history.replaceState({}, document.title, window.location.pathname);
       if (error) {
         // Сервіс авторизації або реєстрації повернув помилку (RFC 6749): текст за Додатком 1
-        const signUp = afterSignUpFlag();
         const r = await apiJson('/auth/sign-in-error', jsonRequest('POST', {
           error, error_description: params.get('error_description') || '', mode: signUp ? 'sign-up' : 'sign-in'
         }));
         if (signUp) {
           // п.3.5.6.1: помилку реєстрації показуємо на формі реєстрації, щоб пацієнт міг виправити дані
-          try { sessionStorage.removeItem('pis_after_signup'); } catch (e) {}
-          openSignUp();
-          showErrors('signup-errors', [errorText(r.body)]);
+          if (await openSignUp()) showErrors('signup-errors', [errorText(r.body)]);
+          else showGateLog('error', errorText(r.body));
         } else {
           showGateLog('error', errorText(r.body));
           // Додаток 1: пацієнта немає в ЕСОЗ — запропонувати реєстрацію
-          if (r.body.next_step === 'sign-up' && confirm(errorText(r.body) + '\n\nПерейти до реєстрації в ЕСОЗ?')) openSignUp();
+          if (r.body.next_step === 'sign-up' &&
+              await uiConfirm(errorText(r.body) + '\n\nПерейти до реєстрації в ЕСОЗ?', { title: 'Помилка', tone: 'error', okText: 'Зареєструватися' })) {
+            await openSignUp();
+          }
         }
         return false;
       }
-      return await processAuthCode(code, authState);
+      return await processAuthCode(code, authState, signUp);
     }
 
-    async function processAuthCode(code, authState) {
+    async function processAuthCode(code, authState, signUp) {
       showGateLog('info', 'Завершуємо вхід через ЕСОЗ...');
       try {
         const r = await apiJson('/auth/token', jsonRequest('POST', { code, state: authState || '' }));
         if (r.ok) {
           showGateLog('info', 'Вхід через ЕСОЗ успішний');
+          // п.3.5.8.2: після реєстрації — одноразова перевірка, чи потрібні копії документів
+          if (signUp) flagSet(SIGNUP_DOCUMENTS_KEY, true);
           await enterCabinet();
           // п.3.5.8.1: повідомлення про успішну реєстрацію та авторизацію
-          if (afterSignUpFlag()) showNotice('Реєстрацію та авторизацію в ЕСОЗ успішно завершено.');
+          if (signUp) showNotice('Реєстрацію та авторизацію в ЕСОЗ успішно завершено.');
           return true;
         }
         showGateLog('error', errorText(r.body, 'Помилка авторизації через ЕСОЗ'));
-        if (state.authenticated) alert(errorText(r.body));
+        if (state.authenticated) await uiError(errorText(r.body));
       } catch (e) {
         showGateLog('error', 'Помилка мережі: ' + e.message);
       }
       return false;
     }
 
-    async function exchangeManualCodeGate() {
-      const val = document.getElementById('gate-manual-code-input').value.trim();
-      if (!val) return alert('Вставте посилання з адресного рядка');
-      let code = null, authState = null;
-      try {
-        const u = new URL(val.startsWith('http') ? val : 'https://' + val);
-        code = u.searchParams.get('code');
-        authState = u.searchParams.get('state');
-      } catch (e) { /* некоректне посилання */ }
-      if (!code || !authState) return alert('Посилання має містити параметри code та state. Скопіюйте адресу повністю');
-      const btn = document.getElementById('btn-exchange-code');
-      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Вхід...'; }
-      try {
-        await processAuthCode(code, authState);
-      } finally {
-        if (btn) { btn.disabled = false; btn.innerHTML = 'Увійти в кабінет'; }
-      }
+    function disconnectEhealth() {
+      return guard('ehealth-disconnect', async () => {
+        if (!(await uiConfirm('Припинити доступ кабінету до ваших даних в ЕСОЗ у цій сесії?', { okText: 'Припинити доступ' }))) return;
+        const r = await apiJson('/auth/ehealth/logout', { method: 'POST' });
+        if (!r.ok) return await uiError(errorText(r.body));
+        setEhealthDisconnected();
+        // п.3.7.1.1: помилка ЕСОЗ під час Logout — текст за Додатком 1
+        if (r.body.warning) await uiAlert(r.body.warning, { title: 'Помилка', tone: 'error' });
+        await loadPatientProfile();
+      });
     }
 
-    async function disconnectEhealth() {
-      if (!confirm('Припинити доступ кабінету до ваших даних в ЕСОЗ у цій сесії?')) return;
-      const r = await apiJson('/auth/ehealth/logout', { method: 'POST' });
-      if (!r.ok) return alert(errorText(r.body));
-      if (r.body.warning) alert(r.body.warning);
-      state.ehealthConnected = false;
-      await loadPatientProfile();
-    }
-
+    // Повідомлення на екрані входу: error — помилка, info — процес (з індикатором), notice — інформація
     function showGateLog(type, msg) {
       const log = document.getElementById('gate-status-log');
       if (!log) return;
+      if (!msg) {
+        log.className = 'hidden mt-4 p-3 rounded-lg text-xs space-y-1';
+        log.textContent = '';
+        return;
+      }
       const isError = type === 'error';
-      log.className = 'mt-4 p-3 rounded-lg text-xs space-y-1 block ' +
+      log.className = 'mt-4 p-3 rounded-lg text-xs space-y-1 block whitespace-pre-line ' +
         (isError ? 'bg-rose-50 border border-rose-200 text-rose-900' : 'bg-blue-50 border border-blue-200 text-blue-900');
       log.innerHTML = isError
-        ? '<i class="fa-solid fa-triangle-exclamation text-rose-600 mr-1.5"></i> '
-        : '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> ';
+        ? '<i class="fa-solid fa-triangle-exclamation text-rose-600 mr-1.5" aria-hidden="true"></i> '
+        : (type === 'info' ? '<i class="fa-solid fa-spinner fa-spin mr-1.5" aria-hidden="true"></i> '
+                           : '<i class="fa-solid fa-circle-info text-blue-600 mr-1.5" aria-hidden="true"></i> ');
       log.append(document.createTextNode(msg));
     }
 
@@ -1214,10 +1490,65 @@
       document.getElementById('top-ehealth-dot').className = 'w-2 h-2 rounded-full ' + (connected ? 'bg-emerald-400' : 'bg-slate-400');
     }
 
+    // Текст помилки в області даних (екранується через textContent)
+    function errorParagraph(text) {
+      const p = document.createElement('p');
+      p.className = 'text-rose-700 whitespace-pre-line';
+      p.textContent = text;
+      return p;
+    }
+
+    // Доступу до ЕСОЗ немає або його припинено: прибрати з екрана всі дані ЕСОЗ — запис про пацієнта (з кодовим
+    // словом), верифікацію, методи автентифікації, копії документів, форму зміни даних
+    function clearEhealthData() {
+      Object.assign(state, { ehealthPerson: null, verification: null, authMethods: [], declarations: [], declarationRequests: [],
+                             apps: [], personRequests: [], personRequest: null });
+      const details = document.getElementById('person-details');
+      details.innerHTML = '';
+      details.classList.add('hidden');
+      document.getElementById('documents-card').classList.add('hidden');
+      document.getElementById('documents-list').innerHTML = '';
+      document.getElementById('verification-list').innerHTML = '<p class="text-[11px] text-slate-500">Статуси верифікації доступні після входу через ЕСОЗ.</p>';
+      document.getElementById('auth-methods-list').textContent = 'Доступно після входу через ЕСОЗ.';
+      const notice = document.getElementById('auth-methods-notice');
+      notice.textContent = '';
+      notice.classList.add('hidden');
+      ['btn-add-auth-method', 'btn-edit-person', 'verification-card', 'auth-methods-card'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+      document.getElementById('person-card').classList.replace('lg:col-span-2', 'lg:col-span-3');
+      // Форма зміни даних заповнена даними ЕСОЗ — створюється заново при наступному відкритті
+      const editForm = document.getElementById('person-edit-form');
+      editForm.querySelector('[data-role="fields-slot"]').innerHTML = '';
+      formState.delete(editForm);
+      showErrors('person-edit-errors', []);
+      document.getElementById('declaration-active').textContent = 'Немає даних.';
+      ['declaration-requests-body', 'declarations-other-body'].forEach(id => { document.getElementById(id).innerHTML = ''; });
+      if (state.activeNav === 'person-edit') switchNav('profile');
+    }
+
+    function showEhealthBlocks() {
+      ['btn-edit-person', 'verification-card', 'auth-methods-card'].forEach(id => {
+        document.getElementById(id).classList.remove('hidden');
+      });
+      document.getElementById('person-card').classList.replace('lg:col-span-3', 'lg:col-span-2');
+    }
+
+    function setEhealthDisconnected() {
+      state.ehealthConnected = false;
+      clearEhealthData();
+      fillPersonFields(state.patientData || {});
+      setText('sidebar-auth-method', 'Обліковий запис');
+      updateEhealthBox();
+    }
+
     // Профіль: локальні дані кабінету + дані ЕСОЗ (п.3.9.2–3.9.4)
     async function loadPatientProfile() {
       const r = await apiJson('/patient/me');
-      if (!r.ok) return;
+      if (!r.ok) {
+        showNotice(errorText(r.body, 'Не вдалося завантажити дані кабінету. Спробуйте пізніше.'), 'error');
+        return;
+      }
       const p = r.body.data || {};
       state.patientData = p;
       state.ehealthConnected = !!p.ehealth_connected;
@@ -1232,15 +1563,18 @@
       updateEhealthBox();
 
       if (!state.ehealthConnected) {
-        document.getElementById('verification-list').innerHTML = '<p class="text-[11px] text-slate-500">Статуси верифікації доступні після входу через ЕСОЗ.</p>';
-        document.getElementById('auth-methods-list').textContent = 'Доступно після входу через ЕСОЗ.';
-        document.getElementById('auth-methods-notice').classList.add('hidden');
-        document.getElementById('btn-add-auth-method').classList.add('hidden');
-        document.getElementById('btn-edit-person').classList.add('hidden');
+        clearEhealthData();
         return;
       }
-      document.getElementById('btn-edit-person').classList.remove('hidden');
+      showEhealthBlocks();
       await Promise.all([loadEhealthPerson(), loadVerification(), loadAuthMethods()]);
+    }
+
+    // Стать: опис з довідника GENDER, якщо довідник недоступний — українська назва коду
+    function genderLabel(code) {
+      if (!code) return '—';
+      return ((dictCache.GENDER || []).find(v => v.code === code) || {}).description
+        || ({ MALE: 'Чоловіча', FEMALE: 'Жіноча' })[code] || code;
     }
 
     function fillPersonFields(p) {
@@ -1248,7 +1582,7 @@
       setText('top-user-name', fullname);
       setText('p-fullname', fullname);
       setText('p-id', 'ID: ' + (p.id || p.ehealth_person_id || p.local_user_id || (state.patientData || {}).ehealth_person_id || '—'));
-      const genderText = dictLabel('GENDER', p.gender) || (p.gender === 'MALE' ? 'Чоловіча' : (p.gender === 'FEMALE' ? 'Жіноча' : '—'));
+      const genderText = genderLabel(p.gender);
       setText('p-birth-gender', `${formatDate(p.birth_date)} (${genderText})`);
       setText('p-tax-id', p.tax_id);
       setText('p-unzr', p.unzr);
@@ -1259,7 +1593,7 @@
 
     // п.3.9.2: усі атрибути запису про пацієнта; відсутні — порожні ("—")
     function personRow(label, value) {
-      return `<div><span class="text-slate-600 block mb-0.5">${esc(label)}:</span><span class="font-semibold text-slate-900">${esc(value === undefined || value === null || value === '' ? '—' : value)}</span></div>`;
+      return `<div class="min-w-0"><span class="text-slate-600 block mb-0.5">${esc(label)}:</span><span class="font-semibold text-slate-900 break-words">${esc(value === undefined || value === null || value === '' ? '—' : value)}</span></div>`;
     }
 
     function renderPersonDetails(p) {
@@ -1267,12 +1601,12 @@
       const d = (name, code) => code ? dictLabel(name, code) : '';
       let html = `<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
         ${personRow("Ім'я", p.first_name)}${personRow('Прізвище', p.last_name)}${personRow('По батькові', p.second_name)}
-        ${personRow('Дата народження', p.birth_date ? formatDate(p.birth_date) : '')}${personRow('Стать', d('GENDER', p.gender))}
+        ${personRow('Дата народження', p.birth_date ? formatDate(p.birth_date) : '')}${personRow('Стать', p.gender ? genderLabel(p.gender) : '')}
         ${personRow('Країна народження', p.birth_country ? dictLabel('COUNTRY', p.birth_country) : '')}
         ${personRow('Місце народження', p.birth_settlement)}${personRow('РНОКПП', p.tax_id)}
         ${personRow('Відмова від РНОКПП', p.no_tax_id === true ? 'Так' : (p.no_tax_id === false ? 'Ні' : ''))}
         ${personRow('УНЗР', p.unzr)}
-        <div><span class="text-slate-600 block mb-0.5">Кодове слово:</span><span class="font-semibold text-slate-900" id="p-secret" data-secret="${esc(p.secret || '')}">${p.secret ? '••••••' : '—'}</span>
+        <div class="min-w-0"><span class="text-slate-600 block mb-0.5">Кодове слово:</span><span class="font-semibold text-slate-900 break-words" id="p-secret" data-secret="${esc(p.secret || '')}">${p.secret ? '••••••' : '—'}</span>
           ${p.secret ? '<button type="button" onclick="toggleSecret()" class="ml-1 text-blue-600 underline text-sm">показати</button>' : ''}</div>
         ${personRow("Бажаний спосіб зв'язку", p.preferred_way_communication === 'email' ? 'Електронна пошта' : (p.preferred_way_communication === 'phone' ? 'Телефон' : ''))}
       </div>`;
@@ -1319,11 +1653,17 @@
     async function loadEhealthPerson() {
       const [r] = await Promise.all([apiJson('/ehealth/person'),
         ...['GENDER', 'COUNTRY', 'ADDRESS_TYPE', 'SETTLEMENT_TYPE', 'STREET_TYPE', 'PHONE_TYPE', 'DOCUMENT_TYPE'].map(loadDictionary)]);
+      if (!state.ehealthConnected) return;
+      const box = document.getElementById('person-details');
       if (!r.ok) {
-        document.getElementById('person-details').textContent = errorText(r.body);
+        box.replaceChildren(errorParagraph(errorText(r.body)));
+        box.classList.remove('hidden');
         return;
       }
-      state.ehealthPerson = r.body.data || {};
+      // п.3.9.3.8: загальний статус верифікації не показується — також в «Усіх відомостях»
+      const person = { ...(r.body.data || {}) };
+      delete person.verification;
+      state.ehealthPerson = person;
       fillPersonFields(state.ehealthPerson);
       renderPersonDetails(state.ehealthPerson);
     }
@@ -1343,7 +1683,7 @@
         : (s === 'NOT_VERIFIED' ? 'bg-rose-100 text-rose-800'
         : (s === 'VERIFICATION_NOT_NEEDED' ? 'bg-slate-100 text-slate-700' : 'bg-amber-100 text-amber-800'));
       const label = (dictCache.PERSON_VERIFICATION_STATUSES || []).find(v => v.code === s)?.description || VERIFICATION_STATUSES[s] || s || '—';
-      return `<span class="status-badge ${cls} whitespace-nowrap" title="${esc(s)}">${esc(label)}</span>`;
+      return `<span class="status-badge ${cls} text-left" title="${esc(s)}">${esc(label)}</span>`;
     }
 
     // п.3.9.3: лише визначені напрями, з повідомленнями ТВ; загальний статус не показується (п.3.9.3.8)
@@ -1351,24 +1691,24 @@
       const box = document.getElementById('verification-list');
       const [r] = await Promise.all([apiJson('/ehealth/person/verification'),
                                      loadDictionary('PERSON_VERIFICATION_STATUSES'), loadDictionary('PERSON_VERIFICATION_STATUS_REASONS')]);
-      if (!r.ok) { box.textContent = errorText(r.body); return; }
+      if (!state.ehealthConnected) return;
+      if (!r.ok) { box.replaceChildren(errorParagraph(errorText(r.body))); return; }
       const view = r.body.display || { items: [], documents_required: false };
       state.verification = r.body.data || {};
       let html = view.items.length ? '' : '<p class="text-[11px] text-slate-500">Відомості про верифікацію відсутні.</p>';
       for (const item of view.items) {
-        html += `<div class="p-3 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
-          <div class="flex items-start justify-between gap-2">
-            <span class="font-semibold text-slate-700">${esc(item.label)}</span>${statusBadge(item.status)}
+        // Повідомлення ТВ можуть містити абзаци (\n) — white-space: pre-line
+        html += `<div class="p-3 rounded-lg bg-slate-50 border border-slate-200 space-y-1 min-w-0">
+          <div class="flex flex-wrap items-start justify-between gap-2">
+            <span class="font-semibold text-slate-700 min-w-0 break-words">${esc(item.label)}</span>${statusBadge(item.status)}
           </div>
-          <p class="text-[11px] text-slate-500">Причина: ${esc(dictLabel('PERSON_VERIFICATION_STATUS_REASONS', item.reason))}</p>
-          ${item.comment ? `<p class="text-[11px] text-slate-600">Коментар: ${esc(item.comment)}</p>` : ''}
-          ${item.message ? `<p class="text-[11px] ${item.status === 'NOT_VERIFIED' ? 'text-rose-800' : 'text-slate-700'}">${linkify(item.message)}</p>` : ''}
+          <p class="text-[11px] text-slate-500 break-words">Причина: ${esc(dictLabel('PERSON_VERIFICATION_STATUS_REASONS', item.reason))}</p>
+          ${item.comment ? `<p class="text-[11px] text-slate-600 break-words">Коментар: ${esc(item.comment)}</p>` : ''}
+          ${item.message ? `<p class="text-[11px] whitespace-pre-line break-words ${item.status === 'NOT_VERIFIED' ? 'text-rose-800' : 'text-slate-700'}">${linkify(item.message)}</p>` : ''}
         </div>`;
       }
-      let afterSignUp = false;
-      try { afterSignUp = sessionStorage.getItem('pis_after_signup') === '1'; } catch (e) {}
-      // п.3.9.3.5.f / 3.5.8.2: передача копій документів
-      if (afterSignUp || view.documents_required) loadDocuments();
+      // п.3.9.3.5.f / 3.5.8.2: передача копій документів (після реєстрації — одноразова перевірка)
+      if (flagGet(SIGNUP_DOCUMENTS_KEY) || view.documents_required) loadDocuments();
       // п.3.9.3.8: загальний статус і напрями, не передбачені ТВ, не показуються — лише список вище
       box.innerHTML = html;
     }
@@ -1382,7 +1722,8 @@
     async function loadAuthMethods() {
       const box = document.getElementById('auth-methods-list');
       const r = await apiJson('/ehealth/person/authentication-methods');
-      if (!r.ok) { box.textContent = errorText(r.body); return; }
+      if (!state.ehealthConnected) return;
+      if (!r.ok) { box.replaceChildren(errorParagraph(errorText(r.body))); return; }
       const methods = (r.body.data || []).filter(m => m.is_active !== false);
       const notice = document.getElementById('auth-methods-notice');
       const tail = ' Це допоможе забезпечити зручність отримання електронних медичних сервісів та вищий контроль Вами доступу до інформації про Вас.';
@@ -1396,10 +1737,10 @@
         return;
       }
       const types = { OTP: 'SMS (OTP)', OFFLINE: 'Офлайн (документи)', THIRD_PERSON: 'Третя особа' };
-      box.innerHTML = `<table class="w-full text-sm text-left">
+      box.innerHTML = `<div class="overflow-x-auto"><table class="w-full text-sm text-left">
         <thead class="text-slate-600 font-semibold border-b border-slate-200"><tr>
           <th class="py-2 px-3">Тип</th><th class="py-2 px-3">Номер телефону</th><th class="py-2 px-3">Назва</th>
-          <th class="py-2 px-3">Діє з</th><th class="py-2 px-3 text-right"></th></tr></thead>
+          <th class="py-2 px-3">Діє з</th><th class="py-2 px-3 text-right"><span class="sr-only">Дії</span></th></tr></thead>
         <tbody class="divide-y divide-slate-100">${methods.map((m, i) => `<tr>
           <td class="py-2 px-3">${esc(types[m.type] || m.type)}</td>
           <td class="py-2 px-3 font-mono">${esc(m.phone_number || '—')}</td>
@@ -1408,7 +1749,7 @@
           <td class="py-2 px-3 text-right space-x-2 whitespace-nowrap">
             ${m.type === 'OTP' ? `<button onclick="renameAuthMethod(${i})" class="text-blue-600 underline text-sm">Змінити назву</button>` : ''}
             <button onclick="showMethodDetails(${i})" class="text-blue-600 underline text-sm">Деталі</button></td>
-        </tr>`).join('')}</tbody></table>`;
+        </tr>`).join('')}</tbody></table></div>`;
       state.authMethods = methods;
     }
 
@@ -1430,8 +1771,14 @@
       new: 'Новий (очікує підпису)', approved: 'Погоджується лікарем', signed: 'Підписаний',
       expired: 'Строк минув', rejected: 'Відхилений', cancelled: 'Скасований'
     };
-    const MSG_NO_CONTRACT = 'Щоб отримувати медичні послуги безоплатно за Програмою медичних гарантій, оберіть заклад, який має договір з НСЗУ. Обраний вами медичний заклад не має договору з НСЗУ або це місце надання послуг не входить до такого договору. Через це держава не зможе оплачувати надані вам послуги первинної медичної допомоги за декларацією. Радимо сконтактувати з закладом та уточнити, чи можна подати декларацію саме тут.';
-    const MSG_OVERLIMIT = 'У обраного лікаря перевищено ліміт поданих декларацій. Запит буде надіслано лікарю на погодження — очікування до 7 календарних днів, і запит може бути відхилено.';
+    // п.3.11.1.7 — абзаци як у ТВ
+    const MSG_NO_CONTRACT = 'Щоб отримувати медичні послуги безоплатно за Програмою медичних гарантій, оберіть заклад, який має договір з НСЗУ.\n\n'
+      + 'Обраний вами медичний заклад не має договору з НСЗУ або це місце надання послуг не входить до такого договору. Через це держава не зможе оплачувати надані вам послуги первинної медичної допомоги за декларацією.\n\n'
+      + 'Радимо сконтактувати з закладом та уточнити, чи можна подати декларацію саме тут.';
+    // п.3.11.1.6 — той самий текст, що й backend/ehealth_pis/declarations.py MSG_OVERLIMIT
+    const MSG_OVERLIMIT = 'Обраний лікар уже має рекомендовану кількість пацієнтів. Запит на декларацію буде надіслано лікарю на погодження — це займе до 7 календарних днів, і лікар може його відхилити.';
+    // п.3.11.4.3
+    const MSG_TERMINATE_CONFIRM = 'Увага! Припинення дії Декларації є незворотною дією. Ви впевнені?';
 
     function declStatusBadge(status) {
       const key = String(status || '').toLowerCase();
@@ -1441,6 +1788,16 @@
 
     function dictLabel(name, code) {
       return ((dictCache[name] || []).find(v => v.code === code) || {}).description || code || '—';
+    }
+
+    function tableMessageRow(colspan, text, isError) {
+      const row = document.createElement('tr');
+      const cell = document.createElement('td');
+      cell.colSpan = colspan;
+      cell.className = 'py-4 px-3 text-center whitespace-pre-line ' + (isError ? 'text-rose-700' : 'text-slate-500');
+      cell.textContent = text;
+      row.append(cell);
+      return row;
     }
 
     // п.3.11.3: чинна декларація окремо від інших; запити на подання (п.3.11.2)
@@ -1457,7 +1814,9 @@
       const [r, rq] = await Promise.all([apiJson('/ehealth/declarations'), apiJson('/ehealth/declaration-requests'),
                                          loadDictionary('DECLARATION_STATUS_REASON')]);
       if (!r.ok) {
-        activeBox.textContent = errorText(r.body);
+        state.declarations = [];
+        activeBox.replaceChildren(errorParagraph(errorText(r.body)));
+        otherBody.replaceChildren(tableMessageRow(7, errorText(r.body), true));
       } else {
         const decls = r.body.data || [];
         state.declarations = decls;
@@ -1491,14 +1850,7 @@
       }
       if (!rq.ok) {
         state.declarationRequests = [];
-        reqBody.innerHTML = '';
-        const row = document.createElement('tr');
-        const cell = document.createElement('td');
-        cell.colSpan = 4;
-        cell.className = 'py-4 px-3 text-rose-700';
-        cell.textContent = errorText(rq.body);
-        row.append(cell);
-        reqBody.append(row);
+        reqBody.replaceChildren(tableMessageRow(4, errorText(rq.body), true));
         return;
       }
       const requests = rq.body.data || [];
@@ -1511,6 +1863,7 @@
           <td class="py-3 px-3">${esc(formatDate(q.start_date || q.inserted_at))}</td>
           <td class="py-3 px-3 text-right space-x-1 whitespace-nowrap">
             <button onclick="openDeclarationRequest(${i})" class="px-2.5 text-blue-700 hover:bg-blue-50 rounded-lg border border-blue-200 text-sm font-semibold min-h-[40px]">${st === 'new' ? 'Продовжити' : 'Деталі'}</button>
+            <button onclick="showDetails('Запит на декларацію', state.declarationRequests[${i}])" class="px-2.5 text-blue-700 hover:bg-blue-50 rounded-lg border border-blue-200 text-sm font-semibold min-h-[40px]">Усі відомості</button>
             ${['new', 'approved'].includes(st) ? `<button onclick="rejectDeclarationRequest(state.declarationRequests[${i}].id)" class="px-2.5 text-rose-600 hover:bg-rose-50 rounded-lg border border-rose-200 text-sm font-semibold min-h-[40px]">Відхилити</button>` : ''}
           </td></tr>`;
       }).join('') : '<tr><td colspan="4" class="py-4 text-center text-slate-500">Запитів немає.</td></tr>';
@@ -1552,7 +1905,7 @@
     }
 
     async function downloadFormPdf(html, title) {
-      if (!html) return alert('Електронна форма недоступна');
+      if (!html) return await uiError('Електронна форма недоступна');
       try {
         await loadPdfLibs();
         const frame = document.getElementById('pdf-frame');
@@ -1577,19 +1930,23 @@
         pdf.save(pdfFileName(title));
       } catch (e) {
         // Резерв: друк форми з вибором «Зберегти як PDF»
-        if (confirm('Не вдалося сформувати PDF-файл. Відкрити друк форми, щоб зберегти її як PDF?')) printFormContent(html);
+        if (await uiConfirm('Не вдалося сформувати PDF-файл. Відкрити друк форми, щоб зберегти її як PDF?', { tone: 'warning', okText: 'Відкрити друк' })) {
+          await printFormContent(html);
+        }
       }
     }
 
     // Збереження форми у PDF: друк в окремому фреймі з унікальним походженням (скрипти форми не мають доступу до кабінету)
-    function printFormContent(html) {
-      if (!html) return alert('Електронна форма недоступна');
+    async function printFormContent(html) {
+      if (!html) return await uiError('Електронна форма недоступна');
       const frame = document.getElementById('print-frame');
       frame.srcdoc = html + '<script>window.onload=function(){setTimeout(function(){print();},300)}<\/script>';
     }
 
-    function openDeclarationModal(title, content, { canSign = false, canReject = false, warning = '' } = {}) {
+    // details — відомості запиту на декларацію для «Усі відомості» (п.3.11.2.1.3); null — форма не для запиту
+    function openDeclarationModal(title, content, { canSign = false, canReject = false, warning = '', details = null } = {}) {
       state.declarationContent = content || '';
+      state.declarationDetails = details;
       document.getElementById('declaration-modal-title').textContent = title;
       document.getElementById('declaration-frame').srcdoc = content || '<p style="font-family:sans-serif">Форма недоступна.</p>';
       const w = document.getElementById('declaration-modal-warning');
@@ -1597,6 +1954,7 @@
       w.classList.toggle('hidden', !warning);
       document.getElementById('declaration-sign-btn').classList.toggle('hidden', !canSign);
       document.getElementById('declaration-reject-btn').classList.toggle('hidden', !canReject);
+      document.getElementById('declaration-details-btn').classList.toggle('hidden', !details);
       document.getElementById('modal-declaration').classList.remove('hidden');
     }
 
@@ -1604,72 +1962,94 @@
       document.getElementById('modal-declaration').classList.add('hidden');
     }
 
+    function showDeclarationRequestDetails() {
+      if (state.declarationDetails) showDetails('Запит на декларацію', state.declarationDetails);
+    }
+
     // п.3.11.3.3: форма підписаної декларації з можливістю збереження у PDF
     async function showDeclaration(i) {
       const d = state.declarations[i];
       const r = await apiJson('/ehealth/declarations/' + encodeURIComponent(d.id));
-      if (!r.ok) return alert(errorText(r.body));
+      if (!r.ok) return await uiError(errorText(r.body));
       openDeclarationModal('Декларація № ' + (d.declaration_number || ''), (r.body.data || {}).content);
     }
 
-    // п.3.11.4: припинення лише чинної декларації, з причиною і попередженням
-    async function terminateDeclaration(i) {
-      const d = state.declarations[i];
-      if (String(d.status).toLowerCase() !== 'active') return;
-      const reason = prompt('Причина припинення декларації (необов’язково):', '');
-      if (reason === null) return;
-      if (!confirm('Увага! Припинення дії Декларації є незворотною дією. Ви впевнені?')) return;
-      const r = await apiJson('/ehealth/declarations/' + encodeURIComponent(d.id) + '/terminate',
-                              jsonRequest('PATCH', { reason_description: reason.trim() }));
-      if (!r.ok) return alertEhealthError(r.body);
-      alert('Дію декларації припинено.');
-      await loadDeclarations();
+    // п.3.11.4.2–3.11.4.5: припинення лише чинної декларації — одне вікно з причиною і попередженням;
+    // «Скасувати» повертає до попереднього кроку (перелік декларацій)
+    function terminateDeclaration(i) {
+      return guard('declaration-terminate', async () => {
+        const d = state.declarations[i];
+        if (!d || String(d.status).toLowerCase() !== 'active') return;
+        const answer = await uiDialog({
+          kind: 'confirm',
+          title: 'Припинення декларації № ' + (d.declaration_number || ''),
+          tone: 'warning',
+          input: { label: 'Причина припинення', multiline: true, maxLength: 500, placeholder: 'Необов’язково' },
+          warning: MSG_TERMINATE_CONFIRM,
+          okText: 'Так, припинити',
+          cancelText: 'Скасувати'
+        });
+        if (!answer.ok) return;
+        const r = await apiJson('/ehealth/declarations/' + encodeURIComponent(d.id) + '/terminate',
+                                jsonRequest('PATCH', { reason_description: answer.value.trim() }));
+        if (!r.ok) return await alertEhealthError(r.body);
+        await uiAlert('Дію декларації припинено.', { tone: 'success' });
+        await loadDeclarations();
+      });
     }
 
     // п.3.11.2.2 / 3.11.1.13: деталі запиту; NEW — продовжити підписання
     async function openDeclarationRequest(i) {
       const q = state.declarationRequests[i];
       const r = await apiJson('/ehealth/declaration-requests/' + encodeURIComponent(q.id));
-      if (!r.ok) return alert(errorText(r.body));
+      if (!r.ok) return await uiError(errorText(r.body));
       const data = r.body.data || {};
       const st = String(data.status || q.status || '').toLowerCase();
       state.declarationRequestId = q.id;
       const content = (data.data_to_be_signed || {}).content || data.content;
       if (!content || !q.person) return showDetails('Запит на декларацію', r.body);   // форма — лише якщо є дані Користувача
       openDeclarationModal('Запит на декларацію ' + (data.declaration_number || ''), content,
-                           { canSign: st === 'new', canReject: ['new', 'approved'].includes(st) });
+                           { canSign: st === 'new', canReject: ['new', 'approved'].includes(st), details: r.body });
     }
 
     // п.3.11.2.3: відхилення запиту після попередження про незворотність
-    async function rejectDeclarationRequest(id, fromModal) {
-      if (!confirm('Відхилення запиту на декларацію є незворотною дією. Відхилити запит?')) return;
-      const r = await apiJson('/ehealth/declaration-requests/' + encodeURIComponent(id) + '/reject', { method: 'PATCH' });
-      if (!r.ok) return alertEhealthError(r.body);
-      if (fromModal) closeDeclarationModal();
-      await loadDeclarations();
+    function rejectDeclarationRequest(id, fromModal) {
+      return guard('declaration-request-reject', async () => {
+        if (!(await uiConfirm('Відхилення запиту на декларацію є незворотною дією. Відхилити запит?',
+                              { tone: 'warning', okText: 'Відхилити запит' }))) return;
+        const r = await apiJson('/ehealth/declaration-requests/' + encodeURIComponent(id) + '/reject', { method: 'PATCH' });
+        if (!r.ok) return await alertEhealthError(r.body);
+        if (fromModal) closeDeclarationModal();
+        await loadDeclarations();
+      });
     }
 
     // п.3.11.1.9–3.11.1.11: підпис даних, повернутих Системою, і повідомлення за статусом
-    async function signDeclarationRequest() {
-      const id = state.declarationRequestId;
-      const r = await apiJson('/ehealth/declaration-requests/' + encodeURIComponent(id) + '/sign-content');
-      if (!r.ok) return alert(errorText(r.body));
-      if (r.body.warning && !confirm(r.body.warning + '\n\nПродовжити підписання?')) return;   // п.3.11.1.10
-      const content = r.body.content;
-      openKepModal({
-        title: 'Підпис декларації',
-        purpose: 'Підпишіть декларацію про вибір лікаря своїм КЕП. Дані з підпису мають належати вам.',
-        getData: async () => content,
-        onSigned: async signed => {
-          const s = await apiJson('/ehealth/declaration-requests/' + encodeURIComponent(id) + '/sign',
-                                  jsonRequest('PATCH', { signed_content: signed }));
-          if (!s.ok && s.body.next_step === 'person-edit') return alertEhealthError(s.body);
-          if (!s.ok) throw new Error(errorText(s.body));
-          closeKepModal();
-          closeDeclarationModal();
-          alert(s.body.message || 'Запит на декларацію підписано.');
-          switchNav('declarations');
-        }
+    function signDeclarationRequest() {
+      return guard('declaration-request-sign', async () => {
+        const id = state.declarationRequestId;
+        const r = await apiJson('/ehealth/declaration-requests/' + encodeURIComponent(id) + '/sign-content');
+        if (!r.ok) return await uiError(errorText(r.body));
+        if (r.body.warning && !(await uiConfirm(r.body.warning + '\n\nПродовжити підписання?', { tone: 'warning', okText: 'Продовжити' }))) return;   // п.3.11.1.10
+        const content = r.body.content;
+        await openKepModal({
+          title: 'Підпис декларації',
+          purpose: 'Підпишіть декларацію про вибір лікаря своїм КЕП. Дані з підпису мають належати вам.',
+          getData: async () => content,
+          onSigned: async signed => {
+            const s = await apiJson('/ehealth/declaration-requests/' + encodeURIComponent(id) + '/sign',
+                                    jsonRequest('PATCH', { signed_content: signed }));
+            if (!s.ok && s.body.next_step === 'person-edit') {
+              kepStatus('error', errorText(s.body));
+              return await alertEhealthError(s.body);
+            }
+            if (!s.ok) throw new Error(errorText(s.body));
+            closeKepModal();
+            closeDeclarationModal();
+            await uiAlert(s.body.message || 'Запит на декларацію підписано.', { tone: 'success' });
+            switchNav('declarations');
+          }
+        });
       });
     }
 
@@ -1679,7 +2059,7 @@
     const doctorSearch = { offset: 0, pageSize: 25, legalEntityId: null, divisionId: null };
 
     async function openDeclarationNew() {
-      if (!state.ehealthConnected) return alert('Увійдіть через ЕСОЗ, щоб подати декларацію.');
+      if (!state.ehealthConnected) return await uiAlert('Увійдіть через ЕСОЗ, щоб подати декларацію.', { tone: 'warning' });
       switchNav('declaration-new');
       await Promise.all(['SPECIALITY_TYPE', 'GENDER', 'EDUCATION_DEGREE', 'QUALIFICATION_TYPE', 'SPECIALITY_LEVEL']
         .map(n => loadDictionary(n)));
@@ -1761,15 +2141,22 @@
       doctorSearch.legalEntityId = d.legal_entity_id;
       doctorSearch.divisionId = null;
       setSearchScope('Заклад: ' + d.legal_entity_name);
-      const r = await apiJson('/registry/divisions?legal_entity_id=' + encodeURIComponent(d.legal_entity_id));
       const box = document.getElementById('dn-divisions');
-      state.divisionRows = (r.ok && r.body.data) || [];
+      box.innerHTML = '<div class="text-xs text-slate-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Завантаження...</div>';
+      box.classList.remove('hidden');
+      searchDoctors(0);
+      const r = await apiJson('/registry/divisions?legal_entity_id=' + encodeURIComponent(d.legal_entity_id));
+      if (doctorSearch.legalEntityId !== d.legal_entity_id) return;   // поки чекали — обрано інший заклад
+      if (!r.ok) {
+        state.divisionRows = [];
+        box.replaceChildren(errorParagraph(errorText(r.body)));
+        return;
+      }
+      state.divisionRows = r.body.data || [];
       box.innerHTML = '<div class="text-xs font-semibold text-slate-700">Місця надання послуг закладу:</div>' +
         state.divisionRows.map((v, k) => `<button onclick="scopeDivisionRow(${k})" class="block w-full text-left p-2 rounded-lg border border-slate-200 hover:bg-blue-50 text-sm">
           <span class="font-semibold">${esc(v.name)}</span> — ${esc(v.address_text || '')}
           ${v.in_contract ? '' : '<span class="text-amber-700">(без договору з НСЗУ)</span>'}</button>`).join('');
-      box.classList.remove('hidden');
-      searchDoctors(0);
     }
 
     // п.3.11.1.3.2: обрано МНП — лікарі цього МНП
@@ -1790,7 +2177,7 @@
     // п.3.11.1.5: дані про лікаря
     async function showDoctor(i) {
       const r = await apiJson('/registry/doctors/' + encodeURIComponent(state.doctorRows[i].employee_id));
-      if (!r.ok) return alert(errorText(r.body));
+      if (!r.ok) return await uiError(errorText(r.body));
       const d = r.body.data;
       document.getElementById('doctor-title').textContent = [d.last_name, d.first_name, d.second_name].filter(Boolean).join(' ');
       const list = (items, render) => items && items.length ? '<ul class="list-disc pl-5 space-y-0.5">' + items.map(x => `<li>${render(x)}</li>`).join('') + '</ul>' : '—';
@@ -1812,28 +2199,32 @@
     }
 
     // п.3.11.1.6–3.11.1.8: попередження, створення запиту, показ форми від Системи
-    async function chooseDoctor(i) {
-      const d = state.doctorRows[i];
-      if (d.overlimit && !confirm(MSG_OVERLIMIT + '\n\nПродовжити?')) return;
-      if (!d.in_contract && !confirm(MSG_NO_CONTRACT + '\n\nПродовжити?')) return;
-      const r = await apiJson('/ehealth/declaration-requests', jsonRequest('POST', { employee_id: d.employee_id, division_id: d.division_id }));
-      if (!r.ok) return alertEhealthError(r.body);
-      const data = r.body.data || {};
-      state.declarationRequestId = data.id;
-      const warning = d.declarations_limit != null && d.declarations_limit - d.declarations_count > 0 && d.declarations_limit - d.declarations_count < 20
-        ? `У лікаря залишилося ${d.declarations_limit - d.declarations_count} місць до рекомендованого ліміту декларацій.` : '';
-      openDeclarationModal('Запит на декларацію ' + (data.declaration_number || ''), data.content || (data.data_to_be_signed || {}).content,
-                           { canSign: true, canReject: true, warning });
+    function chooseDoctor(i) {
+      return guard('choose-doctor', async () => {
+        const d = state.doctorRows[i];
+        if (!d) return;
+        if (d.overlimit && !(await uiConfirm(MSG_OVERLIMIT + '\n\nПродовжити?', { tone: 'warning', okText: 'Продовжити' }))) return;
+        if (!d.in_contract && !(await uiConfirm(MSG_NO_CONTRACT + '\n\nПродовжити?', { tone: 'warning', okText: 'Продовжити' }))) return;
+        const r = await apiJson('/ehealth/declaration-requests', jsonRequest('POST', { employee_id: d.employee_id, division_id: d.division_id }));
+        if (!r.ok) return await alertEhealthError(r.body);
+        const data = r.body.data || {};
+        state.declarationRequestId = data.id;
+        const warning = d.declarations_limit != null && d.declarations_limit - d.declarations_count > 0 && d.declarations_limit - d.declarations_count < 20
+          ? `У лікаря залишилося ${d.declarations_limit - d.declarations_count} місць до рекомендованого ліміту декларацій.` : '';
+        openDeclarationModal('Запит на декларацію ' + (data.declaration_number || ''), data.content || (data.data_to_be_signed || {}).content,
+                             { canSign: true, canReject: true, warning, details: r.body });
+      });
     }
 
-    // п.3.8: доступи, надані застосункам
+    // п.3.8: доступи, надані застосункам. Невдале завантаження довідника не кешується
     async function loadScopeDescriptions() {
       if (state.scopeDescriptions) return state.scopeDescriptions;
-      state.scopeDescriptions = {};
       const r = await apiJson('/ehealth/dictionaries?name=SCOPES');
       const dict = r.ok && (r.body.data || [])[0];
-      ((dict && dict.values) || []).forEach(v => { state.scopeDescriptions[v.code] = v.description; });
-      return state.scopeDescriptions;
+      const descriptions = {};
+      ((dict && dict.values) || []).forEach(v => { descriptions[v.code] = v.description; });
+      if (dict) state.scopeDescriptions = descriptions;
+      return descriptions;
     }
 
     async function loadApps() {
@@ -1870,22 +2261,26 @@
       showDetails('Доступ: ' + (state.apps[i].client_name || ''), state.apps[i]);
     }
 
-    async function deleteApp(i) {
-      const a = state.apps[i];
-      // п.3.8.2.1: відкликання доступу самої ПІС — попередження, після відкликання вихід (п.3.7)
-      const cfg = await apiJson('/config');
-      const ownId = String((cfg.ok && cfg.body.client_id) || '').trim().toLowerCase();
-      const current = ownId !== '' && String(a.client_id || '').trim().toLowerCase() === ownId;
-      let text = 'Відкликати доступ застосунку «' + (a.client_name || '') + '» до ваших даних в ЕСОЗ?';
-      if (current) {
-        text += '\n\nЦе застосунок, через який ви зараз працюєте: доступ до функціональності Системи через нього буде припинено. '
-          + 'Для продовження роботи потрібно буде повторно авторизуватися.';
-      }
-      if (!confirm(text)) return;
-      const r = await apiJson('/ehealth/apps/' + encodeURIComponent(a.id), { method: 'DELETE' });
-      if (!r.ok) return alert(errorText(r.body));
-      if (current) return logoutPatient();
-      await loadApps();
+    function deleteApp(i) {
+      return guard('app-delete', async () => {
+        const a = state.apps[i];
+        if (!a) return;
+        // п.3.8.2.1: відкликання доступу самої ПІС — попередження, після відкликання вихід (п.3.7)
+        const cfg = await loadConfig();
+        if (!cfg) return await uiError(MSG_UNAVAILABLE);
+        const ownId = String(cfg.client_id || '').trim().toLowerCase();
+        const current = ownId !== '' && String(a.client_id || '').trim().toLowerCase() === ownId;
+        let text = 'Відкликати доступ застосунку «' + (a.client_name || '') + '» до ваших даних в ЕСОЗ?';
+        if (current) {
+          text += '\n\nЦе застосунок, через який ви зараз працюєте. '
+            + 'Доступ до функціональності Системи через цю ПІС буде припинено. Для продовження роботи буде потрібно повторно авторизуватися.';
+        }
+        if (!(await uiConfirm(text, { tone: current ? 'warning' : 'question', okText: 'Відкликати' }))) return;
+        const r = await apiJson('/ehealth/apps/' + encodeURIComponent(a.id), { method: 'DELETE' });
+        if (!r.ok) return await alertEhealthError(r.body);
+        if (current) return await logoutPatient();
+        await loadApps();
+      });
     }
 
     // Перегляд усіх атрибутів відповіді ЕСОЗ (вимога "інші параметри за запитом Користувача")
@@ -1899,24 +2294,27 @@
       document.getElementById('modal-details').classList.add('hidden');
     }
 
-    // Політика конфіденційності
-    async function loadPrivacyPolicy() {
-      const area = document.getElementById('policy-text-area');
+    // Політика конфіденційності (текст; помилка мережі або сервера — повідомлення замість тексту)
+    async function fetchPrivacyPolicy() {
       try {
-        const resp = await fetch('/api/privacy-policy');
-        area.textContent = resp.ok ? await resp.text() : 'Політику конфіденційності тимчасово не вдалося завантажити.';
+        const resp = await fetch('/api/privacy-policy', { credentials: 'same-origin' });
+        return resp.ok ? await resp.text() : 'Політику конфіденційності тимчасово не вдалося завантажити.';
       } catch (e) {
-        area.textContent = 'Помилка: ' + e.message;
+        return MSG_OFFLINE;
       }
     }
 
-    function openPolicyModal() {
+    async function loadPrivacyPolicy() {
+      const area = document.getElementById('policy-text-area');
+      area.textContent = 'Завантаження тексту політики конфіденційності...';
+      area.textContent = await fetchPrivacyPolicy();
+    }
+
+    async function openPolicyModal() {
+      const content = document.getElementById('modal-policy-content');
+      content.textContent = 'Завантаження тексту...';
       document.getElementById('modal-policy').classList.remove('hidden');
-      fetch('/api/privacy-policy').then(r => r.text()).then(t => {
-        document.getElementById('modal-policy-content').textContent = t;
-      }).catch(e => {
-        document.getElementById('modal-policy-content').textContent = 'Помилка: ' + e.message;
-      });
+      content.textContent = await fetchPrivacyPolicy();
     }
 
     function closePolicyModal() {
@@ -1931,32 +2329,52 @@
       else if (state.activeNav === 'person-requests') await loadPersonRequests();
     }
 
-    // Вихід: припинення токенів ЕСОЗ (п.3.7) і сесії кабінету
-    async function logoutPatient(callApi = true) {
-      let warning = null;
-      if (callApi) {
-        try {
-          const resp = await apiFetch('/auth/logout', { method: 'POST' });
-          warning = ((await resp.json().catch(() => ({}))) || {}).warning;
-        } catch (e) {}
-      }
-      Object.assign(state, { authenticated: false, ehealthConnected: false, patientData: null, declarations: [], apps: [] });
-      renderAppView();
-      if (warning) showGateLog('error', warning);
+    // Вихід: припинення токенів ЕСОЗ (п.3.7) і сесії кабінету, потім повне скидання сторінки
+    function logoutPatient() {
+      return guard('logout', async () => {
+        const r = await apiJson('/auth/logout', { method: 'POST' });
+        // Без відповіді сервера сесію не завершено (cookie HttpOnly) — пацієнт лишається в кабінеті і може повторити
+        if (!r.ok) return await uiError(errorText(r.body));
+        // п.3.7.1.1: помилка ЕСОЗ під час Logout (текст за Додатком 1) показується на екрані входу
+        await endSession(r.body.warning ? { type: 'error', text: r.body.warning } : null);
+      });
+    }
+
+    // Видалення облікового запису «Плексі» (App Store 5.1.1(v), Google Play): сильне підтвердження,
+    // DELETE /api/account; записи в ЕСОЗ (державний реєстр) не видаляються
+    function deleteAccount() {
+      return guard('account-delete', async () => {
+        const answer = await uiDialog({
+          kind: 'confirm',
+          title: 'Видалити обліковий запис «Плексі»?',
+          tone: 'error',
+          message: 'Буде видалено ваш обліковий запис у кабінеті «Плексі» та завершено його сесії на всіх пристроях. '
+            + 'Доступ до ЕСОЗ через цей кабінет буде припинено.\n\n'
+            + 'Записи про вас в ЕСОЗ (зокрема декларація з лікарем) залишаться: це державний реєстр, кабінет їх не видаляє.\n\n'
+            + 'Дію не можна скасувати.',
+          input: { label: 'Щоб підтвердити, введіть слово ВИДАЛИТИ', requireText: 'ВИДАЛИТИ', maxLength: 20 },
+          okText: 'Видалити обліковий запис',
+          cancelText: 'Скасувати'
+        });
+        if (!answer.ok) return;
+        const r = await apiJson('/account', jsonRequest('DELETE', { confirm: 'DELETE' }));
+        if (!r.ok) return await uiError(errorText(r.body));
+        await endSession({ type: 'notice', text: 'Обліковий запис видалено.' });
+      });
     }
 
     async function initApp() {
       try { localStorage.removeItem('pis_session_token'); } catch (e) {}  // залишок старої версії
       const host = window.location.hostname;
       document.getElementById('env-badge').classList.toggle('hidden', !(host.includes('my-dev') || host === 'localhost'));
+      const notice = takeGateNotice();
       setGateAuthTab('ehealth');
       renderAppView();
-      try {
-        const resp = await apiFetch('/patient/me');
-        state.authenticated = resp.ok;
-      } catch (e) {
-        state.authenticated = false;
-      }
+      const [me] = await Promise.all([apiFetch('/patient/me').catch(() => null), loadConfig()]);
+      state.authenticated = !!(me && me.ok);
+      initGateTabs();
+      // Причина повного скидання сторінки (вихід, завершення сесії, видалення облікового запису) — на екрані входу
+      if (notice) showGateLog(notice.type === 'error' ? 'error' : 'notice', notice.text);
       const handled = await checkUrlAuthCode();
       if (state.authenticated && !handled) await enterCabinet();
     }
@@ -1964,23 +2382,34 @@
     // ========================================================================
     // КЕП: зчитування ключа і підпис у браузері (п.1.6, 3.3.3, 3.5.5)
     // ========================================================================
-    const kepState = { task: null, casLoaded: false };
+    const kepState = { task: null, casLoaded: false, busy: false };
+    const KEP_STATUS_TO_EHEALTH_SITE = 'Підпис накладено. Переходимо до сервісу ЕСОЗ...';
+    const KEP_STATUS_SENDING = 'Підпис накладено. Надсилаємо до ЕСОЗ...';
 
     function kepStatus(type, msg) {
       const el = document.getElementById('kep-status');
-      el.className = 'p-3 rounded-lg ' + (type === 'error' ? 'bg-rose-50 border border-rose-200 text-rose-900'
-                                                           : 'bg-blue-50 border border-blue-200 text-blue-900');
+      el.className = 'p-3 rounded-lg whitespace-pre-line ' + (type === 'error' ? 'bg-rose-50 border border-rose-200 text-rose-900'
+                                                                                 : 'bg-blue-50 border border-blue-200 text-blue-900');
       el.textContent = msg;
       el.classList.toggle('hidden', !msg);
     }
 
-    /** task: {title, purpose, getData: async () => string, onSigned: async (base64) => void} */
+    function clearKepOwner() {
+      const owner = document.getElementById('kep-owner');
+      owner.textContent = '';
+      owner.classList.add('hidden');
+    }
+
+    /**
+     * task: {title, purpose, getData: async () => string, onSigned: async (base64) => void,
+     *        signedStatus — текст після підпису (типово «Надсилаємо до ЕСОЗ»; вхід і реєстрація — перехід на сайт ЕСОЗ)}
+     */
     async function openKepModal(task) {
       kepState.task = task;
       document.getElementById('kep-title').lastChild.textContent = ' ' + task.title;
       document.getElementById('kep-purpose').textContent = task.purpose;
       document.getElementById('kep-password').value = '';
-      document.getElementById('kep-owner').classList.add('hidden');
+      clearKepOwner();
       kepStatus('', '');
       document.getElementById('modal-kep').classList.remove('hidden');
       if (!(await Kep.available())) {
@@ -1999,13 +2428,16 @@
     function closeKepModal() {
       document.getElementById('modal-kep').classList.add('hidden');
       document.getElementById('kep-password').value = '';
+      kepStatus('', '');
+      clearKepOwner();
       kepState.task = null;
       Kep.reset();
     }
 
     async function kepModalSubmit() {
       const task = kepState.task;
-      if (!task) return;
+      if (!task || kepState.busy) return;
+      kepState.busy = true;
       const btn = document.getElementById('kep-submit');
       btn.disabled = true;
       try {
@@ -2013,9 +2445,9 @@
           const file = document.getElementById('kep-file').files[0];
           if (!file) throw new Error('Оберіть файл ключа');
           kepStatus('info', 'Зчитування ключа... Перший раз бібліотека підпису завантажується кілька секунд.');
-          const { owner } = await Kep.readKey(new Uint8Array(await file.arrayBuffer()),
-            document.getElementById('kep-password').value, document.getElementById('kep-ca').value);
-          document.getElementById('kep-password').value = '';
+          const password = document.getElementById('kep-password').value;
+          document.getElementById('kep-password').value = '';   // пароль не лишається в полі після використання
+          const { owner } = await Kep.readKey(new Uint8Array(await file.arrayBuffer()), password, document.getElementById('kep-ca').value);
           const ownerBox = document.getElementById('kep-owner');
           ownerBox.textContent = `Підписувач: ${owner.subjFullName || owner.subjCN || '—'}` +
             (owner.subjDRFOCode ? ` • РНОКПП ${owner.subjDRFOCode}` : '') + ` • ${owner.issuerCN || ''}`;
@@ -2023,11 +2455,12 @@
         }
         kepStatus('info', 'Накладання підпису...');
         const signed = await Kep.sign(await task.getData());
-        kepStatus('info', 'Підпис накладено. Переходимо до сервісу ЕСОЗ...');
+        kepStatus('info', task.signedStatus || KEP_STATUS_SENDING);
         await task.onSigned(signed);
       } catch (e) {
-        kepStatus('error', e.message || String(e));
+        if (kepState.task === task) kepStatus('error', e.message || String(e));
       } finally {
+        kepState.busy = false;
         btn.disabled = false;
       }
     }
@@ -2041,23 +2474,26 @@
       const r = await apiJson('/auth-url', jsonRequest('POST', { env: ehealthEnv(), ...payload }));
       if (!r.ok || !r.body.url) throw new Error(errorText(r.body, 'Не вдалося сформувати посилання на сервіс ЕСОЗ'));
       window.location.href = r.body.url;
+      await holdWhileNavigating();   // кнопка підпису лишається зайнятою, поки браузер переходить на сайт ЕСОЗ
     }
 
     // п.3.3: вхід — пацієнт підписує nonce (JWT) своїм КЕП, ЕСОЗ визначає його за РНОКПП із сертифіката
     function startKepSignIn() {
-      if (!document.getElementById('gate-eh-agree').checked) {
-        alert('Щоб продовжити, ознайомтеся з Політикою конфіденційності та підтвердьте згоду.');
-        return;
-      }
-      openKepModal({
-        title: 'Вхід через ЕСОЗ з КЕП',
-        purpose: 'Підпишіть запит на вхід своїм кваліфікованим електронним підписом. Після цього ви перейдете на сторінку ЕСОЗ для надання доступу кабінету.',
-        getData: async () => {
-          const r = await apiJson('/auth/nonce', { method: 'POST' });
-          if (!r.ok || !r.body.nonce) throw new Error(errorText(r.body, 'Не вдалося отримати дані для підпису від ЕСОЗ'));
-          return r.body.nonce;
-        },
-        onSigned: signed => redirectToEhealth({ mode: 'sign-in', user_data: signed })
+      return guard('kep-sign-in', async () => {
+        if (!document.getElementById('gate-eh-agree').checked) {
+          return await uiAlert('Щоб продовжити, ознайомтеся з Політикою конфіденційності та підтвердьте згоду.', { tone: 'warning' });
+        }
+        await openKepModal({
+          title: 'Вхід через ЕСОЗ з КЕП',
+          purpose: 'Підпишіть запит на вхід своїм кваліфікованим електронним підписом. Після цього ви перейдете на сторінку ЕСОЗ для надання доступу кабінету.',
+          signedStatus: KEP_STATUS_TO_EHEALTH_SITE,
+          getData: async () => {
+            const r = await apiJson('/auth/nonce', { method: 'POST' });
+            if (!r.ok || !r.body.nonce) throw new Error(errorText(r.body, 'Не вдалося отримати дані для підпису від ЕСОЗ'));
+            return r.body.nonce;
+          },
+          onSigned: signed => redirectToEhealth({ mode: 'sign-in', user_data: signed })
+        });
       });
     }
 

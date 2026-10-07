@@ -390,7 +390,8 @@ class PisClient:
         return self._bulk("PIS. Contract Divisions (Bulk data export)", "contract_divisions", depth)
 
     def bulk_declarations_limit(self):
-        return self._bulk("PIS. Get declarations limit and declarations", "declarations_limit")
+        return self._bulk("PIS. Get declarations limit and declarations count per practitioner (Bulk data export)",
+                          "declarations_limit")
 
     def address_regions(self, name=None, koatuu=None):
         return self._call("Get regions", "GET", "/api/uaddresses/regions", params={"name": name, "koatuu": koatuu})

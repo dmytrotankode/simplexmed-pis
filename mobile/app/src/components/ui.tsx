@@ -73,8 +73,10 @@ const makeStyles = (c: Palette) => StyleSheet.create({
 export function Screen({ children, scroll = true }: { children: ReactNode; scroll?: boolean }) {
   const s = useStyles(makeStyles);
   if (!scroll) return <View style={s.screen}>{children}</View>;
+  // Поле під клавіатурою прокручується у видиму частину (iOS), клавіатуру можна сховати жестом
   return (
-    <ScrollView style={s.screenBg} contentContainerStyle={s.screenContent} keyboardShouldPersistTaps="handled">
+    <ScrollView style={s.screenBg} contentContainerStyle={s.screenContent} keyboardShouldPersistTaps="handled"
+                automaticallyAdjustKeyboardInsets keyboardDismissMode="interactive">
       {children}
     </ScrollView>
   );

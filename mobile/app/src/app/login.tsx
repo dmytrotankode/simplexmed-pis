@@ -38,7 +38,7 @@ export default function Login() {
         router.push('/kep-sign');
         userData = await signing;
       }
-      await signIn(await loginWithEhealth({ userData }));
+      await signIn((await loginWithEhealth({ userData })).token);
       router.replace('/');
     } catch (e) {
       if (!(e instanceof LoginCancelled)) setError(handleApiError(e));

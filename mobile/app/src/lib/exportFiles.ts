@@ -2,6 +2,8 @@ import { File, Paths } from 'expo-file-system';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 
+import { deleteFileQuietly } from './localFiles';
+
 /**
  * Збереження документів на пристрої через системне меню «Поділитися / Зберегти»:
  * політика конфіденційності як текстовий файл (п.3.3.1.1, 3.5.1.1) і форми декларацій у PDF
@@ -29,18 +31,30 @@ async function share(uri: string, mimeType: string, UTI: string, dialogTitle: st
   await Sharing.shareAsync(uri, { mimeType, UTI, dialogTitle });
 }
 
-/** Текст у файл .txt у кеші застосунку і меню збереження. */
+/** Текст у файл .txt у кеші застосунку і меню збереження; після закриття меню файл видаляється. */
 export async function shareTextFile(baseName: string, text: string, dialogTitle: string): Promise<void> {
   const file = new File(Paths.cache, safeFileName(baseName, 'txt'));
-  file.create({ overwrite: true });
-  file.write(text.replace(/﻿/g, ''));
-  await share(file.uri, 'text/plain', 'public.plain-text', dialogTitle);
+  try {
+    file.create({ overwrite: true });
+    file.write(text.replace(/﻿/g, ''));
+    await share(file.uri, 'text/plain', 'public.plain-text', dialogTitle);
+  } finally {
+    deleteFileQuietly(file.uri);
+  }
 }
 
-/** HTML-форма ЕСОЗ у PDF і меню збереження. */
+/**
+ * HTML-форма ЕСОЗ у PDF і меню збереження. Форма містить персональні дані, тож копія в кеші застосунку
+ * видаляється, щойно користувач зберіг або надіслав файл (чи закрив меню).
+ */
 export async function shareHtmlAsPdf(baseName: string, html: string, dialogTitle: string): Promise<void> {
   const printed = await Print.printToFileAsync({ html: htmlForPdf(html) });
   const target = new File(Paths.cache, safeFileName(baseName, 'pdf'));
-  await new File(printed.uri).move(target, { overwrite: true });
-  await share(target.uri, 'application/pdf', 'com.adobe.pdf', dialogTitle);
+  try {
+    await new File(printed.uri).move(target, { overwrite: true });
+    await share(target.uri, 'application/pdf', 'com.adobe.pdf', dialogTitle);
+  } finally {
+    deleteFileQuietly(printed.uri);
+    deleteFileQuietly(target.uri);
+  }
 }

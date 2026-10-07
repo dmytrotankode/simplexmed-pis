@@ -79,7 +79,7 @@ export default function SignUp() {
         'Підпишіть дані реєстрації своїм КЕП. Дані з підпису (ПІБ, РНОКПП) мають збігатися з даними форми.');
       router.push('/kep-sign');
       const signed = await signing;
-      const token = await loginWithEhealth({ userData: signed, mode: 'sign-up' });
+      const { token } = await loginWithEhealth({ userData: signed, mode: 'sign-up' });
       // п.3.5.8.2: копії документів — банер на головному екрані, доки їх не завантажено
       const needsDocuments = signUpNeedsDocuments(person, needsCapacityDoc(values));
       if (needsDocuments) await setSecure(KEYS.documentsPending, '1');

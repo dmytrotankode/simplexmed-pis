@@ -53,20 +53,35 @@ def get_db():
 # 2. БЕЗПЕКА ТА ХЕШУВАННЯ ПАРОЛІВ (PBKDF2-HMAC-SHA256)
 # ------------------------------------------------------------------------------
 
+# OWASP (2023+): PBKDF2-HMAC-SHA256 — не менше 600 000 ітерацій. Старі хеші (100 000) теж перевіряються.
+PBKDF2_ITERATIONS = 600_000
+
+
 def hash_password(password: str) -> str:
     salt = os.urandom(16)
-    pwd_hash = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, 100000)
-    return f"pbkdf2:sha256:100000${binascii.hexlify(salt).decode()}${binascii.hexlify(pwd_hash).decode()}"
+    pwd_hash = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, PBKDF2_ITERATIONS)
+    return f"pbkdf2:sha256:{PBKDF2_ITERATIONS}${binascii.hexlify(salt).decode()}${binascii.hexlify(pwd_hash).decode()}"
+
+
+# Хеш-приманка: перевірка пароля для неіснуючого логіна триває стільки ж, скільки для існуючого
+_DECOY_HASH = None
+
+
+def _decoy_hash():
+    global _DECOY_HASH
+    if _DECOY_HASH is None:
+        _DECOY_HASH = hash_password(binascii.hexlify(os.urandom(16)).decode())
+    return _DECOY_HASH
+
 
 def verify_password(password: str, hashed: str) -> bool:
     if not hashed or not hashed.startswith("pbkdf2:sha256:"):
         return False
     try:
-        parts = hashed.split("$")
-        salt = binascii.unhexlify(parts[1])
-        expected_hash = binascii.unhexlify(parts[2])
-        actual_hash = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, 100000)
-        return hmac.compare_digest(actual_hash, expected_hash)
+        head, salt_hex, hash_hex = hashed.split("$")
+        iterations = int(head.split(":")[2])
+        actual_hash = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), binascii.unhexlify(salt_hex), iterations)
+        return hmac.compare_digest(actual_hash, binascii.unhexlify(hash_hex))
     except Exception:
         return False
 
@@ -204,6 +219,7 @@ def login_local_patient(identifier, password, ip="127.0.0.1", ua=""):
             )
             row = cur.fetchone()
             if not row:
+                verify_password(password, _decoy_hash())   # однаковий час відповіді: не розкриваємо, чи є логін
                 return {"error": "Невірний логін або пароль"}, 401
 
             if not verify_password(password, row["password_hash"]):
@@ -233,7 +249,7 @@ def login_local_patient(identifier, password, ip="127.0.0.1", ua=""):
             }, 200
     except Exception as e:
         conn.rollback()
-        logger.error(f"Login error: {e}")
+        logger.error(f"Login error: {type(e).__name__}")  # текст помилки БД може містити телефон/email
         return {"error": "Помилка авторизації. Спробуйте пізніше"}, 500
     finally:
         conn.close()
@@ -449,6 +465,38 @@ def link_ehealth_person(person, current_user_id=None):
             )
         conn.commit()
         return user_id, False
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
+
+
+def delete_account(user_id):
+    """
+    Видалення облікового запису кабінету на вимогу користувача (App Store 5.1.1(v), Google Play).
+    Видаляються обліковий запис, особисті відомості й усі сесії; записи в ЕСОЗ (ЦБД) не змінюються.
+    Повертає розшифровані Access token ЕСОЗ сесій користувача, щоб припинити їх дію (п.3.7).
+    """
+    conn = get_db()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT ehealth_access_token FROM pis_core.sessions WHERE user_id = %s;", (user_id,))
+            tokens = [t for t in (decrypt_token(r["ehealth_access_token"]) for r in cur.fetchall()) if t]
+            cur.execute("DELETE FROM pis_core.sessions WHERE user_id = %s;", (user_id,))
+            cur.execute("DELETE FROM pis_core.patient_details WHERE user_id = %s;", (user_id,))
+            cur.execute("SELECT to_regclass('pis_core.access_grants') IS NOT NULL AS has_grants, "
+                        "to_regclass('pis_core.audit_log') IS NOT NULL AS has_audit;")
+            tables = cur.fetchone()
+            if tables["has_grants"]:
+                cur.execute("DELETE FROM pis_core.access_grants WHERE user_id = %s;", (user_id,))
+            cur.execute("DELETE FROM pis_core.users WHERE id = %s;", (user_id,))
+            if tables["has_audit"]:
+                # Факт видалення без персональних даних
+                cur.execute("INSERT INTO pis_core.audit_log (user_id, action_type, details) VALUES (%s, %s, %s);",
+                            (user_id, "ACCOUNT_DELETED", '{"by": "user"}'))
+        conn.commit()
+        return tokens
     except Exception:
         conn.rollback()
         raise

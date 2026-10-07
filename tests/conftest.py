@@ -1,7 +1,11 @@
 """Спільні налаштування тестів: кеш реєстрів у тимчасовій теці, без фонового оновлення."""
 
+import atexit
 import os
+import shutil
 import tempfile
 
-os.environ.setdefault("PIS_REGISTRY_DB", os.path.join(tempfile.mkdtemp(prefix="pis-tests-"), "registry.sqlite3"))
+_TMP = tempfile.mkdtemp(prefix="pis-tests-")
+atexit.register(shutil.rmtree, _TMP, True)
+os.environ.setdefault("PIS_REGISTRY_DB", os.path.join(_TMP, "registry.sqlite3"))
 os.environ.setdefault("PIS_REGISTRY_REFRESH", "0")

@@ -79,13 +79,28 @@ def _payload_items(payload):
     return payload if isinstance(payload, list) else []
 
 
+# Скорочення типів вулиць (довідник STREET_TYPE); невідомий код не показуємо — лише назву вулиці
+STREET_TYPE_SHORT = {
+    "STREET": "вул.", "AVENUE": "просп.", "BOULEVARD": "бульв.", "LANE": "пров.", "SQUARE": "пл.",
+    "ALLEY": "алея", "BLIND_STREET": "тупик", "DESCENT": "узвіз", "EMBANKMENT": "наб.", "QUAY": "наб.",
+    "HIGHWAY": "шосе", "MICRODISTRICT": "мкр.", "PASSAGE": "проїзд", "ROAD": "дорога", "PARK": "парк",
+    "ISLAND": "острів", "BLOCK": "квартал", "DISTRICT": "район", "SETTLEMENT": "селище", "LINE": "лінія",
+}
+
+
 def address_text(addresses):
-    """Адреса МНП одним рядком (для показу і пошуку)."""
+    """Адреса МНП одним рядком (для показу і пошуку), без повторів (м. Київ: область = місто)."""
     for a in addresses or []:
+        street_type = a.get("street_type_name") or STREET_TYPE_SHORT.get(str(a.get("street_type") or "").upper(), "")
         parts = [a.get("area"), a.get("region"), a.get("settlement"),
-                 " ".join(p for p in (a.get("street_type_name") or a.get("street_type"), a.get("street")) if p),
-                 a.get("building")]
-        text = ", ".join(str(p) for p in parts if p)
+                 " ".join(p for p in (street_type, a.get("street")) if p), a.get("building")]
+        seen, out = set(), []
+        for part in (str(p).strip() for p in parts if p):
+            key = part.lower().replace("м.", "").strip()
+            if part and key not in seen:
+                seen.add(key)
+                out.append(part)
+        text = ", ".join(out)
         if text:
             return text
     return ""

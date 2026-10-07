@@ -50,10 +50,10 @@ class PisConfig:
     timeout: int = 60                        # п.1.3.2: не менше 60 секунд
     pis_name: str = "SimplexMed"
     support_contacts: str = ""
-    # Портал підтримки НСЗУ/ЕСОЗ для повідомлень ТВ із "[url переходу на створення запиту ...]"
-    # Сторінка НСЗУ «Процедура отримання інформації або внесення змін до Реєстрів ЦБД ЕСОЗ» (звернення щодо даних про себе)
-    nhsu_support_url: str = ("https://nszu.gov.ua/gromadianam/onlain-formi/"
-                             "procedura-otrimannia-informaciyi-abo-vnesennia-zmin-d-1")
+    # Портал підтримки НСЗУ/ЕСОЗ для повідомлень ТВ із "[url переходу на створення запиту ...]": створення звернення
+    # (категорія «Контекстні питання» — дублювання запису, зміна даних, блокування; «Технічні питання» — збої кабінету).
+    # Пряме посилання на категорію портал не надає; інше посилання — змінна PIS_NHSU_SUPPORT_URL.
+    nhsu_support_url: str = "https://support.ehealth.gov.ua/issues/new"
     user_agent: str = "SimplexMed-PIS/2.1"
 
     def __post_init__(self):
@@ -85,8 +85,9 @@ class PisConfig:
             "auth_host": env("AUTH_HOST", PREPROD["auth_host"]),
             "login_host": env("LOGIN_HOST", PREPROD["login_host"]),
             "psk": env("EHEALTH_PSK"),
-            "pis_name": env("NAME", "Плексі"),
-            "support_contacts": env("SUPPORT_CONTACTS", "support@simplex-med.com"),
+            "pis_name": env("NAME") or "Плексі",
+            # порожнє значення в .env — теж типові контакти: повідомлення Додатку 1 мають містити контакти підтримки
+            "support_contacts": env("SUPPORT_CONTACTS") or "support@simplex-med.com",
         }
         if env("NHSU_SUPPORT_URL"):
             values["nhsu_support_url"] = env("NHSU_SUPPORT_URL")

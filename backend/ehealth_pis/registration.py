@@ -145,9 +145,10 @@ def validate_person_request(person, today=None, for_update=False):
     elif len(methods) != 1 or methods[0].get("type") != "OTP" or not PHONE_RE.match(str(methods[0].get("phone_number") or "")):
         errors.append(("authentication_methods", "Метод автентифікації: мобільний номер у форматі +380XXXXXXXXX"))
 
-    if person.get("preferred_way_communication") not in ("email", "phone"):
+    way = str(person.get("preferred_way_communication") or "").lower()
+    if way not in ("email", "phone"):
         errors.append(("preferred_way_communication", "Оберіть бажаний спосіб зв'язку"))
-    elif person["preferred_way_communication"] == "email" and not email:
+    elif way == "email" and not email:
         errors.append(("email", "Для зв'язку електронною поштою вкажіть її адресу"))
 
     contact = person.get("emergency_contact") or {}
@@ -176,6 +177,12 @@ def validate_person_update(person, current, today=None):
     return errors
 
 
+# Поля запиту на зміну, які підписує пацієнт (приклад signed_content у специфікації "Complete Update Person
+# details"): службові inserted_at / updated_at та інші поля відповіді в підпис не входять
+PERSON_REQUEST_SIGNED_FIELDS = ("status", "id", "person", "patient_signed", "process_disclosure_data_consent",
+                                "content", "channel")
+
+
 def person_request_sign_content(request_data):
     """
     Контент для підпису "PIS. Complete Update Person details": дані запиту на зміну
@@ -183,7 +190,8 @@ def person_request_sign_content(request_data):
     """
     data = dict(request_data or {})
     data["patient_signed"] = True
-    return json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+    signed = {k: data[k] for k in PERSON_REQUEST_SIGNED_FIELDS if k in data}
+    return json.dumps(signed, ensure_ascii=False, separators=(",", ":"))
 
 
 def clean_person(person):
@@ -196,6 +204,9 @@ def clean_person(person):
         return value.strip() if isinstance(value, str) else value
     result = clean(person)
     result["no_tax_id"] = bool(person.get("no_tax_id"))
+    # Специфікація PIS API: preferred_way_communication — email | phone (довідник ЕСОЗ має коди EMAIL/PHONE)
+    if result.get("preferred_way_communication"):
+        result["preferred_way_communication"] = str(result["preferred_way_communication"]).lower()
     return result
 
 
