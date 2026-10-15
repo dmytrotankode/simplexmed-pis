@@ -58,6 +58,7 @@
     .nav-item { width: 100%; min-height: 44px; display: flex; align-items: center; gap: .75rem; padding: 0 .75rem; border-radius: .75rem; font-weight: 600; color: rgb(var(--neutral-700)); transition: background-color .15s; text-align: left; }
     .nav-item:hover { background: rgb(var(--neutral-100)); }
     .nav-item.is-active { background: rgb(var(--accent-50)); color: rgb(var(--accent-600)); }
+    .nav-item.hidden, .tab-item.hidden { display: none; }
     .tab-item { flex: 1; min-width: 0; min-height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: .8125rem; font-weight: 600; color: rgb(var(--neutral-600)); }
     .tab-item i { width: 56px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 15px; font-size: 1.05rem; }
     .tab-item.is-active { color: rgb(var(--accent-600)); }
@@ -225,9 +226,6 @@
             <button onclick="startKepSignIn()" class="w-full min-h-[52px] px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-base rounded-xl transition flex items-center justify-center gap-2">
               <i class="fa-solid fa-key"></i> <span>Увійти з електронним підписом (КЕП)</span>
             </button>
-            <button onclick="startEhealthOAuth('gate-eh-agree')" class="w-full min-h-[52px] px-4 bg-white hover:bg-slate-50 text-slate-900 font-semibold text-base rounded-xl border border-slate-300 transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-arrow-up-right-from-square text-slate-600"></i> <span>Інші способи входу на сайті ЕСОЗ</span>
-            </button>
           </div>
           <div class="text-center">
             <button onclick="openSignUp()" class="min-h-[44px] px-2 text-sm text-blue-600 hover:text-blue-700 font-semibold">
@@ -276,7 +274,7 @@
             <div><label class="block text-sm font-semibold text-slate-700 mb-1">Стать *</label><select data-f="gender" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none bg-white min-h-[44px] text-sm focus:ring-blue-600" data-dict="GENDER"><option value="">—</option></select></div>
             <div><label class="block text-sm font-semibold text-slate-700 mb-1">Країна народження *</label><input data-f="birth_country" list="dl-country" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"><datalist id="dl-country"></datalist></div>
             <div class="sm:col-span-2"><label class="block text-sm font-semibold text-slate-700 mb-1">Місце народження *</label><input data-f="birth_settlement" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
-            <div><label class="block text-sm font-semibold text-slate-700 mb-1">УНЗР</label><input data-f="unzr" placeholder="РРРРММДД-ХХХХХ" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
+            <div><label class="block text-sm font-semibold text-slate-700 mb-1">УНЗР <span class="font-normal text-slate-500">(обов'язково для ID-картки)</span></label><input data-f="unzr" placeholder="РРРРММДД-ХХХХХ" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
             <div><label class="block text-sm font-semibold text-slate-700 mb-1">РНОКПП</label><input data-f="tax_id" inputmode="numeric" maxlength="10" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
             <div class="sm:col-span-2 flex items-end pb-2"><label class="flex items-center gap-2 text-slate-700"><input type="checkbox" data-f="no_tax_id" onchange="toggleNoTaxId(this.form)" class="rounded"> Відмовився(-лась) від РНОКПП</label></div>
             <div><label class="block text-sm font-semibold text-slate-700 mb-1">Кодове слово *</label><input data-f="secret" placeholder="6–20 літер або цифр" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
@@ -291,7 +289,7 @@
             <div><label class="block text-sm font-semibold text-slate-700 mb-1">Тип документа *</label><select data-f="doc.type" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none bg-white min-h-[44px] text-sm focus:ring-blue-600" data-dict="DOCUMENT_TYPE" data-identity="1"><option value="">—</option></select></div>
             <div><label class="block text-sm font-semibold text-slate-700 mb-1">Серія та номер *</label><input data-f="doc.number" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
             <div><label class="block text-sm font-semibold text-slate-700 mb-1">Дата видачі *</label><input type="text" data-date="1" inputmode="numeric" maxlength="10" placeholder="ДД.ММ.РРРР" autocomplete="off" oninput="maskDate(this)" data-f="doc.issued_at" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
-            <div class="sm:col-span-2"><label class="block text-sm font-semibold text-slate-700 mb-1">Ким виданий</label><input data-f="doc.issued_by" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
+            <div class="sm:col-span-2"><label class="block text-sm font-semibold text-slate-700 mb-1">Ким виданий *</label><input data-f="doc.issued_by" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
             <div><label class="block text-sm font-semibold text-slate-700 mb-1">Дійсний до</label><input type="text" data-date="1" inputmode="numeric" maxlength="10" placeholder="ДД.ММ.РРРР" autocomplete="off" oninput="maskDate(this)" data-f="doc.expiration_date" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
           </div>
           <div data-role="capacity" class="hidden space-y-2 p-3 bg-amber-50 border border-amber-200 rounded-lg">
@@ -300,7 +298,7 @@
               <div><label class="block text-sm font-semibold text-slate-700 mb-1">Тип документа *</label><select data-f="cap.type" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none bg-white min-h-[44px] text-sm focus:ring-blue-600" data-dict="DOCUMENT_TYPE"><option value="">—</option></select></div>
               <div><label class="block text-sm font-semibold text-slate-700 mb-1">Серія та номер *</label><input data-f="cap.number" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
               <div><label class="block text-sm font-semibold text-slate-700 mb-1">Дата видачі *</label><input type="text" data-date="1" inputmode="numeric" maxlength="10" placeholder="ДД.ММ.РРРР" autocomplete="off" oninput="maskDate(this)" data-f="cap.issued_at" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
-              <div class="sm:col-span-2"><label class="block text-sm font-semibold text-slate-700 mb-1">Ким виданий</label><input data-f="cap.issued_by" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
+              <div class="sm:col-span-2"><label class="block text-sm font-semibold text-slate-700 mb-1">Ким виданий *</label><input data-f="cap.issued_by" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
               <div><label class="block text-sm font-semibold text-slate-700 mb-1">Дійсний до</label><input type="text" data-date="1" inputmode="numeric" maxlength="10" placeholder="ДД.ММ.РРРР" autocomplete="off" oninput="maskDate(this)" data-f="cap.expiration_date" class="w-full px-3 border border-slate-300 rounded-lg focus:ring-2 focus:outline-none min-h-[44px] text-sm focus:ring-blue-600"></div>
             </div>
           </div>
@@ -389,6 +387,10 @@
         <button onclick="switchNav('apps')" id="nav-apps" class="nav-item">
           <i class="fa-solid fa-shield-halved w-5 text-center"></i>
           <span class="truncate">Доступи застосунків</span>
+        </button>
+        <button onclick="switchNav('tester')" id="nav-tester" class="nav-item hidden">
+          <i class="fa-solid fa-list-check w-5 text-center"></i>
+          <span class="truncate">Тестування</span>
         </button>
         <div class="pt-4 pb-1 px-3 text-xs font-semibold text-slate-500">Документи</div>
         <button onclick="switchNav('policy')" id="nav-policy" class="nav-item">
@@ -494,7 +496,7 @@
                     <input type="checkbox" id="p-eh-agree" class="rounded text-emerald-600">
                     <span>Погоджуюсь з <button type="button" onclick="openPolicyModal()" class="text-blue-600 underline">Політикою</button></span>
                   </label>
-                  <button id="p-btn-connect-ehealth" onclick="startEhealthOAuth('p-eh-agree')" class="px-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-sm font-semibold transition flex items-center gap-1 shadow-sm min-h-[40px]">
+                  <button id="p-btn-connect-ehealth" onclick="startKepSignIn('p-eh-agree')" class="px-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-sm font-semibold transition flex items-center gap-1 shadow-sm min-h-[40px]">
                     <i class="fa-solid fa-key"></i> <span>Увійти через ЕСОЗ</span>
                   </button>
                   <button id="p-btn-disconnect-ehealth" onclick="disconnectEhealth()" class="hidden px-3 bg-white hover:bg-rose-50 text-rose-700 rounded-lg text-sm font-semibold border border-rose-200 transition min-h-[40px]">
@@ -704,6 +706,9 @@
           </div>
         </div>
 
+        <!-- РОЗДІЛ «ТЕСТУВАННЯ»: з'являється лише для тестувальників (tester.js, /api/tester/*) -->
+        <div id="view-tester" class="view-panel hidden max-w-4xl"><div id="tester-root"></div></div>
+
         <!-- 5. РОЗДІЛ: ПОЛІТИКА КОНФІДЕНЦІЙНОСТІ -->
         <div id="view-policy" class="view-panel hidden space-y-4 max-w-4xl">
           <div class="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
@@ -733,6 +738,7 @@
     <button id="tab-declarations" class="tab-item" onclick="switchNav('declarations')"><i class="fa-regular fa-file-lines"></i>Декларація</button>
     <button id="tab-person-requests" class="tab-item" onclick="switchNav('person-requests')"><i class="fa-regular fa-pen-to-square"></i>Зміна даних</button>
     <button id="tab-apps" class="tab-item" onclick="switchNav('apps')"><i class="fa-solid fa-shield-halved"></i>Доступи</button>
+    <button id="tab-tester" class="tab-item hidden" onclick="switchNav('tester')"><i class="fa-solid fa-list-check"></i>Тестування</button>
     <button id="tab-policy" class="tab-item" onclick="switchNav('policy')"><i class="fa-solid fa-file-shield"></i>Політика</button>
   </nav>
 
@@ -1263,9 +1269,21 @@
       });
     }
 
+    // Розділ «Тестування»: модуль завантажується після входу; сервер повертає 404 не-тестувальникам
+    function initTesterSection() {
+      if (window.PlexiTester) return;
+      const el = document.createElement('script');
+      el.src = '/tester.js';
+      el.onload = () => PlexiTester.init({ onAvailable: () => {
+        ['nav-tester', 'tab-tester'].forEach(id => { const b = document.getElementById(id); if (b) b.classList.remove('hidden'); });
+      } });
+      document.head.appendChild(el);
+    }
+
     async function enterCabinet() {
       state.authenticated = true;
       renderAppView();
+      initTesterSection();
       await loadPatientProfile();
       switchNav('profile');
     }
@@ -1329,20 +1347,6 @@
     }
 
     // 2. ВХІД ЧЕРЕЗ СЕРВІС АВТОРИЗАЦІЇ ЕСОЗ (п.3.3)
-    function startEhealthOAuth(agreeCheckboxId) {
-      return guard('ehealth-oauth', async () => {
-        const agree = document.getElementById(agreeCheckboxId || 'gate-eh-agree');
-        if (agree && !agree.checked) {
-          // п.3.3.1.2: продовжити лише після явної згоди з політикою конфіденційності
-          return await uiAlert('Щоб продовжити, ознайомтеся з Політикою конфіденційності та підтвердьте згоду.', { tone: 'warning' });
-        }
-        const r = await apiJson('/auth-url?env=' + ehealthEnv());
-        if (!r.ok || !r.body.url) return await uiError(errorText(r.body, 'Не вдалося сформувати посилання на сервіс авторизації ЕСОЗ'));
-        window.location.href = r.body.url;
-        await holdWhileNavigating();
-      });
-    }
-
     function showNotice(text, type) {
       const box = document.getElementById('cabinet-notice');
       const isError = type === 'error';
@@ -1368,9 +1372,15 @@
         const r = await apiJson('/auth/sign-in-error', jsonRequest('POST', {
           error, error_description: params.get('error_description') || '', mode: signUp ? 'sign-up' : 'sign-in'
         }));
+        // Код запиту ЕСОЗ потрібен службі підтримки, щоб знайти запит у своїх журналах
+        const requestId = params.get('request_id');
+        if (requestId && r.body && r.body.error) r.body.error += ' (код запиту ЕСОЗ: ' + requestId + ')';
         if (signUp) {
           // п.3.5.6.1: помилку реєстрації показуємо на формі реєстрації, щоб пацієнт міг виправити дані
-          if (await openSignUp()) showErrors('signup-errors', [errorText(r.body)]);
+          if (await openSignUp()) {
+            const restored = restoreSignUpDraft();
+            showErrors('signup-errors', [errorText(r.body) + (restored ? ' Дані форми збережено — виправте помилку й підпишіть ще раз. Кодове слово введіть повторно.' : '')]);
+          }
           else showGateLog('error', errorText(r.body));
         } else {
           showGateLog('error', errorText(r.body));
@@ -1390,6 +1400,7 @@
       try {
         const r = await apiJson('/auth/token', jsonRequest('POST', { code, state: authState || '' }));
         if (r.ok) {
+          clearSignUpDraft();
           showGateLog('info', 'Вхід через ЕСОЗ успішний');
           // п.3.5.8.2: після реєстрації — одноразова перевірка, чи потрібні копії документів
           if (signUp) flagSet(SIGNUP_DOCUMENTS_KEY, true);
@@ -1462,10 +1473,12 @@
         'person-edit': 'Зміна персональних даних',
         'declaration-new': 'Подання декларації',
         'person-requests': 'Запити на зміну персональних даних',
-        policy: 'Політика конфіденційності'
+        policy: 'Політика конфіденційності',
+        tester: 'Тестування'
       };
       document.getElementById('view-title').textContent = titles[navKey] || 'Кабінет пацієнта';
       if (navKey === 'policy') loadPrivacyPolicy();
+      if (navKey === 'tester' && window.PlexiTester) PlexiTester.render(document.getElementById('tester-root'));
       if (navKey === 'declarations') loadDeclarations();
       if (navKey === 'apps') loadApps();
       if (navKey === 'person-requests') loadPersonRequests();
@@ -2478,9 +2491,9 @@
     }
 
     // п.3.3: вхід — пацієнт підписує nonce (JWT) своїм КЕП, ЕСОЗ визначає його за РНОКПП із сертифіката
-    function startKepSignIn() {
+    function startKepSignIn(agreeCheckboxId) {
       return guard('kep-sign-in', async () => {
-        if (!document.getElementById('gate-eh-agree').checked) {
+        if (!document.getElementById(agreeCheckboxId || 'gate-eh-agree').checked) {
           return await uiAlert('Щоб продовжити, ознайомтеся з Політикою конфіденційності та підтвердьте згоду.', { tone: 'warning' });
         }
         await openKepModal({
@@ -2490,7 +2503,7 @@
           getData: async () => {
             const r = await apiJson('/auth/nonce', { method: 'POST' });
             if (!r.ok || !r.body.nonce) throw new Error(errorText(r.body, 'Не вдалося отримати дані для підпису від ЕСОЗ'));
-            return r.body.nonce;
+            return r.body.content || r.body.nonce;
           },
           onSigned: signed => redirectToEhealth({ mode: 'sign-in', user_data: signed })
         });
@@ -2691,6 +2704,39 @@
       document.getElementById('auth-gate').classList.add('hidden');
       document.getElementById('signup-gate').classList.remove('hidden');
       await prepareForm(document.getElementById('signup-form'));
+      return true;
+    }
+
+    // Чернетка форми реєстрації на час переходу до ЕСОЗ: якщо ЕСОЗ поверне помилку, пацієнт бачить уже заповнену
+    // форму й виправляє лише проблемне поле. Кодове слово не зберігаємо; чернетка живе у вкладці й видаляється одразу.
+    const SIGNUP_DRAFT_KEY = 'pis_signup_draft';
+
+    function saveSignUpDraft(person) {
+      try {
+        const { secret, ...rest } = person;
+        sessionStorage.setItem(SIGNUP_DRAFT_KEY, JSON.stringify({ person: rest, auth_phone: field(document.getElementById('signup-form'), 'auth_phone') }));
+      } catch (e) { /* сховище недоступне — форма просто буде порожньою */ }
+    }
+
+    function clearSignUpDraft() {
+      try { sessionStorage.removeItem(SIGNUP_DRAFT_KEY); } catch (e) { /* ignore */ }
+    }
+
+    /** true, якщо форму заповнено з чернетки. Викликати після openSignUp(). */
+    function restoreSignUpDraft() {
+      let draft = null;
+      try { draft = JSON.parse(sessionStorage.getItem(SIGNUP_DRAFT_KEY) || 'null'); } catch (e) { /* ignore */ }
+      clearSignUpDraft();
+      if (!draft || !draft.person) return false;
+      const form = document.getElementById('signup-form');
+      fillPersonForm(form, draft.person);
+      // у реєстрації РНОКПП і УНЗР редагуються (fillPersonForm блокує їх лише для зміни даних)
+      ['tax_id', 'unzr'].forEach(f => { const el = fieldEl(form, f); el.readOnly = false; el.classList.remove('bg-slate-100'); });
+      fieldEl(form, 'no_tax_id').disabled = false;
+      toggleNoTaxId(form);
+      setField(form, 'auth_phone', draft.auth_phone || ((draft.person.authentication_methods || [])[0] || {}).phone_number);
+      document.getElementById('signup-agree').checked = true;
+      return true;
     }
 
     function closeSignUp() {
@@ -2718,6 +2764,7 @@
           purpose: 'Підпишіть дані реєстрації своїм КЕП. Дані з підпису (ПІБ, РНОКПП) мають збігатися з даними форми.',
           getData: async () => content,
           onSigned: async signed => {
+            saveSignUpDraft(person);
             try { sessionStorage.setItem('pis_after_signup', '1'); } catch (e) {}
             await redirectToEhealth({ mode: 'sign-up', user_data: signed });
           }

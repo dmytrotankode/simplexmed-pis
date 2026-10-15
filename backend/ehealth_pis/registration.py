@@ -107,12 +107,17 @@ def validate_person_request(person, today=None, for_update=False):
     # Реєстрація (п.3.5.4.12): рівно один документ; у наявного запису їх може бути кілька
     if (len(identity) != 1) if not for_update else (len(identity) < 1):
         errors.append(("documents", "Вкажіть один документ, що посвідчує особу"))
+    # ЕСОЗ (sign-up_validation): "unzr is mandatory for document type NATIONAL_ID"
+    if any(d.get("type") == "NATIONAL_ID" for d in identity) and not person.get("unzr"):
+        errors.append(("unzr", "УНЗР обов'язковий для ID-картки (формат РРРРММДД-ХХХХХ, є на звороті картки)"))
     for i, doc in enumerate(documents):
         prefix = f"documents[{i}]"
         if not doc.get("type"):
             errors.append((f"{prefix}.type", "Документ: оберіть тип"))
         if not str(doc.get("number") or "").strip():
             errors.append((f"{prefix}.number", "Документ: вкажіть серію та номер"))
+        if not str(doc.get("issued_by") or "").strip():   # ЕСОЗ: "required property issued_by was not present"
+            errors.append((f"{prefix}.issued_by", "Документ: вкажіть, ким виданий"))
         issued = _date(doc.get("issued_at"))
         if not issued or issued >= today or (birth and issued <= birth):
             errors.append((f"{prefix}.issued_at",
@@ -208,6 +213,12 @@ def clean_person(person):
     if result.get("preferred_way_communication"):
         result["preferred_way_communication"] = str(result["preferred_way_communication"]).lower()
     return result
+
+
+def sign_in_content(nonce):
+    """Рядок JSON, який пацієнт підписує ЕП для "PIS. Patient sign-in": ЕСОЗ вимагає JSON ({"jwt": nonce}),
+    а не голий JWT (інакше 422 "Malformed encoded content. Probably, you have encoded corrupted JSON")."""
+    return json.dumps({"jwt": nonce}, separators=(",", ":"))
 
 
 def sign_up_content(person, nonce):

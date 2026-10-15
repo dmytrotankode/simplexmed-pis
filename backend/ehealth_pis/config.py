@@ -93,6 +93,10 @@ class PisConfig:
             values["nhsu_support_url"] = env("NHSU_SUPPORT_URL")
         if env("SCOPES"):
             values["scopes"] = tuple(env("SCOPES").split())
+        elif env("EXTRA_SCOPES"):
+            # напр. PIS_EXTRA_SCOPES="person_request:sign_pis": потрібен, якщо ЕСОЗ відповідає 403 "Missing allowances"
+            # під час Complete Update Person details і скоуп виданий клієнту ПІС
+            values["scopes"] = tuple(DEFAULT_SCOPES) + tuple(s for s in env("EXTRA_SCOPES").split() if s not in DEFAULT_SCOPES)
         values.update(overrides)
         return cls(**values)
 

@@ -212,11 +212,26 @@ class PisClient:
     # 3.8 Доступи, надані Користувачем для ПІС (approvals / apps)
     # ------------------------------------------------------------------
 
+    def _list_all(self, api_method, path, token, params, page_key, page_size):
+        """Переліки пацієнта ЕСОЗ віддає сторінками (за замовчуванням по 50). Якщо клієнт не просить конкретну
+        сторінку — збираємо всі, щоб перелік був повним (п.3.8.1, 3.10.2, 3.11.2, 3.11.3)."""
+        if params.get(page_key) is not None:
+            return self._call(api_method, "GET", path, token, params=params)
+        data, page, result = [], 1, {}
+        while page <= 40:
+            result = self._call(api_method, "GET", path, token,
+                                params={**params, page_key: page, "page_size": params.get("page_size") or page_size})
+            data.extend(result.get("data") or [])
+            if page >= int((result.get("paging") or {}).get("total_pages") or 1):
+                break
+            page += 1
+        return {**result, "data": data}
+
     def list_apps(self, token, client_ids=None, client_names=None, page_number=None, page_size=None):
-        return self._call("PIS. Get Approvals", "GET", "/api/pis/apps", token, params={
+        return self._list_all("PIS. Get Approvals", "/api/pis/apps", token, {
             "client_ids": ",".join(client_ids) if client_ids else None,
             "client_names": ",".join(client_names) if client_names else None,
-            "page_number": page_number, "page_size": page_size})
+            "page_number": page_number, "page_size": page_size}, "page_number", 100)
 
     def get_app(self, token, approval_id):
         return self._call("PIS. Get Approval details", "GET", f"/api/pis/apps/{_q(approval_id)}", token)
@@ -278,7 +293,9 @@ class PisClient:
                           "/api/pis/authentication_method_requests", token, body={"authentication_method": method})
 
     def approve_auth_method_request(self, token, request_id, verification_code=None):
-        body = {"verification_code": int(verification_code)} if verification_code else {}
+        # Код — рядок цифр: початкові нулі значущі ("0123" не можна перетворювати на 123)
+        code = str(verification_code).strip() if verification_code not in (None, "") else ""
+        body = {"verification_code": int(code) if code and not code.startswith("0") else code} if code else {}
         return self._call("PIS. Approve authentication method request", "PATCH",
                           f"/api/pis/authentication_method_requests/{_q(request_id)}/actions/approve", token, body=body)
 
@@ -309,8 +326,8 @@ class PisClient:
                           f"/api/pis/person_requests/{_q(request_id)}/actions/complete", token, body=body)
 
     def list_person_requests(self, token, status=None, channel=None, page=None, page_size=None):
-        return self._call("PIS. Get Person Requests List", "GET", "/api/pis/person_requests", token,
-                          params={"status": status, "channel": channel, "page": page, "page_size": page_size})
+        return self._list_all("PIS. Get Person Requests List", "/api/pis/person_requests", token,
+                              {"status": status, "channel": channel, "page": page, "page_size": page_size}, "page", 300)
 
     def get_person_request(self, token, request_id):
         return self._call("PIS. Get Person Request Details", "GET", f"/api/pis/person_requests/{_q(request_id)}", token)
@@ -325,9 +342,9 @@ class PisClient:
 
     def list_declarations(self, token, status=None, start_date_from=None, start_date_to=None,
                           end_date_from=None, end_date_to=None, page=None, page_size=None):
-        return self._call("PIS. Get declarations", "GET", "/api/pis/declarations", token, params={
+        return self._list_all("PIS. Get declarations", "/api/pis/declarations", token, {
             "status": status, "start_date_from": start_date_from, "start_date_to": start_date_to,
-            "end_date_from": end_date_from, "end_date_to": end_date_to, "page": page, "page_size": page_size})
+            "end_date_from": end_date_from, "end_date_to": end_date_to, "page": page, "page_size": page_size}, "page", 300)
 
     def get_declaration(self, token, declaration_id):
         return self._call("PIS. Get Declaration details", "GET", f"/api/pis/declarations/{_q(declaration_id)}", token)
@@ -339,10 +356,10 @@ class PisClient:
 
     def list_declaration_requests(self, token, status=None, channel=None, start_date_from=None, start_date_to=None,
                                   end_date_from=None, end_date_to=None, page=None, page_size=None):
-        return self._call("PIS. Get Declaration requests", "GET", "/api/pis/declaration_requests", token, params={
+        return self._list_all("PIS. Get Declaration requests", "/api/pis/declaration_requests", token, {
             "status": status, "channel": channel, "start_date_from": start_date_from,
             "start_date_to": start_date_to, "end_date_from": end_date_from, "end_date_to": end_date_to,
-            "page": page, "page_size": page_size})
+            "page": page, "page_size": page_size}, "page", 300)
 
     def get_declaration_request(self, token, request_id):
         return self._call("PIS. Get Declaration request details", "GET",
@@ -393,32 +410,44 @@ class PisClient:
         return self._bulk("PIS. Get declarations limit and declarations count per practitioner (Bulk data export)",
                           "declarations_limit")
 
+    def _all_pages(self, api_method, path, params=None, max_pages=30, page_size=100):
+        """Адресні переліки ЕСОЗ віддаються сторінками (за замовчуванням по 10): збираємо всі сторінки."""
+        data, page, result = [], 1, {}
+        while page <= max_pages:
+            result = self._call(api_method, "GET", path, params={**(params or {}), "page": page, "page_size": page_size})
+            data.extend(result.get("data") or [])
+            paging = result.get("paging") or {}
+            if page >= int(paging.get("total_pages") or 1):
+                break
+            page += 1
+        return {**result, "data": data}
+
     def address_regions(self, name=None, koatuu=None):
-        return self._call("Get regions", "GET", "/api/uaddresses/regions", params={"name": name, "koatuu": koatuu})
+        return self._all_pages("Get regions", "/api/uaddresses/regions", {"name": name, "koatuu": koatuu})
 
     def address_districts(self, region_id=None, region=None, name=None, koatuu=None):
         """п.3.12.3.3: райони області — метод "Districts by Region" (за ідентифікатором області)."""
         if region_id:
-            return self._call("Districts by Region", "GET",
-                              f"/api/uaddresses/regions/{urllib.parse.quote(str(region_id), safe='')}/districts",
-                              params={"name": name, "koatuu": koatuu})
-        return self._call("Get districts", "GET", "/api/uaddresses/districts",
-                          params={"region": region, "name": name, "koatuu": koatuu})
+            return self._all_pages("Districts by Region",
+                                   f"/api/uaddresses/regions/{urllib.parse.quote(str(region_id), safe='')}/districts",
+                                   {"name": name, "koatuu": koatuu})
+        return self._all_pages("Get districts", "/api/uaddresses/districts",
+                               {"region": region, "name": name, "koatuu": koatuu})
 
     def address_settlements_by_district(self, district_id, name=None, koatuu=None):
         """п.3.12.3.4.1: населені пункти району — метод "Settlements by districts"."""
-        return self._call("Settlements by districts", "GET",
-                          f"/api/uaddresses/districts/{urllib.parse.quote(str(district_id), safe='')}/settlements",
-                          params={"name": name, "koatuu": koatuu})
+        return self._all_pages("Settlements by districts",
+                               f"/api/uaddresses/districts/{urllib.parse.quote(str(district_id), safe='')}/settlements",
+                               {"name": name, "koatuu": koatuu})
 
     def address_settlements(self, region, name=None, district=None, koatuu=None, mountain_group=None, type=None):
         return self._call("Get settlements", "GET", "/api/uaddresses/settlements", params={
             "region": region, "name": name, "district": district, "koatuu": koatuu,
-            "mountain_group": mountain_group, "type": type})
+            "mountain_group": mountain_group, "type": type, "page_size": 100})
 
     def address_streets(self, settlement_id, name=None, type=None):
         return self._call("Get streets", "GET", "/api/uaddresses/streets",
-                          params={"settlement_id": settlement_id, "name": name, "type": type})
+                          params={"settlement_id": settlement_id, "name": name, "type": type, "page_size": 100})
 
     def dictionaries(self, name=None, is_active=None, value_code=None, value_description=None, value_is_active=None):
         return self._call("Get dictionaries", "GET", "/api/v2/dictionaries", params={

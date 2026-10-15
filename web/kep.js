@@ -121,7 +121,11 @@
     const text = String(data).replace(/﻿/g, '');
     const eu = await getEndUser();
     const C = constants();
-    await eu.SetRuntimeParameter(C.EU_SIGN_TYPE_PARAMETER, C.EndUserSignType.CAdES_X_Long);
+    // За замовчуванням CAdES-X Long (з міткою часу). Для діагностики вимог ЕСОЗ: localStorage.kep_sign_type = BES | T | C | X_Long
+    let signType = 'X_Long';
+    try { signType = localStorage.getItem('kep_sign_type') || 'X_Long'; } catch (e) { /* сховище недоступне */ }
+    const type = C.EndUserSignType['CAdES_' + signType] || C.EndUserSignType.CAdES_X_Long;
+    await eu.SetRuntimeParameter(C.EU_SIGN_TYPE_PARAMETER, type);
     let lastError = null;
     for (const algo of signAlgos()) {
       try {

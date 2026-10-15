@@ -51,7 +51,7 @@ except ImportError:
 import pis_service  # noqa: E402
 from ca_proxy import CaProxy, ProxyError  # noqa: E402
 from ehealth_pis import EhealthApiError, PisClient, PisConfig  # noqa: E402
-from ehealth_pis.registration import (clean_person, person_request_sign_content, sign_up_content,  # noqa: E402
+from ehealth_pis.registration import (sign_in_content, clean_person, person_request_sign_content, sign_up_content,  # noqa: E402
                                      validate_person_request, validate_person_update)
 from ehealth_pis.declarations import MSG_NO_CONTRACT, declaration_sign_content, limit_warning, sign_result_message  # noqa: E402
 from ehealth_pis.registry import RegistryStore, age_from_birth_date, allowed_specialities, start_background_refresh  # noqa: E402
@@ -451,7 +451,9 @@ def login_kep():
 def get_nonce():
     """п.3.3.2: JWT для підпису ЕП користувачем перед переходом на сервіс авторизації."""
     try:
-        return jsonify({"nonce": ehealth.get_nonce()}), 200
+        nonce = ehealth.get_nonce()
+        # content — те, що підписує користувач (JSON з jwt); nonce лишається для зворотної сумісності
+        return jsonify({"nonce": nonce, "content": sign_in_content(nonce)}), 200
     except EhealthApiError as e:
         return _ehealth_error(e)
 
@@ -595,8 +597,7 @@ def _pending_mobile_login(state):
 
 def _sign_in_error_body(error, description, mode):
     """Текст для користувача за помилкою сервісу авторизації (error/error_description, RFC 6749)."""
-    if error == "access_denied":
-        return {"error": "Авторизацію скасовано: доступ до даних не надано", "action": "", "next_step": None}
+    cancelled = {"error": "Авторизацію скасовано: доступ до даних не надано", "action": "", "next_step": None}
     # Помилки сервісу реєстрації — за рядками "PIS. Patient sign-up" Додатку 1 (п.3.5.6.1), інакше sign-in
     description = str(description or "")[:2000]
     methods = (["PIS. Patient sign-up"] if mode == "sign-up" else []) + ["PIS. Patient sign-in"]
@@ -605,6 +606,10 @@ def _sign_in_error_body(error, description, mode):
         message, action = ehealth.annex.resolve(method, None, description)
         if message != ehealth.annex.generic_message():
             break
+    # access_denied без відомого ЕСОЗ пояснення — пацієнт сам відмовився; з поясненням ("Person not found" тощо)
+    # показуємо текст за Додатком 1 і пропонуємо реєстрацію
+    if error == "access_denied" and message == ehealth.annex.generic_message():
+        return cancelled
     return {"error": message, "action": action, "next_step": next_step(action)}
 
 
@@ -948,7 +953,7 @@ def eh_create_person_request(token):
     if errors:
         raise FieldErrors(errors)
     return ehealth.create_person_request(token, clean_person(data["person"]), False,
-                                         bool(data.get("process_disclosure_data_consent", True)))
+                                         data.get("process_disclosure_data_consent") is True)   # лише явна згода клієнта
 
 
 @app.route("/api/ehealth/person-requests/<request_id>", methods=["GET"])
@@ -1181,7 +1186,7 @@ def eh_addresses(kind):
     }
     if kind not in calls:
         return jsonify({"error": "Невідомий тип адресного довідника"}), 404
-    key = "addr:" + kind + ":" + "&".join(f"{k}={a.get(k)}" for k in sorted(a.keys()))
+    key = "addr2:" + kind + ":" + "&".join(f"{k}={a.get(k)}" for k in sorted(a.keys()))
     return _public_call(lambda: registry.cached(key, calls[kind]))
 
 
@@ -1291,6 +1296,12 @@ def serve_static(path):
     if path.startswith("lib/") or os.path.splitext(path)[1]:
         return jsonify({"error": "Not found"}), 404
     return send_from_directory(WEB_DIR, "index.html")
+
+
+# Розділ «Тестування» (лише для тестувальників на тестовому середовищі; див. backend/tester.py)
+import tester  # noqa: E402
+
+tester.register(app, _current_session, pis_service.get_db, rate_limit=lambda b, n, w: rate_limit(b, n, w))
 
 
 def start_registry_refresh():

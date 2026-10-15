@@ -188,7 +188,7 @@ function DocumentFields({ prefix, value, options, errors, onChange, editable }: 
                  onChangeText={(number) => onChange({ number })} autoCapitalize="characters" autoCorrect={false} />
       <DateField label="Дата видачі *" value={value.issued_at} error={errors[`${prefix}.issued_at`]} editable={editable}
                  onChangeText={(issued_at) => onChange({ issued_at })} />
-      <TextField label="Ким виданий" value={value.issued_by} error={errors[`${prefix}.issued_by`]} editable={editable}
+      <TextField label="Ким виданий *" value={value.issued_by} error={errors[`${prefix}.issued_by`]} editable={editable}
                  onChangeText={(issued_by) => onChange({ issued_by })} />
       <DateField label="Дійсний до" value={value.expiration_date} error={errors[`${prefix}.expiration_date`]} editable={editable}
                  onChangeText={(expiration_date) => onChange({ expiration_date })} />

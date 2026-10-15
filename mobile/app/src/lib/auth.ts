@@ -208,8 +208,8 @@ export async function loadPendingLogin(now = Date.now()): Promise<PendingLogin |
 // ---------------------------------------------------------------------------
 
 export async function getNonce(): Promise<string> {
-  const r = await api<{ nonce: string }>('/auth/nonce', { method: 'POST' });
-  return r.nonce;
+  const r = await api<{ nonce: string; content?: string }>('/auth/nonce', { method: 'POST' });
+  return r.content ?? r.nonce;   // content — JSON {"jwt": nonce}, який вимагає ЕСОЗ для підпису входу
 }
 
 /** Одноразова пара RFC 7636 (S256): verifier лишається на пристрої, на сервер іде лише challenge. */

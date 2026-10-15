@@ -184,3 +184,33 @@ def test_signing_helpers_strip_bom():
     b64 = base64.b64encode("﻿{\"a\":1}".encode()).decode()
     assert base64.b64decode(strip_bom_from_base64(b64)).decode() == "{\"a\":1}"
     assert base64.b64decode(content_to_sign({"a": "б"})).decode() == "{\"a\":\"б\"}"
+
+
+def test_address_lists_collect_every_page(setup):
+    client, t = setup
+    t.add(200, {"data": [{"name": "A"}, {"name": "B"}], "paging": {"page_number": 1, "page_size": 2, "total_pages": 2}})
+    t.add(200, {"data": [{"name": "C"}], "paging": {"page_number": 2, "page_size": 2, "total_pages": 2}})
+    result = client.address_regions()
+    assert [r["name"] for r in result["data"]] == ["A", "B", "C"]
+    assert "page=1" in t.calls[0]["url"] and "page=2" in t.calls[1]["url"] and "page_size=100" in t.calls[0]["url"]
+
+
+def test_patient_lists_collect_every_page_and_respect_explicit_page(setup):
+    client, t = setup
+    t.add(200, {"data": [{"id": 1}], "paging": {"page_number": 1, "total_pages": 2}})
+    t.add(200, {"data": [{"id": 2}], "paging": {"page_number": 2, "total_pages": 2}})
+    assert [d["id"] for d in client.list_declarations("TOK")["data"]] == [1, 2]
+    assert "page_size=300" in t.calls[0]["url"]
+    t.add(200, {"data": [{"id": 9}], "paging": {"page_number": 2, "total_pages": 5}})
+    assert client.list_declarations("TOK", page=2)["data"] == [{"id": 9}]
+    assert len(t.calls) == 3   # явна сторінка — один запит
+
+
+def test_verification_code_keeps_leading_zero(setup):
+    client, t = setup
+    t.add(200, {"data": {}})
+    client.approve_auth_method_request("TOK", "R1", "0123")
+    assert t.calls[0]["body"] == {"verification_code": "0123"}
+    t.add(200, {"data": {}})
+    client.approve_auth_method_request("TOK", "R1", "4567")
+    assert t.calls[1]["body"] == {"verification_code": 4567}

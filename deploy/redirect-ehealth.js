@@ -1,110 +1,100 @@
 /**
- * SimplexMed — Єдиний шлюз обробки OAuth редиректів eHealth
- * Розміщується на https://simplex-med.com/js/redirect-ehealth.js
- * 
- * Працює як для МІС (лікарі, персонал, адміністратори),
- * так і для ПІС (пацієнти, Наказ НСЗУ № 978).
- * 
- * Параметр state приймає формат: "<env>|<customPath>"
- * Приклади state:
- *  - "app2-dev|/auth/callback"     -> https://app2-dev.simplex-med.com/auth/callback
- *  - "app2|/auth/callback"         -> https://app2.simplex-med.com/auth/callback
- *  - "my-dev|/"                    -> https://my-dev.simplex-med.com/
- *  - "my|/"                        -> https://my.simplex-med.com/
- *  - "pis|/"                       -> https://my.simplex-med.com/
- *  - "pis-app|/|<nonce>"           -> simplexpis://auth/callback (мобільний застосунок ПІС)
+ * SimplexMed — єдиний шлюз повернення з авторизації eHealth (ЕСОЗ).
+ * Розміщується на https://simplex-med.com/js/redirect-ehealth.js (зареєстрований redirect_uri: https://simplex-med.com).
  *
- * Помилки сервісу авторизації (?error=...&error_description=...) повертаються за тими ж правилами.
+ * Працює для МІС (лікарі, персонал, адміністратори) і для ПІС (пацієнти, наказ НСЗУ № 978).
+ *
+ * ЕСОЗ повертає користувача на https://simplex-med.com/?code=...&state=... або, у разі помилки,
+ * ?error=...&error_description=...&state=... Скрипт читає state і переадресовує на потрібний сервіс,
+ * передаючи туди code або error разом зі state.
+ *
+ * Формат state: "<середовище>|<шлях>|<одноразове значення>"
+ *   my-dev|/|nonce            -> https://my-dev.simplex-med.com/?code=...
+ *   my|/ehealth/return/my|n   -> https://my.simplex-med.com/ehealth/return/my?code=...
+ *   app2-dev|/auth/callback|n -> https://app2-dev.simplex-med.com/auth/callback?code=...
+ *   pis-app|/|n               -> simplexpis://auth/callback?code=... (мобільний застосунок ПІС)
+ *
+ * Безпека:
+ *  - ціль визначається лише за списком TARGETS; невідоме середовище — зупинка без переадресації;
+ *  - шлях зі state приймається тільки відносний ("/abc/def"): без "//", "@", "\", "..", ":" — інакше state
+ *    на кшталт "my|.evil.com/" відправив би код авторизації пацієнта на сторонній хост (open redirect);
+ *  - code і state передаються лише в запиті до цілі з цього списку.
  */
-(function() {
+(function () {
+  'use strict';
+
+  // середовище -> [базова адреса, шлях за замовчуванням]
+  var TARGETS = {
+    // ПІС (кабінет пацієнта)
+    'my': ['https://my.simplex-med.com', '/'],
+    'pis': ['https://my.simplex-med.com', '/'],
+    'prod': ['https://my.simplex-med.com', '/'],
+    'my-dev': ['https://my-dev.simplex-med.com', '/'],
+    'pis-dev': ['https://my-dev.simplex-med.com', '/'],
+    // мобільний застосунок ПІС: фіксована адреса, шлях зі state не використовується
+    'pis-app': ['simplexpis://auth', '/callback', true],
+    // МІС SimplexMed 2.0
+    'app2-dev': ['https://app2-dev.simplex-med.com', '/auth/callback'],
+    'app2-admin-dev': ['https://app2-admin-dev.simplex-med.com', '/auth/callback'],
+    'app2': ['https://app2.simplex-med.com', '/auth/callback'],
+    'app2-prod': ['https://app2.simplex-med.com', '/auth/callback'],
+    // попередній кабінет
+    'cabinet-dev': ['https://cabinet-dev.simplex-med.com', '/dashboard'],
+    'cabinet-test': ['https://cabinet-test.simplex-med.com', '/dashboard'],
+    'cabinet': ['https://cabinet.simplex-med.com', '/dashboard']
+  };
+  var LEGACY_DEFAULT = ['https://app2-dev.simplex-med.com', '/auth/callback']; // виклики без state (старі МІС-потоки)
+  var SAFE_PATH = /^\/(?!\/)[A-Za-z0-9\-._~\/]*$/;
+
+  function show(title, text) {
+    var document = window.document;
+    if (!document || !document.body || !document.createElement) return;
+    var box = document.createElement('div');
+    box.style.cssText = 'font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;max-width:480px;margin:80px auto;' +
+      'padding:30px;text-align:center;border-radius:12px;background:#fff;border:1px solid #e2e8f0;';
+    var h = document.createElement('h3');
+    h.style.cssText = 'margin:0 0 8px;color:#0f172a;font-size:20px;';
+    h.textContent = title;
+    var p = document.createElement('p');
+    p.style.cssText = 'margin:0;color:#64748b;font-size:14px;';
+    p.textContent = text;
+    box.appendChild(h);
+    box.appendChild(p);
+    document.body.textContent = '';
+    document.body.appendChild(box);
+  }
+
   try {
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get('code');
-    const state = params.get('state');
-    const error = params.get('error');
+    var params = new URLSearchParams(window.location.search);
+    var code = params.get('code');
+    var error = params.get('error');
+    var state = params.get('state');
+    if (!code && !error) return;
 
-    if (code || error) {
-      // Базові значення за замовчуванням
-      let targetDomain = 'https://app2-dev.simplex-med.com';
-      let path = '/auth/callback';
-
-      if (state) {
-        const parts = state.split('|');
-        const env = parts[0];
-        // Шлях дописується одразу після домену, тому дозволяємо лише відносний шлях.
-        // Інакше state на кшталт "my|.evil.com/" або "my|@evil.com/" відправив би
-        // код авторизації пацієнта на сторонній хост.
-        const rawPath = parts[1];
-        const customPath = (rawPath && /^\/(?!\/)[A-Za-z0-9\-._~\/]*$/.test(rawPath)) ? rawPath : null;
-        
-        // 1. Локальна розробка
-        if (env === 'localhost') {
-          targetDomain = 'http://localhost:5173';
-          path = customPath || '/dashboard';
-        }
-        // 2. Старий кабінет (legacy)
-        else if (env === 'cabinet-dev') {
-          targetDomain = 'https://cabinet-dev.simplex-med.com';
-          path = customPath || '/dashboard';
-        }
-        else if (env === 'cabinet-test') {
-          targetDomain = 'https://cabinet-test.simplex-med.com';
-          path = customPath || '/dashboard';
-        }
-        else if (env === 'cabinet') {
-          targetDomain = 'https://cabinet.simplex-med.com';
-          path = customPath || '/dashboard';
-        }
-        // 3. МІС SimplexMed 2.0 (лікарі, реєстратура, адміністрація)
-        else if (env === 'app2-dev') {
-          targetDomain = 'https://app2-dev.simplex-med.com';
-          path = customPath || '/auth/callback';
-        }
-        else if (env === 'app2-admin-dev') {
-          targetDomain = 'https://app2-admin-dev.simplex-med.com';
-          path = customPath || '/auth/callback';
-        }
-        else if (env === 'app2' || env === 'app2-prod') {
-          targetDomain = 'https://app2.simplex-med.com';
-          path = customPath || '/auth/callback';
-        }
-        // 4. ПІС SimplexMed 2.0 (Кабінет пацієнта)
-        else if (env === 'pis-app') {
-          // Мобільний застосунок: фіксована схема, шлях зі state не використовується
-          targetDomain = 'simplexpis://auth';
-          path = '/callback';
-        }
-        else if (env === 'my' || env === 'prod' || env === 'pis') {
-          targetDomain = 'https://my.simplex-med.com';
-          path = customPath || '/';
-        }
-        else if (env === 'my-dev' || env === 'pis-dev') {
-          targetDomain = 'https://my-dev.simplex-med.com';
-          path = customPath || '/';
-        }
-        else {
-          path = customPath || (env.startsWith('my') ? '/' : '/dashboard');
-        }
+    var target = LEGACY_DEFAULT;
+    var fixed = false;
+    var path = null;
+    if (state) {
+      var parts = state.split('|');
+      target = TARGETS[Object.prototype.hasOwnProperty.call(TARGETS, parts[0]) ? parts[0] : ''];
+      if (!target) {
+        show('Невідоме середовище', 'Не вдалося визначити, куди повернути вас після авторизації. Поверніться до застосунку і почніть вхід ще раз.');
+        return;
       }
-
-      // Показуємо плашку редиректу для зручності користувача
-      if (window.document && window.document.body) {
-        window.document.body.innerHTML = 
-          '<div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;max-width:480px;margin:80px auto;padding:30px;text-align:center;border-radius:12px;background:#ffffff;box-shadow:0 8px 24px rgba(0,0,0,0.06);border:1px solid #e2e8f0;">' +
-            '<div style="font-size:36px;margin-bottom:12px;">🏥</div>' +
-            '<h3 style="margin:0 0 8px;color:#0f172a;font-size:20px;">Авторизація в eHealth успішна</h3>' +
-            '<p style="margin:0;color:#64748b;font-size:14px;">Переходимо до робочого кабінету SimplexMed...</p>' +
-          '</div>';
-      }
-
-      // Миттєвий редирект до відповідного кабінету (код або помилка сервісу авторизації)
-      const query = code
-        ? 'code=' + encodeURIComponent(code)
-        : 'error=' + encodeURIComponent(error) + '&error_description=' + encodeURIComponent(params.get('error_description') || '');
-      const redirectUrl = targetDomain + path + '?' + query + (state ? '&state=' + encodeURIComponent(state) : '');
-      window.location.href = redirectUrl;
+      fixed = target[2] === true;
+      if (!fixed && parts[1] && SAFE_PATH.test(parts[1]) && parts[1].indexOf('..') === -1) path = parts[1];
     }
+
+    var query = code
+      ? 'code=' + encodeURIComponent(code)
+      : 'error=' + encodeURIComponent(error) + '&error_description=' + encodeURIComponent(params.get('error_description') || '');
+    if (state) query += '&state=' + encodeURIComponent(state);
+    if (!code && params.get('request_id')) query += '&request_id=' + encodeURIComponent(params.get('request_id'));
+
+    if (code) show('Авторизацію в ЕСОЗ завершено', 'Переходимо до кабінету SimplexMed...');
+    else show('Авторизацію в ЕСОЗ не завершено', 'Повертаємо вас назад, щоб показати причину і повторити вхід...');
+    window.location.href = target[0] + (path || target[1]) + '?' + query;
   } catch (exception) {
-    console.error('SimplexMed redirect error:', exception);
+    if (window.console) console.error('SimplexMed redirect error:', exception);
   }
 })();

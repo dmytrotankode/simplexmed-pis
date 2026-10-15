@@ -8,9 +8,11 @@ eHealth PIS API — переносимий клієнт для кваліфік�
     person = client.get_person(tokens.access_token)
 """
 
+__version__ = "2.3.0"
+
 from .client import PisClient, TokenSet, validate_document_file
 from .config import DEFAULT_SCOPES, PisConfig
 from .errors import Annex1, EhealthApiError
 
-__all__ = ["PisClient", "PisConfig", "TokenSet", "EhealthApiError", "Annex1",
+__all__ = ["__version__", "PisClient", "PisConfig", "TokenSet", "EhealthApiError", "Annex1",
            "DEFAULT_SCOPES", "validate_document_file"]

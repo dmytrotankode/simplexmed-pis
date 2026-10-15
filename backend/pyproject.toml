@@ -1,0 +1,25 @@
+# Переносима бібліотека eHealth PIS для кабінету «Плексі» (КПІС): клієнт PIS API, помилки за Додатком 1,
+# валідація реєстрації/зміни даних, кеш реєстрів, підпис-контент. Лише стандартна бібліотека Python.
+#
+#   pip install ./pis/backend            # або: pip install -e pis/backend
+#   from ehealth_pis import PisClient, PisConfig
+#
+# BFF-сервіс (app.py, pis_service.py) у пакет не входить: він розгортається окремим сервісом (див. docs/integration).
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "plexi-ehealth"
+version = "2.3.0"
+description = "Клієнт eHealth PIS API (КПІС) для кабінету пацієнта «Плексі»"
+requires-python = ">=3.10"
+license = { text = "Proprietary" }
+authors = [{ name = "ТОВ «СІМПЛЕКС-МЕД»" }]
+dependencies = []
+
+[tool.setuptools]
+packages = ["ehealth_pis"]
+
+[tool.setuptools.package-data]
+ehealth_pis = ["annex1_errors.json"]

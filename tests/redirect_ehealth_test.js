@@ -10,7 +10,9 @@ const cases=[
  ['my|.evil.com/','https://my.simplex-med.com/?'],
  ['my|@evil.com/','https://my.simplex-med.com/?'],
  ['my|//evil.com','https://my.simplex-med.com/?'],
- ['zzz|.evil.com','https://app2-dev.simplex-med.com/dashboard?'],
+ ['zzz|.evil.com',''],            // невідоме середовище: переадресації немає
+ ['my|/a/../b|n','https://my.simplex-med.com/?'],
+ ['localhost|/|n',''],             // локальну адресу в робочому скрипті не підтримуємо
  ['pis-app|/|n1','simplexpis://auth/callback?'],
  ['pis-app|//evil.com|n1','simplexpis://auth/callback?'],
 ];
@@ -19,8 +21,7 @@ for (const [st,exp] of cases){
   const loc={search:'?code=C1&state='+encodeURIComponent(st), href:''};
   const window={location:loc,document:{body:{}}};
   new Function('window','URLSearchParams','console',src)(window,URLSearchParams,console);
-  const u=new URL(loc.href);
-  const ok=loc.href.startsWith(exp) && (u.protocol==='simplexpis:' || u.host.endsWith('simplex-med.com'));
+  const ok=exp===''?loc.href==='':(loc.href.startsWith(exp) && (new URL(loc.href).protocol==='simplexpis:' || new URL(loc.href).host.endsWith('simplex-med.com')));
   if(!ok) fail++;
   console.log(ok?'OK  ':'FAIL',st,'->',loc.href);
 }

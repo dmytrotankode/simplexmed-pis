@@ -26,6 +26,9 @@ import urllib.error
 import urllib.request
 from urllib.parse import urlsplit
 
+# Служби кваліфікованих надавачів, на які посилаються сертифікати (AIA/OCSP), але яких немає в CAs.json:
+# zc.bank.gov.ua — OCSP/CRL Центру сертифікації НБУ (ключі monobank та інших банків). Інші — PIS_KEP_EXTRA_HOSTS.
+EXTRA_HOSTS = frozenset({"zc.bank.gov.ua"} | {h.strip().lower() for h in os.getenv("PIS_KEP_EXTRA_HOSTS", "").split(",") if h.strip()})
 CA_ADDRESS_KEYS = ("address", "cmpAddress", "tspAddress", "ocspAccessPointAddress")
 MAX_REQUEST_BYTES = 1024 * 1024
 MAX_RESPONSE_BYTES = 10 * 1024 * 1024
@@ -76,7 +79,7 @@ class CaProxy:
                 cas = json.load(f)
             hosts = frozenset(host for ca in cas for key in CA_ADDRESS_KEYS
                               for host in [split_address(ca.get(key))[0]] if host)
-            self._hosts_cache = (mtime, hosts)
+            self._hosts_cache = (mtime, hosts | EXTRA_HOSTS)
         return self._hosts_cache[1]
 
     def _rate_limited(self, client_id):

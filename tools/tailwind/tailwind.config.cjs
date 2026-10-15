@@ -7,7 +7,7 @@ const scale = name => Object.fromEntries(shades.map(n => [n, `rgb(var(--${name}-
 const accent = scale('accent'), attention = scale('attention'), neutral = scale('neutral');
 
 module.exports = {
-  content: [path.join(__dirname, '../../web/index.html')],
+  content: [path.join(__dirname, '../../web/index.html'), path.join(__dirname, '../../web/tester.js')],
   theme: {
     extend: {
       colors: {

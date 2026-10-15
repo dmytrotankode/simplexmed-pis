@@ -587,3 +587,30 @@ def test_preferred_way_communication_case_insensitive():
     assert not [e for e in validate_person_request(person) if e[0] == "preferred_way_communication"]
     assert clean_person(person)["preferred_way_communication"] == "email"
 
+
+
+def test_kep_proxy_allows_nbu_ocsp_host(tmp_path):
+    from ca_proxy import CaProxy
+    cas = tmp_path / "CAs.json"
+    cas.write_text('[{"address": "ca.monobank.ua"}]', encoding="utf-8")
+    hosts = CaProxy(str(cas)).allowed_hosts()
+    assert "zc.bank.gov.ua" in hosts and "ca.monobank.ua" in hosts and "evil.example" not in hosts
+
+
+def test_nonce_response_carries_json_content_to_sign(env):
+    import json as _json
+    c, _, eh = env
+    eh.on("POST", "/oauth/nonce", 200, {"data": {"token": "JWT.PAYLOAD.SIG"}})
+    body = c.post("/api/auth/nonce").get_json()
+    assert body["nonce"] == "JWT.PAYLOAD.SIG"
+    assert _json.loads(body["content"]) == {"jwt": "JWT.PAYLOAD.SIG"}
+
+
+def test_access_denied_with_person_not_found_uses_annex_text(env):
+    c, _, _ = env
+    r = c.post("/api/auth/sign-in-error", json={"error": "access_denied",
+                                               "error_description": "Person with tax id or document number not found."})
+    body = r.get_json()
+    assert "скасовано" not in body["error"].lower() and body["next_step"] == "sign-up"
+    r = c.post("/api/auth/sign-in-error", json={"error": "access_denied", "error_description": "User denied access"})
+    assert "скасовано" in r.get_json()["error"].lower()

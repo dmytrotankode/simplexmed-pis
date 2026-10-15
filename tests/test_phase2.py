@@ -37,7 +37,7 @@ def test_update_valid_without_auth_methods():
 def test_update_allows_several_identity_documents():
     person = update_person()
     person["documents"].append({"type": "NATIONAL_ID", "number": "000111222", "issued_at": "2020-01-01",
-                                "expiration_date": "2030-01-01"})
+                                "issued_by": "7413", "expiration_date": "2030-01-01"})
     assert validate_person_update(person, CURRENT, TODAY) == []
     person["documents"] = []
     assert "documents" in [f for f, _ in validate_person_update(person, CURRENT, TODAY)]
@@ -100,10 +100,14 @@ def test_create_person_request_sends_clean_person(env):
     router.on("POST", "/api/pis/person_requests", 201,
               {"data": {"id": "R1", "status": "NEW"}, "urgent": {"documents": [{"type": "PASSPORT", "url": "https://st/u"}]}})
     person = update_person(second_name="", email="")
-    r = c.post("/api/ehealth/person-requests", json={"person": person})
+    r = c.post("/api/ehealth/person-requests", json={"person": person, "process_disclosure_data_consent": True})
     assert r.status_code == 200 and r.get_json()["data"]["id"] == "R1"
     sent = json.loads([b for m, u, b in router.calls if m == "POST"][0])
     assert sent["patient_signed"] is False and sent["process_disclosure_data_consent"] is True
+    # без явної згоди клієнта сервер її не припускає
+    c.post("/api/ehealth/person-requests", json={"person": person})
+    sent = json.loads([b for m, u, b in router.calls if m == "POST"][-1])
+    assert sent["process_disclosure_data_consent"] is False
     assert "second_name" not in sent["person"] and "email" not in sent["person"]
 
 
@@ -158,3 +162,17 @@ def test_auth_method_flow(env):
     assert json.loads(router.calls[-1][2]) == {"verification_code": 1234}
     assert c.patch("/api/ehealth/authentication-methods/M1", json={"alias": " "}).status_code == 400
     assert c.patch("/api/ehealth/authentication-methods/M1", json={"alias": "мій"}).status_code == 200
+
+
+def test_document_requires_issued_by():
+    person = update_person()
+    person["documents"][0].pop("issued_by", None)
+    assert any(f.endswith(".issued_by") for f, _ in validate_person_update(person, CURRENT, TODAY))
+
+
+def test_unzr_required_for_national_id_on_registration():
+    from ehealth_pis.registration import validate_person_request
+    person = update_person()
+    person["documents"][0]["type"] = "NATIONAL_ID"
+    person["unzr"] = None
+    assert "unzr" in [f for f, _ in validate_person_request(person, TODAY)]

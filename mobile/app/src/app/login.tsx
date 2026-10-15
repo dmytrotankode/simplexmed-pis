@@ -82,8 +82,6 @@ export default function Login() {
         <ErrorBox message={error} />
         <Button title="Увійти з КЕП" icon="key" busy={busy === 'kep'} disabled={busy !== null} onPress={() => void run('kep')}
                 accessibilityHint="Кваліфікований електронний підпис, далі сторінка ЕСОЗ" />
-        <Button title="Інші способи входу на сайті ЕСОЗ" variant="secondary" busy={busy === 'site'} disabled={busy !== null}
-                onPress={() => void run('site')} />
         <View style={{ alignItems: 'center', gap: 2, paddingTop: 4 }}>
           <Muted>Ще не зареєстровані в ЕСОЗ?</Muted>
           <Pressable accessibilityRole="link" disabled={busy !== null} onPress={() => router.push('/sign-up')}
