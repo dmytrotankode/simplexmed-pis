@@ -1,16 +1,26 @@
 import Constants from 'expo-constants';
 import { Redirect, router } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { Alert, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BrandLockup, Group, ListRow, Muted, Title, useColors } from '../../components/ui';
+import { api } from '../../lib/api';
 import { useSession } from '../../lib/session';
 
 /** «Ще»: рідше потрібні розділи, блокування і вихід (п.3.7). */
 export default function More() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
-  const { status, lock, signOut } = useSession();
+  const { status, token, lock, signOut } = useSession();
+  // Пункт «Тестування» показуємо лише тестувальникам (сервер відповідає 404 усім іншим)
+  const [isTester, setIsTester] = useState(false);
+  useEffect(() => {
+    if (status !== 'unlocked' || !token) return;
+    let off = false;
+    api('/tester/marks', { token }).then(() => { if (!off) setIsTester(true); }, () => {});
+    return () => { off = true; };
+  }, [status, token]);
   if (status === 'signedOut' || status === 'needsPin') return <Redirect href="/" />;
 
   function confirmSignOut() {
@@ -29,6 +39,7 @@ export default function More() {
         <ListRow icon="grid" title="Доступи застосунків" onPress={() => router.push('/apps')} />
         <ListRow icon="list" title="Запити на зміну персональних даних" onPress={() => router.push('/person-requests')} />
         <ListRow icon="shield" title="Політика конфіденційності" onPress={() => router.push('/privacy')} />
+        {isTester ? <ListRow icon="check" title="Тестування" onPress={() => router.push('/tester')} /> : null}
       </Group>
       <Group>
         <ListRow first icon="lock" title="Заблокувати" onPress={lock} chevron={false} />

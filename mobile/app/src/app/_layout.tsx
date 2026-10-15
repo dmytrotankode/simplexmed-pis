@@ -70,6 +70,7 @@ function Shell() {
         <Stack.Screen name="apps" options={{ title: 'Доступи застосунків' }} />
         <Stack.Screen name="declaration-new" options={{ title: 'Подання декларації' }} />
         <Stack.Screen name="declaration-request" options={{ title: 'Запит на декларацію' }} />
+        <Stack.Screen name="tester" options={{ title: 'Тестування' }} />
       </Stack>
       </View>
       {status === 'locked' ? <LockOverlay /> : cover || pinRequired ? <PrivacyCover /> : null}
